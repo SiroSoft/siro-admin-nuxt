@@ -12,6 +12,7 @@
     "typecheck": "nuxi typecheck",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:e2e": "playwright test",
     "generate:types": "openapi-typescript docs/openapi.json -o src/types/api.ts"
   },
   "dependencies": {

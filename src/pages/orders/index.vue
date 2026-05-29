@@ -57,7 +57,7 @@ function handlePageChange(newPage: number) {
 
     <div class="flex flex-wrap items-center gap-2">
       <SearchInput v-model="search" placeholder="Search orders..." />
-      <div class="flex items-center gap-1 ml-auto">
+      <div class="flex flex-wrap items-center gap-1 ml-auto">
         <Filter class="h-4 w-4 text-muted-foreground" />
         <button
           v-for="status in ['', 'pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled']"

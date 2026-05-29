@@ -36,7 +36,7 @@ function getSortIcon(key: string) {
 </script>
 
 <template>
-  <div class="rounded-md border">
+  <div class="rounded-md border overflow-x-auto">
     <Table>
       <TableHeader>
         <TableRow>

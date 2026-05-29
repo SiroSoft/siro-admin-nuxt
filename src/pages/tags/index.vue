@@ -52,7 +52,7 @@ function handlePageChange(newPage: number) {
       </Button>
     </PageHeader>
 
-    <div class="flex items-center gap-2">
+    <div class="flex flex-wrap items-center gap-2">
       <SearchInput v-model="search" placeholder="Search tags..." />
     </div>
 

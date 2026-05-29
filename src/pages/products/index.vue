@@ -62,7 +62,7 @@ function handlePageChange(newPage: number) {
 
     <div class="flex flex-wrap items-center gap-2">
       <SearchInput v-model="search" placeholder="Search products..." />
-      <div class="flex items-center gap-1">
+      <div class="flex flex-wrap items-center gap-1">
         <button
           v-for="opt in [{ label: 'All', value: undefined }, { label: 'Active', value: true }, { label: 'Inactive', value: false }]"
           :key="String(opt.value)"

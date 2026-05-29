@@ -81,7 +81,7 @@ const onSubmit = handleSubmit((values) => {
 
 <template>
   <form @submit="onSubmit" class="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
-    <div class="grid grid-cols-2 gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <div class="space-y-2">
         <Label for="name">Name *</Label>
         <Input id="name" v-model="name" v-bind="nameAttrs" placeholder="Product name" :disabled="isSubmitting" />
@@ -104,7 +104,7 @@ const onSubmit = handleSubmit((values) => {
       <Textarea id="short_description" v-model="short_description" placeholder="Brief product summary" :disabled="isSubmitting" />
     </div>
 
-    <div class="grid grid-cols-3 gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
       <div class="space-y-2">
         <Label for="price">Price *</Label>
         <div class="relative">
@@ -129,7 +129,7 @@ const onSubmit = handleSubmit((values) => {
       </div>
     </div>
 
-    <div class="grid grid-cols-2 gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <div class="space-y-2">
         <Label for="stock">Stock</Label>
         <Input id="stock" type="number" v-model="stock" :disabled="isSubmitting" />
@@ -140,7 +140,7 @@ const onSubmit = handleSubmit((values) => {
       </div>
     </div>
 
-    <div class="grid grid-cols-3 gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
       <div class="space-y-2">
         <Label for="weight">Weight</Label>
         <Input id="weight" type="number" step="0.01" v-model="weight" :disabled="isSubmitting" />
@@ -155,7 +155,7 @@ const onSubmit = handleSubmit((values) => {
       </div>
     </div>
 
-    <div class="grid grid-cols-2 gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <div class="space-y-2">
         <Label for="barcode">Barcode</Label>
         <Input id="barcode" v-model="barcode" :disabled="isSubmitting" />

@@ -200,7 +200,7 @@ const themeOptions = [
               <Label for="app_description">Description</Label>
               <Input id="app_description" v-model="app_description" placeholder="Brief description" :disabled="updateMutation.isPending.value" />
             </div>
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div class="space-y-2">
                 <Label>Language</Label>
                 <Select
@@ -220,7 +220,7 @@ const themeOptions = [
                 />
               </div>
             </div>
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div class="space-y-2">
                 <Label>Currency</Label>
                 <Select

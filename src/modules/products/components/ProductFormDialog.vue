@@ -24,6 +24,7 @@ const description = computed(() => props.product ? "Update the product details b
     :open="props.open"
     :title="title"
     :description="description"
+    class="sm:max-w-2xl"
     @update:open="emit('update:open', $event)"
   >
     <ProductForm :product="props.product" @submit="emit('submit', $event)" />

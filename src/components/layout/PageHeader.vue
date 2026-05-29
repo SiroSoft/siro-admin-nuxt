@@ -8,7 +8,7 @@ defineProps<Props>()
 </script>
 
 <template>
-  <div class="flex items-center justify-between gap-4">
+  <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
     <div>
       <h1 class="text-2xl font-bold tracking-tight">{{ title }}</h1>
       <p v-if="description" class="text-sm text-muted-foreground mt-1">{{ description }}</p>

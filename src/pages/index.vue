@@ -83,7 +83,7 @@ const chartData = computed(() => {
     </div>
 
     <template v-else>
-      <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+      <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-5">
         <NuxtLink
           v-for="stat in stats"
           :key="stat.title"

@@ -98,9 +98,9 @@ function handleConfirmDeleteSelected() {
       </Button>
     </PageHeader>
 
-    <div class="flex items-center gap-2">
+    <div class="flex flex-wrap items-center gap-2">
       <SearchInput v-model="search" placeholder="Search users..." />
-      <div v-if="selectedIds.size > 0" class="flex items-center gap-2 ml-auto">
+      <div v-if="selectedIds.size > 0" class="flex flex-wrap items-center gap-2 ml-auto">
         <span class="text-sm text-muted-foreground">{{ selectedIds.size }} selected</span>
         <Button variant="outline" size="sm" @click="handleExport">
           <Download class="mr-1 h-4 w-4" />

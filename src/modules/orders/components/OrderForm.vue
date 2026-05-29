@@ -84,7 +84,7 @@ const onSubmit = handleSubmit((values) => {
 </script>
 
 <template>
-  <form @submit="onSubmit" class="space-y-4">
+  <form @submit="onSubmit" class="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
     <template v-if="isEdit">
       <div class="space-y-2">
         <Label>Status</Label>

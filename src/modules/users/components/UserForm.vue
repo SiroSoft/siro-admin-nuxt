@@ -63,7 +63,7 @@ const onSubmit = handleSubmit((values) => {
 </script>
 
 <template>
-  <form @submit="onSubmit" class="space-y-4">
+  <form @submit="onSubmit" class="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
     <div class="space-y-2">
       <Label>Avatar</Label>
       <ImageUpload :value="avatar ?? ''" @change="(v: string) => setFieldValue('avatar', v)" :disabled="isSubmitting" />

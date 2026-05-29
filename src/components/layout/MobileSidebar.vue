@@ -1,0 +1,72 @@
+<script setup lang="ts">
+import { useUiStore } from "~/stores/ui.store"
+import { useAuthStore } from "~/stores/auth.store"
+import { cn } from "~/utils"
+import { useRuntimeConfig } from "nuxt/app"
+import { X, LayoutDashboard, Users, ShoppingCart, Package, FileText, Settings, LogOut } from "lucide-vue-next"
+import Button from "~/components/ui/Button.vue"
+
+const uiStore = useUiStore()
+const authStore = useAuthStore()
+const config = useRuntimeConfig()
+const router = useRouter()
+
+const navItems = [
+  { href: "/", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/users", label: "Users", icon: Users },
+  { href: "/orders", label: "Orders", icon: ShoppingCart },
+  { href: "/products", label: "Products", icon: Package },
+  { href: "/posts", label: "Posts", icon: FileText },
+  { href: "/settings", label: "Settings", icon: Settings },
+]
+
+function handleLogout() {
+  uiStore.setMobileSidebar(false)
+  authStore.logout()
+  router.push("/login")
+}
+</script>
+
+<template>
+  <template v-if="uiStore.mobileSidebarOpen">
+    <div class="fixed inset-0 z-50 bg-black/50 lg:hidden" @click="uiStore.setMobileSidebar(false)" />
+    <aside
+      class="fixed inset-y-0 left-0 z-50 w-60 bg-sidebar p-4 shadow-lg lg:hidden"
+    >
+      <div class="flex items-center justify-between mb-6">
+        <span class="text-sm font-bold text-sidebar-foreground">{{ config.public.appName }}</span>
+        <Button variant="ghost" size="icon" @click="uiStore.setMobileSidebar(false)" class="text-sidebar-foreground hover:bg-sidebar-accent">
+          <X class="h-4 w-4" />
+        </Button>
+      </div>
+
+      <nav class="space-y-1">
+        <NuxtLink
+          v-for="item in navItems"
+          :key="item.href"
+          :to="item.href"
+          @click="uiStore.setMobileSidebar(false)"
+          :class="cn(
+            'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
+            $route.path === item.href || $route.path.startsWith(item.href + '/')
+              ? 'bg-sidebar-accent text-sidebar-foreground'
+              : 'text-sidebar-muted hover:bg-sidebar-accent hover:text-sidebar-foreground',
+          )"
+        >
+          <component :is="item.icon" class="h-4 w-4" />
+          {{ item.label }}
+        </NuxtLink>
+      </nav>
+
+      <div class="mt-4 pt-4 border-t border-sidebar-border">
+        <button
+          @click="handleLogout"
+          class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-sidebar-muted hover:bg-sidebar-accent hover:text-sidebar-foreground transition-colors"
+        >
+          <LogOut class="h-4 w-4" />
+          Logout
+        </button>
+      </div>
+    </aside>
+  </template>
+</template>

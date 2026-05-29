@@ -22,7 +22,7 @@ function toggleTheme() {
 
 <template>
   <header class="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 lg:px-6">
-    <Button variant="ghost" size="icon" class="lg:hidden" @click="uiStore.setMobileSidebar(true)">
+    <Button variant="ghost" size="icon" class="lg:hidden" @click="uiStore.setMobileSidebar(true)" aria-label="Open navigation menu">
       <Menu class="h-5 w-5" />
     </Button>
 
@@ -35,7 +35,7 @@ function toggleTheme() {
 
     <div class="flex-1" />
 
-    <Button variant="ghost" size="icon" @click="toggleTheme">
+    <Button variant="ghost" size="icon" @click="toggleTheme" :aria-label="`Switch to ${colorMode.value === 'dark' ? 'light' : 'dark'} theme`">
       <Sun :class="cn('h-5 w-5', colorMode.value === 'dark' && 'hidden')" />
       <Moon :class="cn('h-5 w-5', colorMode.value !== 'dark' && 'hidden')" />
     </Button>

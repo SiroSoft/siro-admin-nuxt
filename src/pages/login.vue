@@ -73,7 +73,7 @@ const serverError = computed(() => {
         <Label for="password">Password</Label>
         <div class="relative">
           <Input id="password" :type="showPassword ? 'text' : 'password'" v-model="password" v-bind="passwordAttrs" placeholder="••••••••" autocomplete="current-password" />
-          <button type="button" @click="showPassword = !showPassword" class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+          <button type="button" @click="showPassword = !showPassword" class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground" :aria-label="showPassword ? 'Hide password' : 'Show password'">
             <EyeOff v-if="showPassword" class="h-4 w-4" />
             <Eye v-else class="h-4 w-4" />
           </button>

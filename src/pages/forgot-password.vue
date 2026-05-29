@@ -70,7 +70,7 @@ const onSubmit = handleSubmit(async (values) => {
     </div>
 
     <div class="mt-4 text-center">
-      <button type="button" @click="router.push('/login')" class="text-sm text-muted-foreground hover:text-foreground inline-flex items-center gap-1">
+      <button type="button" @click="router.push('/login')" class="text-sm text-muted-foreground hover:text-foreground inline-flex items-center gap-1" aria-label="Back to login">
         <ArrowLeft class="h-3 w-3" />
         Back to login
       </button>

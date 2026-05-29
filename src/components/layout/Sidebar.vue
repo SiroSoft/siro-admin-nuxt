@@ -45,6 +45,7 @@ function handleLogout() {
       <button
         @click="uiStore.toggleSidebar()"
         :class="cn('ml-auto text-sidebar-foreground hover:bg-sidebar-accent rounded-lg p-2', uiStore.sidebarCollapsed && 'ml-0')"
+        :aria-label="uiStore.sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'"
       >
         <ChevronLeft :class="cn('h-4 w-4 transition-transform', uiStore.sidebarCollapsed && 'rotate-180')" />
       </button>
@@ -55,6 +56,7 @@ function handleLogout() {
         v-for="item in navItems"
         :key="item.href"
         :to="item.href"
+        :aria-current="$route.path === item.href || $route.path.startsWith(item.href + '/') ? 'page' : undefined"
         :class="cn(
           'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
           $route.path === item.href || $route.path.startsWith(item.href + '/')

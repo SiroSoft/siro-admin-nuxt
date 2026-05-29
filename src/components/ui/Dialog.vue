@@ -34,7 +34,7 @@ const emit = defineEmits<{
           </DialogDescription>
         </div>
         <slot />
-        <DialogClose class="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-all duration-200 hover:opacity-100 hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
+        <DialogClose class="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-all duration-200 hover:opacity-100 hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2" aria-label="Close">
           <X class="h-4 w-4" />
         </DialogClose>
       </DialogContent>

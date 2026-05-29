@@ -94,10 +94,10 @@ const columns = [
       @sort="emit('sort', $event)"
     >
       <template #header-select>
-        <input type="checkbox" :checked="allSelected" @change="toggleSelectAll" class="h-4 w-4 rounded border-primary text-primary focus:ring-ring" />
+        <input type="checkbox" :checked="allSelected" @change="toggleSelectAll" class="h-4 w-4 rounded border-primary text-primary focus:ring-ring" aria-label="Select all users" />
       </template>
       <template #cell-select="{ item }: { item: User }">
-        <input type="checkbox" :checked="props.selectedIds.has(item.id!)" @change="toggleSelect(item.id!)" class="h-4 w-4 rounded border-primary text-primary focus:ring-ring" />
+        <input type="checkbox" :checked="props.selectedIds.has(item.id!)" @change="toggleSelect(item.id!)" class="h-4 w-4 rounded border-primary text-primary focus:ring-ring" :aria-label="`Select ${item.name ?? 'user'}`" />
       </template>
       <template #cell-role="{ item }: { item: User }">
         <StatusBadge :status="item.role" />
@@ -110,10 +110,10 @@ const columns = [
       </template>
       <template #cell-actions="{ item }: { item: User }">
         <div class="flex justify-end gap-1">
-          <Button variant="ghost" size="icon" @click="emit('edit', item)">
+          <Button variant="ghost" size="icon" @click="emit('edit', item)" :aria-label="`Edit ${item.name ?? 'user'}`">
             <Edit class="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="icon" @click="deleteId = item.id">
+          <Button variant="ghost" size="icon" @click="deleteId = item.id" :aria-label="`Delete ${item.name ?? 'user'}`">
             <Trash2 class="h-4 w-4 text-destructive" />
           </Button>
         </div>

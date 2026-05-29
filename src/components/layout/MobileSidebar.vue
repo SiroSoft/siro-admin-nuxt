@@ -25,19 +25,34 @@ function handleLogout() {
   authStore.logout()
   router.push("/login")
 }
+
+function onKeydown(e: KeyboardEvent) {
+  if (e.key === "Escape" && uiStore.mobileSidebarOpen) {
+    uiStore.setMobileSidebar(false)
+  }
+}
+
+onMounted(() => {
+  document.addEventListener("keydown", onKeydown)
+})
+
+onUnmounted(() => {
+  document.removeEventListener("keydown", onKeydown)
+})
 </script>
 
 <template>
-  <div v-if="uiStore.mobileSidebarOpen" class="fixed inset-0 z-50 bg-black/50 lg:hidden" @click="uiStore.setMobileSidebar(false)" />
+  <div v-if="uiStore.mobileSidebarOpen" class="fixed inset-0 z-50 bg-black/50 lg:hidden" @click="uiStore.setMobileSidebar(false)" role="presentation" aria-label="Close overlay" />
   <aside
     :class="cn(
       'fixed inset-y-0 left-0 z-50 w-60 bg-sidebar p-4 shadow-lg transition-transform lg:hidden',
       uiStore.mobileSidebarOpen ? 'translate-x-0' : '-translate-x-full',
     )"
+    aria-label="Mobile navigation"
   >
     <div class="flex items-center justify-between mb-6">
       <span class="text-sm font-bold text-sidebar-foreground">{{ config.public.appName }}</span>
-      <Button variant="ghost" size="icon" @click="uiStore.setMobileSidebar(false)" class="text-sidebar-foreground hover:bg-sidebar-accent">
+      <Button variant="ghost" size="icon" @click="uiStore.setMobileSidebar(false)" class="text-sidebar-foreground hover:bg-sidebar-accent" aria-label="Close navigation menu">
         <X class="h-4 w-4" />
       </Button>
     </div>
@@ -47,6 +62,7 @@ function handleLogout() {
         v-for="item in navItems"
         :key="item.href"
         :to="item.href"
+        :aria-current="$route.path === item.href || $route.path.startsWith(item.href + '/') ? 'page' : undefined"
         @click="uiStore.setMobileSidebar(false)"
         :class="cn(
           'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-150',

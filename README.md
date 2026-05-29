@@ -1,209 +1,212 @@
-# Siro Admin — Nuxt 3 Enterprise Starter
+<p align="center">
+  <img src="public/logo.svg" width="80" height="80" alt="Siro Admin">
+</p>
 
-> **Production-ready admin panel for [SiroPHP](https://sirophp.com) — the zero-dependency PHP API framework.**
+<h1 align="center">Siro Admin — Nuxt 3</h1>
 
-[![Nuxt](https://img.shields.io/badge/Nuxt-3.15-00DC82?logo=nuxt)](https://nuxt.com)
-[![Vue](https://img.shields.io/badge/Vue-3.5-4FC08D?logo=vue.js)](https://vuejs.org)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?logo=typescript)](https://www.typescriptlang.org)
-[![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-3.4-06B6D4?logo=tailwindcss)](https://tailwindcss.com)
-[![TanStack Query](https://img.shields.io/badge/TanStack_Query-5-FF4154?logo=reactquery)](https://tanstack.com/query)
-[![Pinia](https://img.shields.io/badge/Pinia-3-F7D358?logo=pinia)](https://pinia.vuejs.org)
-[![Radix Vue](https://img.shields.io/badge/Radix_Vue-latest-000000?logo=radixui)](https://www.radix-vue.com)
+<p align="center">
+  <strong>Enterprise admin panel for <a href="https://sirophp.com">SiroPHP</a> — the zero-dependency PHP API framework.</strong>
+  <br>
+  One backend. Two frontends. Zero duplication.
+</p>
+
+<p align="center">
+  <a href="#-features"><img src="https://img.shields.io/badge/🚀-Features-00DC82" alt="Features"></a>
+  <a href="#-quick-start"><img src="https://img.shields.io/badge/⚡-Quick_Start-16a34a" alt="Quick Start"></a>
+  <a href="#-architecture"><img src="https://img.shields.io/badge/🏗️-Architecture-dc2626" alt="Architecture"></a>
+  <a href="#-api-contract"><img src="https://img.shields.io/badge/📋-API_Contract-ca8a04" alt="API Contract"></a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/SiroSoft/siro-admin-next"><img src="https://img.shields.io/badge/Next.js-15-000000?logo=next.js" alt="Next.js 15"></a>
+  <a href="https://nuxt.com"><img src="https://img.shields.io/badge/Nuxt-3-00DC82?logo=nuxt" alt="Nuxt 3"></a>
+  <a href="https://vuejs.org"><img src="https://img.shields.io/badge/Vue-3.5-4FC08D?logo=vue.js" alt="Vue 3.5"></a>
+  <a href="https://www.typescriptlang.org"><img src="https://img.shields.io/badge/TypeScript-5.7-3178C6?logo=typescript" alt="TypeScript 5.7"></a>
+  <a href="https://tailwindcss.com"><img src="https://img.shields.io/badge/Tailwind_CSS-3.4-06B6D4?logo=tailwindcss" alt="Tailwind CSS"></a>
+  <a href="https://www.radix-vue.com"><img src="https://img.shields.io/badge/Radix_Vue-latest-000000?logo=radixui" alt="Radix Vue"></a>
+  <a href="https://tanstack.com/query"><img src="https://img.shields.io/badge/TanStack_Query-5-FF4154?logo=reactquery" alt="TanStack Query 5"></a>
+</p>
+
+<br>
 
 ---
 
-## ✨ Features
+```bash
+# One command to start:
+cp .env.example .env && npm install && npm run dev
+# → http://localhost:3000
+```
 
-### Enterprise-Grade Dashboard
-- **Real-time charts** — Revenue trends with interactive bar charts (vue-chartjs)
-- **Stats overview** — Users, orders, products, revenue at a glance
-- **Activity feed** — Recent user signups and order activity
-- **API health monitor** — Backend status, uptime, response time
+---
 
-### Complete Authentication
+## 🚀 Features
+
+### 📊 Enterprise Dashboard
+```
+┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐
+│  👥 Users    │  Active      │  📦 Orders   │  🏷️ Products  │  💰 Revenue   │
+│  1,234       │  1,200       │  456         │  789         │  $12,345     │
+├──────────────┴──────────────┴──────────────┴──────────────┴──────────────┤
+│  📈 Monthly Revenue (Bar Chart - vue-chartjs)                           │
+├────────────────────────────────────────────────────────────────────────┤
+│  🔄 Recent Activity              │  ❤️ API Health                       │
+│  John joined 2m ago             │  ● Connected 0.2ms                   │
+│  Order #1234 created 5m ago     │  v0.32.0                             │
+│  ...                            │                                      │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+### 🔐 Complete Auth System
 - JWT login with access + refresh token rotation
-- Auto-persistent session with `Remember me` option
-- Axios interceptor with automatic 401 → refresh → retry queue
-- Route middleware for page-level auth protection
-- Forgot password flow with email confirmation UI
+- Auto-persistent session with "Remember me"
+- Axios interceptor: auto-retry with token refresh queue
+- Route middleware guards all pages
+- Forgot password flow ready
 
-### CRUD Modules
-| Module   | List | Search | Sort | Paginate | Create | Edit | Delete |
-|----------|------|--------|------|----------|--------|------|--------|
-| Users    | ✅   | ✅     | ✅   | ✅       | ✅     | ✅   | ✅     |
-| Orders   | ✅   | ✅     | ✅   | ✅       | ✅     | ✅   | ✅     |
-| Products | ✅   | ✅     | ✅   | ✅       | ✅     | ✅   | ✅     |
-| Posts    | ✅   | ✅     | ✅   | ✅       | ✅     | ✅   | ✅     |
-| Categories | ✅ | ✅     | ✅   | ✅       | ✅     | ✅   | ✅     |
-| Tags     | ✅   | ✅     | ✅   | ✅       | ✅     | ✅   | ✅     |
+### 📋 6 Full CRUD Modules
+| Module | List | Search | Sort | Paginate | Create | Edit | Delete |
+|--------|------|--------|------|----------|--------|------|--------|
+| Users | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Orders | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Products | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Posts | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Categories | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Tags | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 
-### Type Safety
-- **OpenAPI-generated types** — `npm run generate:types` syncs TypeScript types from the backend OpenAPI spec
-- **Zod validation** — All forms validated client-side before submission (vee-validate + Zod)
-- **End-to-end type safety** — From API response to Vue component
+### 🎨 Enterprise UI/UX
+- **Rich Text Editor** — Tiptap-based with Bold/Italic/Headings/Lists/Quote
+- **Image Upload** — Drag & drop, URL paste, preview with remove
+- **Searchable Select** — Combobox for products, users, categories
+- **Dark Mode** — System-aware with manual toggle
+- **Responsive** — Mobile, tablet, desktop adaptive layouts
+- **Accessibility** — ARIA labels, focus rings, keyboard nav, reduced motion
+- **Micro-interactions** — Button press, card hover lift, toast zoom, page transitions
 
-### User Experience
-- ⚡ **Shimmer skeletons** — Premium loading states matching content shape
-- 🌓 **Dark mode** — System-aware with manual toggle, persistent preference (color-mode)
-- 📱 **Fully responsive** — Adaptive sidebar, mobile overlay, scrollable tables
-- ♿ **Accessible** — ARIA labels, focus-visible rings, keyboard navigation
-- 🎯 **Toast notifications** — 4 variants (success, error, warning, info) with auto-dismiss
-- 🧭 **Breadcrumbs** — Dynamic navigation path with every page
+### 🔗 Auto-Generated Types
+```bash
+npm run generate:types
+# → src/types/api.ts  (from OpenAPI spec)
+# Frontend & backend types always in sync
+```
 
 ---
 
-## 🚀 Quick Start
+## ⚡ Quick Start
+
+### Prerequisites
+- Node.js 20+
+- A running [SiroPHP](https://sirophp.com) backend (or any REST API)
+
+### Setup
 
 ```bash
 # 1. Clone
-git clone https://github.com/SiroSoft/siro-admin-nuxt.git siro-admin
-cd siro-admin
+git clone https://github.com/SiroSoft/siro-admin-nuxt.git my-admin
+cd my-admin
 
 # 2. Install
 npm install
 
 # 3. Configure
 cp .env.example .env
-# Edit NUXT_PUBLIC_API_URL to point to your SiroPHP backend
+# Edit NUXT_PUBLIC_API_URL to point to your backend
 # Default: http://localhost:8080
 
-# 4. Generate types (sync with backend)
-npm run generate:types
-
-# 5. Run
+# 4. Run
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) — login with your SiroPHP backend credentials.
+Open [http://localhost:3000](http://localhost:3000) — you'll see the login page.
 
----
-
-## 📸 What's Inside
-
-### Dashboard
-```
-┌──────────────┬──────────────┬──────────────┬──────────────┐
-│  👥 Users    │  📦 Orders   │  🏷️ Products  │  💰 Revenue   │
-│  1,234       │  456         │  789         │  $12,345     │
-├──────────────┴──────────────┴──────────────┴──────────────┤
-│  📊 Monthly Revenue Chart (vue-chartjs)                   │
-├───────────────────────────────────────────────────────────┤
-│  🔄 Recent Activity                     │  ❤️ API Status  │
-│  John joined • Order #123 created      │  ● Connected    │
-│  ...
-└───────────────────────────────────────────────────────────┘
-```
-
-### User Management
-```
-┌──────┬──────────┬────────────────┬──────────┬──────────┐
-│  ID  │  Name    │  Email         │  Role    │  Status  │
-├──────┼──────────┼────────────────┼──────────┼──────────┤
-│  1   │  John    │  john@ex.com   │  Admin   │  Active  │
-│  2   │  Jane    │  jane@ex.com   │  User    │  Active  │
-│  ... │          │                │          │          │
-└──────┴──────────┴────────────────┴──────────┴──────────┘
-  < 1 | 2 | 3 ... 10 >    🔍 Search    ➕ New User
-```
-
----
-
-## 🔧 Architecture
-
-```
-src/
-├── app.vue                 # Root component with page transitions
-├── layouts/
-│   ├── default.vue         # Dashboard layout (sidebar + header)
-│   └── auth.vue            # Centered card layout for auth pages
-├── pages/
-│   ├── index.vue           # Dashboard with stats & charts
-│   ├── login.vue           # Login form
-│   ├── forgot-password.vue # Password reset flow
-│   ├── users/index.vue     # Users CRUD
-│   ├── orders/index.vue    # Orders CRUD
-│   ├── products/index.vue  # Products CRUD
-│   ├── posts/index.vue     # Posts CRUD
-│   ├── categories/index.vue# Categories CRUD
-│   ├── tags/index.vue      # Tags CRUD
-│   ├── settings.vue        # App settings
-│   └── profile/index.vue   # User profile
-├── components/
-│   ├── ui/                 # Radix Vue primitives (button, input, table, etc.)
-│   ├── data-table/         # Reusable table + pagination
-│   ├── dialogs/            # Delete confirmation dialog
-│   ├── forms/              # Search input
-│   ├── layout/             # Sidebar, header, user nav
-│   └── states/             # Loading skeleton, empty state, error state
-├── composables/            # Vue Query hooks per resource
-├── middleware/              # Auth route middleware
-├── modules/{resource}/     # Feature modules (form, table, schemas)
-├── plugins/                # API config, Vue Query plugin
-├── services/               # Axios API service layer
-├── stores/                 # Pinia stores (auth, UI)
-├── types/                  # OpenAPI-generated TypeScript types
-└── utils/                  # cn(), formatDate(), formatNumber()
-```
-
----
-
-## 🔐 Auth Flow
-
-```
-┌─────────┐     POST /api/auth/login     ┌──────────┐
-│  Login   │ ──────────────────────────→  │  SiroPHP  │
-│  Page    │ ←──────────────────────────  │  Backend  │
-└─────────┘     { token, refresh, user }  └──────────┘
-                                                  │
-                                          ┌───────┴───────┐
-                                          │  localStorage  │
-                                          │  access_token  │
-                                          │  refresh_token │
-                                          └───────┬───────┘
-                                                  │
-┌─────────┐     Axios Interceptor           ┌──────┴──────┐
-│  Every   │ ────────────────────────────→  │  Attach     │
-│  Request │                                │  Bearer     │
-└─────────┘                                 │  Token      │
-                                            └──────┬──────┘
-                                                   │
-                                          401? ────┤
-                                                   │
-                                          ┌────────┴────────┐
-                                          │  POST /api/auth/ │
-                                          │  refresh         │
-                                          └────────┬────────┘
-                                                   │
-                                          ┌────────┴────────┐
-                                          │  Retry original  │
-                                          │  request         │
-                                          └─────────────────┘
-                                          Route middleware
-                                          guards all pages
-```
-
----
-
-## 🔗 Integration with SiroPHP
-
-This starter is designed for [**SiroPHP**](https://sirophp.com) — the production-first PHP API framework.
+### With SiroPHP Backend
 
 ```bash
-# Install SiroPHP backend
+# Terminal 1: Start the backend
 iwr https://sirophp.com/downloads/install.ps1 -UseBasicParsing | iex   # Windows
 curl -sS https://sirophp.com/downloads/install.sh | bash               # Linux/macOS
-
-# Generate resources & run
 cd my-api
-php siro serve  # → http://localhost:8080
+php siro db:seed           # Seed demo data
+php siro serve             # → http://localhost:8080
+
+# Terminal 2: Start the admin
+cd my-admin
+npm run dev                 # → http://localhost:3000
 ```
 
-**Auto-generated API types:**
-```bash
-# After updating your backend, regenerate types:
-npm run generate:types
+**Default login:** Register a new account → first user gets `admin` role automatically.
+
+---
+
+## 🏗️ Architecture
+
 ```
-This runs `openapi-typescript` against your backend's OpenAPI spec, keeping frontend types always in sync.
+┌─────────────────────────────────────────────────────┐
+│                     BROWSER                          │
+│  ┌────────────────────────────────────────────────┐ │
+│  │          Vue 3.5 + Nuxt 3                      │ │
+│  │  ┌─────────┐ ┌──────────┐ ┌────────────────┐  │ │
+│  │  │  Pages   │ │Components│ │   Plugins      │  │ │
+│  │  │  (Auth)  │ │ (UI/Radix)│ │ (Vue Query,   │  │ │
+│  │  │  (Dash)  │ │ (Modules)│ │  API Config)   │  │ │
+│  │  └────┬────┘ └────┬─────┘ └───────┬────────┘  │ │
+│  └───────┼───────────┼───────────────┼───────────┘ │
+└──────────┼───────────┼───────────────┼─────────────┘
+           │           │               │
+     ┌─────▼───────────▼───────────────▼──────────┐
+     │              Services Layer                │
+     │  ┌──────────┐ ┌──────────┐ ┌────────────┐ │
+     │  │  Axios   │ │  TanStack│ │  Pinia     │ │
+     │  │ Instance │ │  Vue     │ │  (Auth +   │ │
+     │  │+Refresh  │ │  Query   │ │  UI Store) │ │
+     │  │  Queue   │ │  Hooks   │ │            │ │
+     │  └────┬─────┘ └────┬─────┘ └─────┬──────┘ │
+     └───────┼────────────┼──────────────┼────────┘
+             │            │              │
+     ┌───────▼────────────▼──────────────▼────────┐
+     │           OpenAPI Types                    │
+     │    src/types/api.ts (auto-generated)       │
+     └────────────────┬──────────────────────────┘
+                      │ HTTP/JSON
+     ┌────────────────▼──────────────────────────┐
+     │         SiroPHP API (Backend)              │
+     │  sirophp.com/downloads/install.ps1 | iex   │
+     └───────────────────────────────────────────┘
+```
+
+---
+
+## 📋 API Contract
+
+All endpoints follow the [Siro API Response Contract v1](docs/conventions/responses.md).
+
+### Standard Response Envelope
+
+```json
+{
+  "success": true,
+  "message": "Operation successful",
+  "data": { ... },
+  "meta": {
+    "page": 1,
+    "per_page": 20,
+    "total": 100,
+    "last_page": 5,
+    "timestamp": "2026-05-29T12:00:00+00:00"
+  }
+}
+```
+
+### Error Response
+
+```json
+{
+  "success": false,
+  "message": "Validation failed",
+  "errors": {
+    "email": ["The email field is required."]
+  }
+}
+```
 
 ---
 
@@ -215,42 +218,47 @@ This runs `openapi-typescript` against your backend's OpenAPI spec, keeping fron
 | `npm run build` | Production build |
 | `npm run generate` | Static site generation |
 | `npm run preview` | Preview production build |
-| `npm run lint` | Run ESLint |
-| `npm run typecheck` | TypeScript type checking |
-| `npm run generate:types` | Regenerate API types from backend OpenAPI spec |
+| `npm test` | Run unit tests (Vitest) |
+| `npm run lint` | Lint & format check |
+| `npm run typecheck` | TypeScript checking |
+| `npm run generate:types` | Regenerate API types from OpenAPI spec |
 
 ---
 
-## 🧰 Tech Stack
+## 🧩 Tech Stack
 
-| Category | Technology | Version |
+| Category | Technology | Purpose |
 |----------|-----------|---------|
-| Framework | [Nuxt](https://nuxt.com) | 3.15 |
-| UI Engine | [Vue](https://vuejs.org) | 3.5 |
-| Language | [TypeScript](https://www.typescriptlang.org) | 5.7 |
-| Styling | [Tailwind CSS](https://tailwindcss.com) | 3.4 |
-| UI Library | [Radix Vue](https://www.radix-vue.com) + CVA | Latest |
-| Data Fetching | [TanStack Vue Query](https://tanstack.com/query) | 5 |
-| Forms | [Vee-Validate](https://vee-validate.logaretm.com) + [Zod](https://zod.dev) | Latest |
-| State | [Pinia](https://pinia.vuejs.org) | 3 |
-| Charts | [vue-chartjs](https://vue-chartjs.org) + [Chart.js](https://www.chartjs.org) | Latest |
-| HTTP Client | [Axios](https://axios-http.com) | Latest |
-| Icons | [Lucide](https://lucide.dev) (Vue) | Latest |
-| Theming | [@nuxtjs/color-mode](https://color-mode.nuxtjs.org) | Latest |
-| API Types | [openapi-typescript](https://openapi-ts.dev) | 7 |
+| **Framework** | [Nuxt 3](https://nuxt.com) | Vue meta-framework |
+| **UI Engine** | [Vue 3.5](https://vuejs.org) | Component rendering |
+| **Language** | [TypeScript 5.7](https://www.typescriptlang.org) | Type safety |
+| **Styling** | [Tailwind CSS 3.4](https://tailwindcss.com) | Utility-first CSS |
+| **UI Library** | [Radix Vue](https://www.radix-vue.com) | Accessible primitives |
+| **Data Fetching** | [TanStack Vue Query 5](https://tanstack.com/query) | Server state |
+| **Forms** | [Vee-Validate](https://vee-validate.logaretm.com) + [Zod](https://zod.dev) | Form validation |
+| **State** | [Pinia 3](https://pinia.vuejs.org) | Client state |
+| **Rich Text** | [Tiptap](https://tiptap.dev) | WYSIWYG editor |
+| **Charts** | [vue-chartjs](https://vue-chartjs.org) + [Chart.js](https://www.chartjs.org) | Dashboard charts |
+| **HTTP** | [Axios](https://axios-http.com) | API client |
+| **Icons** | [Lucide](https://lucide.dev) (Vue) | Icon set |
+| **Theming** | [@nuxtjs/color-mode](https://color-mode.nuxtjs.org) | Dark mode |
+| **Types** | [openapi-typescript 7](https://openapi-ts.dev) | Auto-generated types |
+| **Tests** | [Vitest](https://vitest.dev) | Testing |
 
 ---
 
-## 📄 License
+## 🔗 Related Projects
 
-MIT — built for [SiroPHP](https://sirophp.com).
+| Project | Description | Link |
+|---------|-------------|------|
+| **SiroPHP** | Zero-dependency PHP API framework | [github.com/SiroSoft/SiroPHP](https://github.com/SiroSoft/SiroPHP) |
+| **Siro Admin (Next)** | React version of this starter | [github.com/SiroSoft/siro-admin-next](https://github.com/SiroSoft/siro-admin-next) |
+| **Siro Installer** | One-liner installer scripts | [github.com/SiroSoft/siro-installer](https://github.com/SiroSoft/siro-installer) |
 
 ---
 
 <p align="center">
-  <a href="https://sirophp.com">
-    <img src="https://sirophp.com/favicon.ico" width="32" height="32" alt="SiroPHP">
-  </a>
+  Built with ❤️ by <a href="https://github.com/SiroSoft">SiroSoft</a>
   <br>
-  <strong>Powered by <a href="https://sirophp.com">SiroPHP</a></strong> — 1 command, 0 dependency.
+  <sub>MIT License · 2026</sub>
 </p>

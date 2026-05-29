@@ -4,6 +4,7 @@ import { toTypedSchema } from "@vee-validate/zod"
 import { Loader2 } from "lucide-vue-next"
 import Button from "~/components/ui/Button.vue"
 import Input from "~/components/ui/Input.vue"
+import RichTextEditor from "~/components/ui/RichTextEditor.vue"
 import Textarea from "~/components/ui/Textarea.vue"
 import Label from "~/components/ui/Label.vue"
 import Select from "~/components/ui/Select.vue"
@@ -92,15 +93,13 @@ const onSubmit = handleSubmit((values) => {
 
     <div class="space-y-2">
       <Label for="content">Content *</Label>
-      <textarea
-        id="content"
-        :value="content"
-        @input="setFieldValue('content', ($event.target as HTMLTextAreaElement).value)"
-        class="flex min-h-[120px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+      <RichTextEditor
+        :model-value="content ?? ''"
+        @update:model-value="(v: string) => setFieldValue('content', v)"
         placeholder="Post content..."
         :disabled="isSubmitting"
+        :error="errors.content"
       />
-      <p v-if="errors.content" class="text-sm text-destructive">{{ errors.content }}</p>
     </div>
 
     <div class="space-y-2">

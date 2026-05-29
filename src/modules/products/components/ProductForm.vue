@@ -4,6 +4,7 @@ import { toTypedSchema } from "@vee-validate/zod"
 import { Loader2 } from "lucide-vue-next"
 import Button from "~/components/ui/Button.vue"
 import Input from "~/components/ui/Input.vue"
+import RichTextEditor from "~/components/ui/RichTextEditor.vue"
 import Textarea from "~/components/ui/Textarea.vue"
 import Label from "~/components/ui/Label.vue"
 import Switch from "~/components/ui/Switch.vue"
@@ -96,7 +97,12 @@ const onSubmit = handleSubmit((values) => {
 
     <div class="space-y-2">
       <Label for="description">Description</Label>
-      <Textarea id="description" v-model="description" placeholder="Full product description" :disabled="isSubmitting" />
+      <RichTextEditor
+        :model-value="description ?? ''"
+        @update:model-value="(v: string) => setFieldValue('description', v)"
+        placeholder="Full product description"
+        :disabled="isSubmitting"
+      />
     </div>
 
     <div class="space-y-2">

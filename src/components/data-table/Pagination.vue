@@ -34,6 +34,7 @@ const pages = computed(() => {
       <Button
         variant="outline"
         size="icon"
+        class="h-8 w-8"
         :disabled="props.currentPage <= 1"
         @click="emit('pageChange', props.currentPage - 1)"
       >
@@ -52,6 +53,7 @@ const pages = computed(() => {
       <Button
         variant="outline"
         size="icon"
+        class="h-8 w-8"
         :disabled="props.currentPage >= props.lastPage"
         @click="emit('pageChange', props.currentPage + 1)"
       >

@@ -10,6 +10,8 @@
     "preview": "nuxt preview",
     "lint": "eslint .",
     "typecheck": "nuxi typecheck",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "generate:types": "openapi-typescript docs/openapi.json -o src/types/api.ts"
   },
   "dependencies": {
@@ -42,8 +44,13 @@
   "devDependencies": {
     "@nuxtjs/color-mode": "^3.5.2",
     "@nuxtjs/tailwindcss": "^6.13.1",
+    "@playwright/test": "^1.60.0",
     "@types/node": "^22.10.2",
+    "@vue/test-utils": "^2.4.10",
+    "happy-dom": "^20.9.0",
+    "jsdom": "^29.1.1",
     "openapi-typescript": "^7.13.0",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "vitest": "^4.1.7"
   }
 }

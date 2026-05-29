@@ -47,7 +47,7 @@ export function useAuth() {
     user: computed(() => authStore.user),
     isAuthenticated: computed(() => authStore.isAuthenticated),
     isLoading: computed(() => authStore.isLoading || sessionQuery.isLoading.value),
-    login: loginMutation.mutateAsync,
+    login: loginMutation.mutate,
     loginError: loginMutation.error,
     isLoginPending: computed(() => loginMutation.isPending.value),
     logout: logoutMutation.mutate,

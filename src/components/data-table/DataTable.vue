@@ -75,7 +75,10 @@ function getSortIcon(key: string) {
         <template v-else-if="data.length === 0">
           <TableRow>
             <TableCell :colspan="columns.length" class="h-24 text-center text-muted-foreground">
-              No results found.
+              <div class="flex flex-col items-center gap-2">
+                <span>No results found.</span>
+                <slot name="empty-action" />
+              </div>
             </TableCell>
           </TableRow>
         </template>

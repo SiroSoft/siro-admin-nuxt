@@ -32,7 +32,7 @@ const { handleSubmit, errors, defineField, setFieldValue, isSubmitting } = useFo
     role: props.user?.role ?? "viewer",
     status: props.user?.status ?? "active",
     avatar: props.user?.avatar ?? "",
-    phone: (props.user as any)?.phone ?? "",
+    phone: props.user?.phone ?? "",
   },
 })
 
@@ -70,13 +70,13 @@ const onSubmit = handleSubmit((values) => {
     </div>
 
     <div class="space-y-2">
-      <Label for="name">Name</Label>
+      <Label for="name">Name <span class="text-destructive">*</span></Label>
       <Input id="name" v-model="name" v-bind="nameAttrs" placeholder="John Doe" :disabled="isSubmitting" />
       <p v-if="errors.name" class="text-sm text-destructive">{{ errors.name }}</p>
     </div>
 
     <div class="space-y-2">
-      <Label for="email">Email</Label>
+      <Label for="email">Email <span class="text-destructive">*</span></Label>
       <Input id="email" type="email" v-model="email" v-bind="emailAttrs" placeholder="john@example.com" :disabled="isSubmitting" />
       <p v-if="errors.email" class="text-sm text-destructive">{{ errors.email }}</p>
     </div>
@@ -88,12 +88,12 @@ const onSubmit = handleSubmit((values) => {
 
     <template v-if="!isEdit">
       <div class="space-y-2">
-        <Label for="password">Password</Label>
+        <Label for="password">Password <span class="text-destructive">*</span></Label>
         <Input id="password" type="password" v-model="password" v-bind="passwordAttrs" placeholder="••••••••" :disabled="isSubmitting" />
         <p v-if="errors.password" class="text-sm text-destructive">{{ errors.password }}</p>
       </div>
       <div class="space-y-2">
-        <Label for="password_confirmation">Confirm Password</Label>
+        <Label for="password_confirmation">Confirm Password <span class="text-destructive">*</span></Label>
         <Input id="password_confirmation" type="password" v-model="passwordConfirmation" v-bind="passwordConfirmationAttrs" placeholder="••••••••" :disabled="isSubmitting" />
         <p v-if="errors.password_confirmation" class="text-sm text-destructive">{{ errors.password_confirmation }}</p>
       </div>

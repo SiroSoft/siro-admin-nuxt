@@ -25,7 +25,7 @@ const [email, emailAttrs] = defineField("email")
 const [password, passwordAttrs] = defineField("password")
 
 onMounted(() => {
-  const saved = localStorage.getItem("remembered_email")
+  const saved = localStorage.getItem("siro_remember_email")
   if (saved) {
     setFieldValue("email", saved)
     rememberMe.value = true
@@ -34,9 +34,9 @@ onMounted(() => {
 
 const onSubmit = handleSubmit((values) => {
   if (rememberMe.value) {
-    localStorage.setItem("remembered_email", values.email)
+    localStorage.setItem("siro_remember_email", values.email)
   } else {
-    localStorage.removeItem("remembered_email")
+    localStorage.removeItem("siro_remember_email")
   }
   login(values)
 })
@@ -67,13 +67,13 @@ const serverError = computed(() => {
 
     <form v-else @submit="onSubmit" class="space-y-4">
       <div class="space-y-2">
-        <Label for="email">Email</Label>
-        <Input id="email" type="email" v-model="email" v-bind="emailAttrs" placeholder="admin@example.com" autocomplete="email" />
+        <Label for="email">Email <span class="text-destructive">*</span></Label>
+        <Input id="email" type="email" v-model="email" v-bind="emailAttrs" placeholder="admin@example.com" autocomplete="email" autofocus />
         <p v-if="errors.email" class="text-sm text-destructive">{{ errors.email }}</p>
       </div>
 
       <div class="space-y-2">
-        <Label for="password">Password</Label>
+        <Label for="password">Password <span class="text-destructive">*</span></Label>
         <div class="relative">
           <Input id="password" :type="showPassword ? 'text' : 'password'" v-model="password" v-bind="passwordAttrs" placeholder="••••••••" autocomplete="current-password" />
           <button type="button" @click="showPassword = !showPassword" class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground" :aria-label="showPassword ? 'Hide password' : 'Show password'">

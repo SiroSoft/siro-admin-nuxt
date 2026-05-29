@@ -25,14 +25,13 @@ const selectedIds = ref<Set<number>>(new Set())
 const confirmDeleteSelected = ref(false)
 
 const queryClient = useQueryClient()
-const debouncedSearch = useDebounce(search)
 
 const createMutation = useCreateUser()
 const deleteMutation = useDeleteUser()
 
 const params = computed(() => ({
   page: page.value,
-  search: debouncedSearch.value || undefined,
+  search: search.value || undefined,
   per_page: 10,
   sort: sortBy.value || undefined,
   order: sortOrder.value || undefined,

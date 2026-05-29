@@ -1,9 +1,9 @@
 <script setup lang="ts">
 definePageMeta({ middleware: "auth" })
 
-import { Users, ShoppingCart, Package, DollarSign, Activity, RefreshCw, ExternalLink } from "lucide-vue-next"
+import { Users, ShoppingCart, Package, DollarSign, Activity, RefreshCw, ExternalLink, TrendingUp } from "lucide-vue-next"
 import { Bar } from "vue-chartjs"
-import { CategoryScale, LinearScale, BarElement, Title, Tooltip as ChartTooltip, Legend } from "chart.js"
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip as ChartTooltip, Legend } from "chart.js"
 import Card from "~/components/ui/Card.vue"
 import PageHeader from "~/components/layout/PageHeader.vue"
 import StatsSkeleton from "~/components/states/StatsSkeleton.vue"
@@ -68,7 +68,12 @@ const chartData = computed(() => {
 
 <template>
   <div class="space-y-6">
-    <PageHeader title="Dashboard" description="Overview of your application" />
+    <PageHeader title="Dashboard" description="Overview of your application">
+      <Button variant="outline" size="sm" @click="refetch()" :disabled="isRefetching">
+        <RefreshCw class="mr-2 h-4 w-4" :class="{ 'animate-spin': isRefetching }" />
+        Refresh
+      </Button>
+    </PageHeader>
 
     <div v-if="isLoading">
       <StatsSkeleton />

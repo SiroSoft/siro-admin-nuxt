@@ -34,7 +34,7 @@ function handleLogout() {
 <template>
   <DropdownMenuRoot v-if="authStore.user">
     <DropdownMenuTrigger as-child>
-      <button class="flex items-center gap-2 rounded-full outline-none">
+      <button class="flex items-center gap-2 rounded-full outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
         <Avatar :fallback="initials" class="h-8 w-8" />
       </button>
     </DropdownMenuTrigger>

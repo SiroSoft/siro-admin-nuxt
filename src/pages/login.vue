@@ -65,6 +65,14 @@ const serverError = computed(() => {
 
       <p v-if="serverError" class="text-sm text-destructive">{{ serverError }}</p>
 
+      <div class="flex items-center justify-between">
+        <label class="flex items-center gap-2 text-sm">
+          <input type="checkbox" class="h-4 w-4 rounded border-primary text-primary focus:ring-ring" />
+          Remember me
+        </label>
+        <NuxtLink to="/forgot-password" class="text-sm text-primary hover:underline">Forgot password?</NuxtLink>
+      </div>
+
       <Button type="submit" class="w-full" :disabled="isLoginPending">
         <Loader2 v-if="isLoginPending" class="mr-2 h-4 w-4 animate-spin" />
         Sign in

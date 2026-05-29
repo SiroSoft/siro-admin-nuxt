@@ -1,11 +1,19 @@
 <script setup lang="ts">
 import { useUiStore } from "~/stores/ui.store"
-import { Menu, Moon, Sun } from "lucide-vue-next"
+import { Menu, Moon, Sun, ChevronRight } from "lucide-vue-next"
 import { cn } from "~/utils"
 import Button from "~/components/ui/Button.vue"
 
 const colorMode = useColorMode()
 const uiStore = useUiStore()
+const route = useRoute()
+
+const breadcrumbs = computed(() => {
+  return route.path.split("/").filter(Boolean).map((segment, i, arr) => ({
+    label: segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, " "),
+    isLast: i === arr.length - 1,
+  }))
+})
 
 function toggleTheme() {
   colorMode.preference = colorMode.value === "dark" ? "light" : "dark"
@@ -17,6 +25,13 @@ function toggleTheme() {
     <Button variant="ghost" size="icon" class="lg:hidden" @click="uiStore.setMobileSidebar(true)">
       <Menu class="h-5 w-5" />
     </Button>
+
+    <nav aria-label="Breadcrumb" class="hidden md:flex items-center gap-1 text-sm text-muted-foreground">
+      <template v-for="(crumb, i) in breadcrumbs" :key="i">
+        <ChevronRight v-if="i > 0" class="h-3 w-3" />
+        <span :class="crumb.isLast ? 'text-foreground font-medium' : ''">{{ crumb.label }}</span>
+      </template>
+    </nav>
 
     <div class="flex-1" />
 

@@ -4,6 +4,7 @@ import { useUiStore } from "~/stores/ui.store"
 import Sidebar from "~/components/layout/Sidebar.vue"
 import Header from "~/components/layout/Header.vue"
 import MobileSidebar from "~/components/layout/MobileSidebar.vue"
+import LoadingSkeleton from "~/components/states/LoadingSkeleton.vue"
 import { cn } from "~/utils"
 
 const authStore = useAuthStore()
@@ -34,7 +35,7 @@ onMounted(() => {
   <div v-else-if="!authStore.isLoading" class="min-h-screen">
     <slot />
   </div>
-  <div v-else class="flex min-h-screen items-center justify-center">
-    <p class="text-muted-foreground">Loading...</p>
+  <div v-else class="flex min-h-screen items-center justify-center p-8">
+    <LoadingSkeleton rows="4" />
   </div>
 </template>

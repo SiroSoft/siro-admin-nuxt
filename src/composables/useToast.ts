@@ -1,21 +1,23 @@
-import { STORAGE_KEYS } from "~/constants"
-
 export interface ToastItem {
   id: string
   title: string
   description?: string
-  variant: "default" | "destructive"
+  variant: "default" | "destructive" | "success" | "warning" | "info"
 }
 
 const state = reactive<{ toasts: ToastItem[] }>({ toasts: [] })
 
 let count = 0
 
+const autoDismissVariants: ToastItem["variant"][] = ["default", "success", "warning", "info"]
+
 function add(t: ToastItem) {
   state.toasts.push(t)
-  setTimeout(() => {
-    state.toasts = state.toasts.filter((x) => x.id !== t.id)
-  }, 5000)
+  if (autoDismissVariants.includes(t.variant)) {
+    setTimeout(() => {
+      state.toasts = state.toasts.filter((x) => x.id !== t.id)
+    }, 5000)
+  }
 }
 
 export function useToast() {
@@ -27,10 +29,16 @@ export function useToast() {
     toasts: computed(() => state.toasts),
     dismiss,
     success(title: string, description?: string) {
-      add({ id: String(++count), title, description, variant: "default" })
+      add({ id: String(++count), title, description, variant: "success" })
     },
     error(title: string, description?: string) {
       add({ id: String(++count), title, description, variant: "destructive" })
+    },
+    warning(title: string, description?: string) {
+      add({ id: String(++count), title, description, variant: "warning" })
+    },
+    info(title: string, description?: string) {
+      add({ id: String(++count), title, description, variant: "info" })
     },
   }
 }

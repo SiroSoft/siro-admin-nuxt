@@ -62,25 +62,25 @@ const onSubmit = handleSubmit((values) => {
   <form @submit="onSubmit" class="space-y-4">
     <div class="space-y-2">
       <Label for="name">Name</Label>
-      <Input id="name" v-model="name" v-bind="nameAttrs" placeholder="John Doe" />
+      <Input id="name" v-model="name" v-bind="nameAttrs" placeholder="John Doe" :disabled="isSubmitting" />
       <p v-if="errors.name" class="text-sm text-destructive">{{ errors.name }}</p>
     </div>
 
     <div class="space-y-2">
       <Label for="email">Email</Label>
-      <Input id="email" type="email" v-model="email" v-bind="emailAttrs" placeholder="john@example.com" />
+      <Input id="email" type="email" v-model="email" v-bind="emailAttrs" placeholder="john@example.com" :disabled="isSubmitting" />
       <p v-if="errors.email" class="text-sm text-destructive">{{ errors.email }}</p>
     </div>
 
     <template v-if="!isEdit">
       <div class="space-y-2">
         <Label for="password">Password</Label>
-        <Input id="password" type="password" v-model="password" v-bind="passwordAttrs" placeholder="••••••••" />
+        <Input id="password" type="password" v-model="password" v-bind="passwordAttrs" placeholder="••••••••" :disabled="isSubmitting" />
         <p v-if="errors.password" class="text-sm text-destructive">{{ errors.password }}</p>
       </div>
       <div class="space-y-2">
         <Label for="password_confirmation">Confirm Password</Label>
-        <Input id="password_confirmation" type="password" v-model="passwordConfirmation" v-bind="passwordConfirmationAttrs" placeholder="••••••••" />
+        <Input id="password_confirmation" type="password" v-model="passwordConfirmation" v-bind="passwordConfirmationAttrs" placeholder="••••••••" :disabled="isSubmitting" />
         <p v-if="errors.password_confirmation" class="text-sm text-destructive">{{ errors.password_confirmation }}</p>
       </div>
     </template>
@@ -92,6 +92,7 @@ const onSubmit = handleSubmit((values) => {
           :model-value="role"
           @update:model-value="(v: string) => setFieldValue('role', v)"
           :options="roleOptions"
+          :disabled="isSubmitting"
         />
         <p v-if="errors.role" class="text-sm text-destructive">{{ errors.role }}</p>
       </div>
@@ -102,6 +103,7 @@ const onSubmit = handleSubmit((values) => {
           :model-value="status"
           @update:model-value="(v: string) => setFieldValue('status', v)"
           :options="statusOptions"
+          :disabled="isSubmitting"
         />
         <p v-if="errors.status" class="text-sm text-destructive">{{ errors.status }}</p>
       </div>

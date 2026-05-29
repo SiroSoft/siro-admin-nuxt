@@ -5,7 +5,7 @@ import { cn } from "~/utils"
 import { useRuntimeConfig } from "nuxt/app"
 import {
   LayoutDashboard, Users, ShoppingCart, Package, FileText,
-  FolderTree, Tags, Settings, LogOut, ChevronLeft,
+  FolderTree, Tags, Settings, LogOut, ChevronLeft, User,
 } from "lucide-vue-next"
 
 const uiStore = useUiStore()
@@ -21,6 +21,7 @@ const navItems = [
   { href: "/posts", label: "Posts", icon: FileText },
   { href: "/categories", label: "Categories", icon: FolderTree },
   { href: "/tags", label: "Tags", icon: Tags },
+  { href: "/profile", label: "Profile", icon: User },
   { href: "/settings", label: "Settings", icon: Settings },
 ]
 
@@ -55,7 +56,7 @@ function handleLogout() {
         :key="item.href"
         :to="item.href"
         :class="cn(
-          'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
+          'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
           $route.path === item.href || $route.path.startsWith(item.href + '/')
             ? 'bg-sidebar-accent text-sidebar-foreground'
             : 'text-sidebar-muted hover:bg-sidebar-accent hover:text-sidebar-foreground',
@@ -68,19 +69,6 @@ function handleLogout() {
     </nav>
 
     <div class="border-t border-sidebar-border p-2">
-      <NuxtLink
-        to="/profile"
-        :class="cn(
-          'flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors mb-1',
-          $route.path === '/profile'
-            ? 'bg-sidebar-accent text-sidebar-foreground'
-            : 'text-sidebar-muted hover:bg-sidebar-accent hover:text-sidebar-foreground',
-          uiStore.sidebarCollapsed && 'justify-center px-2',
-        )"
-      >
-        <Users class="h-4 w-4 shrink-0" />
-        <span v-if="!uiStore.sidebarCollapsed">Profile</span>
-      </NuxtLink>
       <button
         @click="handleLogout"
         :class="cn(

@@ -2,6 +2,8 @@
 definePageMeta({ middleware: "auth" })
 
 import { Users, ShoppingCart, Package, DollarSign, Activity, RefreshCw, ExternalLink } from "lucide-vue-next"
+import { Bar } from "vue-chartjs"
+import { CategoryScale, LinearScale, BarElement, Title, Tooltip as ChartTooltip, Legend } from "chart.js"
 import Card from "~/components/ui/Card.vue"
 import PageHeader from "~/components/layout/PageHeader.vue"
 import StatsSkeleton from "~/components/states/StatsSkeleton.vue"
@@ -13,6 +15,26 @@ import Button from "~/components/ui/Button.vue"
 import { useDashboard } from "~/composables/useDashboard"
 import { formatDate, formatNumber } from "~/utils"
 
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, ChartTooltip, Legend)
+
+const chartOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  scales: {
+    x: { ticks: { color: "hsl(var(--muted-foreground))" }, grid: { color: "hsl(var(--border))" } },
+    y: { ticks: { color: "hsl(var(--muted-foreground))" }, grid: { color: "hsl(var(--border))" } },
+  },
+  plugins: {
+    tooltip: {
+      backgroundColor: "hsl(var(--popover))",
+      borderColor: "hsl(var(--border))",
+      borderWidth: 1,
+      titleColor: "hsl(var(--foreground))",
+      bodyColor: "hsl(var(--foreground))",
+    },
+  },
+}
+
 const { data, isLoading, isError, error, refetch } = useDashboard()
 
 const stats = computed(() => [
@@ -22,6 +44,21 @@ const stats = computed(() => [
   { title: "Total Products", value: formatNumber(data.value?.total_products ?? 0), icon: Package, href: "/products" },
   { title: "Revenue", value: `$${formatNumber(data.value?.total_revenue ?? 0)}`, icon: DollarSign, href: "/orders" },
 ])
+
+const chartData = computed(() => {
+  if (!data.value?.monthly_revenue?.length) return null
+  return {
+    labels: data.value.monthly_revenue.map((r: any) => r.month),
+    datasets: [
+      {
+        label: "Revenue",
+        data: data.value.monthly_revenue.map((r: any) => r.revenue),
+        backgroundColor: "hsl(var(--primary))",
+        borderRadius: 4,
+      },
+    ],
+  }
+})
 </script>
 
 <template>
@@ -143,14 +180,19 @@ const stats = computed(() => [
         </div>
       </div>
 
-      <div v-if="data?.orders_by_status" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <Card v-for="(count, status) in data.orders_by_status" :key="status">
-          <template #header>
-            <span class="text-sm font-medium capitalize">{{ status }} Orders</span>
-          </template>
-          <div class="text-2xl font-bold">{{ formatNumber(count) }}</div>
-        </Card>
-      </div>
+      <Card v-if="data?.monthly_revenue?.length">
+        <template #header>
+          <span class="text-sm font-medium">Monthly Revenue</span>
+        </template>
+        <div class="h-[300px]">
+          <Bar
+            v-if="chartData"
+            :data="chartData"
+            :options="chartOptions"
+          />
+          <p v-else class="text-muted-foreground text-center py-8">No revenue data available</p>
+        </div>
+      </Card>
     </template>
   </div>
 </template>

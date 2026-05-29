@@ -16,6 +16,7 @@ import Label from "~/components/ui/Label.vue"
 import Avatar from "~/components/ui/Avatar.vue"
 import Skeleton from "~/components/ui/Skeleton.vue"
 import Separator from "~/components/ui/Separator.vue"
+import ImageUpload from "~/components/ui/ImageUpload.vue"
 import { useToast } from "~/composables/useToast"
 import { formatDate } from "~/utils"
 
@@ -24,6 +25,7 @@ const authStore = useAuthStore()
 const profileSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Invalid email"),
+  avatar: z.string().optional(),
 })
 
 const passwordSchema = z.object({
@@ -35,11 +37,12 @@ const passwordSchema = z.object({
   path: ["new_password_confirmation"],
 })
 
-const { handleSubmit: handleProfileSubmit, errors: profileErrors, defineField: defineProfileField, isSubmitting: isProfileSubmitting, resetForm: resetProfileForm } = useForm({
+const { handleSubmit: handleProfileSubmit, errors: profileErrors, defineField: defineProfileField, isSubmitting: isProfileSubmitting, resetForm: resetProfileForm, setFieldValue: setProfileFieldValue } = useForm({
   validationSchema: toTypedSchema(profileSchema),
   initialValues: {
     name: authStore.user?.name ?? "",
     email: authStore.user?.email ?? "",
+    avatar: authStore.user?.avatar ?? "",
   },
 })
 
@@ -49,16 +52,17 @@ const { handleSubmit: handlePasswordSubmit, errors: passwordErrors, defineField:
 
 const [pName, pNameAttrs] = defineProfileField("name")
 const [pEmail, pEmailAttrs] = defineProfileField("email")
+const [pAvatar] = defineProfileField("avatar" as any)
 
 const [currentPassword, cpAttrs] = definePasswordField("current_password")
 const [newPassword, npAttrs] = definePasswordField("new_password")
 const [newPasswordConfirmation, npcAttrs] = definePasswordField("new_password_confirmation" as any)
 
 const profileMutation = useMutation({
-  mutationFn: (data: { name: string; email: string }) => profileService.update(data),
+  mutationFn: (data: { name: string; email: string; avatar?: string }) => profileService.update(data),
   onSuccess: (userData) => {
     authStore.setUser(userData as any)
-    useToast().success("Profile updated", "Your profile has been updated successfully.")
+    useToast().success("Profile updated", "Your profile has been updated.")
   },
   onError: () => {
     useToast().error("Error", "Failed to update profile.")
@@ -68,7 +72,7 @@ const profileMutation = useMutation({
 const passwordMutation = useMutation({
   mutationFn: (data: { current_password: string; new_password: string; new_password_confirmation: string }) => profileService.changePassword(data),
   onSuccess: () => {
-    useToast().success("Password changed", "Your password has been changed successfully.")
+    useToast().success("Password changed", "Your password has been changed.")
     resetPasswordForm()
   },
   onError: () => {
@@ -97,78 +101,101 @@ const initials = computed(() => {
 
 <template>
   <div class="space-y-6">
-    <PageHeader title="Profile" description="Manage your account" />
+    <PageHeader title="Profile" description="Manage your account settings" />
 
-    <Card>
-      <template #header>
-        <div class="flex items-center gap-4">
-          <Avatar :fallback="initials" class="h-16 w-16 text-lg" />
-          <div>
-            <h2 v-if="authStore.user" class="text-lg font-semibold">{{ authStore.user.name }}</h2>
-            <p v-if="authStore.user" class="text-sm text-muted-foreground">{{ authStore.user.email }}</p>
-            <p v-if="authStore.user" class="text-xs text-muted-foreground mt-1">Member since {{ formatDate(authStore.user.created_at) }}</p>
-          </div>
+    <div class="grid gap-6 lg:grid-cols-3">
+      <Card class="lg:col-span-1">
+        <template #header>
+          <span class="text-sm font-medium">Account Info</span>
+        </template>
+        <div class="flex flex-col items-center text-center">
+          <Avatar :fallback="initials" class="h-24 w-24 mb-4 text-2xl" />
+          <h3 class="text-lg font-semibold">{{ authStore.user?.name }}</h3>
+          <p class="text-sm text-muted-foreground">{{ authStore.user?.email }}</p>
+          <p class="text-xs text-muted-foreground mt-1 capitalize">{{ authStore.user?.role }}</p>
+          <p v-if="authStore.user?.created_at" class="text-xs text-muted-foreground mt-4">
+            Member since {{ formatDate(authStore.user.created_at) }}
+          </p>
         </div>
-      </template>
-    </Card>
+      </Card>
 
-    <Card>
-      <template #header>
-        <div class="flex items-center gap-2">
-          <User class="h-4 w-4" />
-          <span class="text-sm font-medium">Account Information</span>
-        </div>
-      </template>
-      <form @submit="onProfileSubmit" class="space-y-4">
-        <div class="space-y-2">
-          <Label for="pName">Name</Label>
-          <Input id="pName" v-model="pName" v-bind="pNameAttrs" placeholder="Your name" />
-          <p v-if="profileErrors.name" class="text-sm text-destructive">{{ profileErrors.name }}</p>
-        </div>
-        <div class="space-y-2">
-          <Label for="pEmail">Email</Label>
-          <Input id="pEmail" type="email" v-model="pEmail" v-bind="pEmailAttrs" placeholder="email@example.com" />
-          <p v-if="profileErrors.email" class="text-sm text-destructive">{{ profileErrors.email }}</p>
-        </div>
-        <div class="flex justify-end">
-          <Button type="submit" :disabled="isProfileSubmitting || profileMutation.isPending.value">
-            <Loader2 v-if="profileMutation.isPending.value" class="mr-2 h-4 w-4 animate-spin" />
-            Update Profile
-          </Button>
-        </div>
-      </form>
-    </Card>
+      <div class="lg:col-span-2 space-y-6">
+        <Card>
+          <template #header>
+            <div class="flex items-center gap-2">
+              <User class="h-4 w-4" />
+              <span class="text-sm font-medium">Profile Details</span>
+            </div>
+          </template>
+          <form @submit="onProfileSubmit" class="space-y-4">
+            <div class="space-y-2">
+              <Label>Avatar</Label>
+              <ImageUpload
+                :value="pAvatar"
+                @change="(url: string) => setProfileFieldValue('avatar', url)"
+                :disabled="profileMutation.isPending.value"
+              />
+            </div>
+            <div class="space-y-2">
+              <Label for="pName">Name</Label>
+              <Input id="pName" v-model="pName" v-bind="pNameAttrs" placeholder="Your name" :disabled="profileMutation.isPending.value" />
+              <p v-if="profileErrors.name" class="text-sm text-destructive">{{ profileErrors.name }}</p>
+            </div>
+            <div class="space-y-2">
+              <Label for="pEmail">Email</Label>
+              <Input id="pEmail" type="email" v-model="pEmail" v-bind="pEmailAttrs" placeholder="email@example.com" :disabled="profileMutation.isPending.value" />
+              <p v-if="profileErrors.email" class="text-sm text-destructive">{{ profileErrors.email }}</p>
+            </div>
+            <div class="flex gap-2">
+              <Button type="submit" :disabled="profileMutation.isPending.value">
+                <Loader2 v-if="profileMutation.isPending.value" class="mr-2 h-4 w-4 animate-spin" />
+                Save Changes
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                :disabled="profileMutation.isPending.value"
+                @click="resetProfileForm({ values: { name: authStore.user?.name ?? '', email: authStore.user?.email ?? '', avatar: authStore.user?.avatar ?? '' } })"
+              >
+                Cancel
+              </Button>
+            </div>
+          </form>
+        </Card>
 
-    <Card>
-      <template #header>
-        <div class="flex items-center gap-2">
-          <Lock class="h-4 w-4" />
-          <span class="text-sm font-medium">Change Password</span>
-        </div>
-      </template>
-      <form @submit="onPasswordSubmit" class="space-y-4">
-        <div class="space-y-2">
-          <Label for="currentPassword">Current Password</Label>
-          <Input id="currentPassword" type="password" v-model="currentPassword" v-bind="cpAttrs" placeholder="••••••••" />
-          <p v-if="passwordErrors.current_password" class="text-sm text-destructive">{{ passwordErrors.current_password }}</p>
-        </div>
-        <div class="space-y-2">
-          <Label for="newPassword">New Password</Label>
-          <Input id="newPassword" type="password" v-model="newPassword" v-bind="npAttrs" placeholder="••••••••" />
-          <p v-if="passwordErrors.new_password" class="text-sm text-destructive">{{ passwordErrors.new_password }}</p>
-        </div>
-        <div class="space-y-2">
-          <Label for="newPasswordConfirmation">Confirm New Password</Label>
-          <Input id="newPasswordConfirmation" type="password" v-model="newPasswordConfirmation" v-bind="npcAttrs" placeholder="••••••••" />
-          <p v-if="passwordErrors.new_password_confirmation" class="text-sm text-destructive">{{ passwordErrors.new_password_confirmation }}</p>
-        </div>
-        <div class="flex justify-end">
-          <Button type="submit" :disabled="isPasswordSubmitting || passwordMutation.isPending.value">
-            <Loader2 v-if="passwordMutation.isPending.value" class="mr-2 h-4 w-4 animate-spin" />
-            Change Password
-          </Button>
-        </div>
-      </form>
-    </Card>
+        <Card>
+          <template #header>
+            <div class="flex items-center gap-2">
+              <Lock class="h-4 w-4" />
+              <span class="text-sm font-medium">Change Password</span>
+            </div>
+          </template>
+          <form @submit="onPasswordSubmit" class="space-y-4">
+            <div class="space-y-2">
+              <Label for="currentPassword">Current Password</Label>
+              <Input id="currentPassword" type="password" v-model="currentPassword" v-bind="cpAttrs" placeholder="••••••••" :disabled="passwordMutation.isPending.value" />
+              <p v-if="passwordErrors.current_password" class="text-sm text-destructive">{{ passwordErrors.current_password }}</p>
+            </div>
+            <Separator />
+            <div class="space-y-2">
+              <Label for="newPassword">New Password</Label>
+              <Input id="newPassword" type="password" v-model="newPassword" v-bind="npAttrs" placeholder="••••••••" :disabled="passwordMutation.isPending.value" />
+              <p v-if="passwordErrors.new_password" class="text-sm text-destructive">{{ passwordErrors.new_password }}</p>
+            </div>
+            <div class="space-y-2">
+              <Label for="newPasswordConfirmation">Confirm New Password</Label>
+              <Input id="newPasswordConfirmation" type="password" v-model="newPasswordConfirmation" v-bind="npcAttrs" placeholder="••••••••" :disabled="passwordMutation.isPending.value" />
+              <p v-if="passwordErrors.new_password_confirmation" class="text-sm text-destructive">{{ passwordErrors.new_password_confirmation }}</p>
+            </div>
+            <div class="flex justify-end">
+              <Button type="submit" :disabled="passwordMutation.isPending.value">
+                <Loader2 v-if="passwordMutation.isPending.value" class="mr-2 h-4 w-4 animate-spin" />
+                Change Password
+              </Button>
+            </div>
+          </form>
+        </Card>
+      </div>
+    </div>
   </div>
 </template>

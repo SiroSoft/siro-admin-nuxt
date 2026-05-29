@@ -4,9 +4,13 @@ import { toTypedSchema } from "@vee-validate/zod"
 import { Loader2, Plus, Trash2 } from "lucide-vue-next"
 import Button from "~/components/ui/Button.vue"
 import Input from "~/components/ui/Input.vue"
+import Textarea from "~/components/ui/Textarea.vue"
 import Label from "~/components/ui/Label.vue"
 import Select from "~/components/ui/Select.vue"
+import SearchableSelect from "~/components/ui/SearchableSelect.vue"
 import { createOrderSchema, updateOrderSchema } from "~/modules/orders/schemas/order.schema"
+import { useProducts } from "~/composables/useProducts"
+import { useUsers } from "~/composables/useUsers"
 import type { Order } from "~/types/order"
 
 interface Props {
@@ -21,24 +25,47 @@ const emit = defineEmits<{
 
 const isEdit = computed(() => !!props.order)
 const schema = computed(() => isEdit.value ? updateOrderSchema : createOrderSchema)
+const { products } = useProducts(ref({ per_page: 200 }))
+const { users } = useUsers(ref({ per_page: 200 }))
 
-const { handleSubmit, errors, defineField, setFieldValue, isSubmitting, values, resetForm } = useForm({
+const productOptions = computed(() =>
+  products.value.map((p: any) => ({
+    label: `${p.name} (${p.sku})`,
+    value: String(p.id),
+  }))
+)
+
+const userOptions = computed(() =>
+  users.value.map((u: any) => ({
+    label: `${u.name} (${u.email})`,
+    value: String(u.id),
+  }))
+)
+
+const { handleSubmit, errors, defineField, setFieldValue, isSubmitting, values } = useForm({
   validationSchema: toTypedSchema(schema.value),
-  initialValues: {
-    status: props.order?.status ?? "pending",
-    shipping_address: props.order?.shipping_address ?? "",
-    billing_address: props.order?.billing_address ?? "",
-    notes: props.order?.notes ?? "",
-    payment_method: props.order?.payment_method ?? "credit_card",
-    items: props.order?.items?.map(i => ({ product_id: i.product_id, quantity: i.quantity })) ?? [{ product_id: undefined as any, quantity: 1 }],
-  },
+  initialValues: isEdit.value
+    ? {
+        status: props.order?.status ?? "pending",
+        shipping_address: props.order?.shipping_address ?? "",
+        billing_address: props.order?.billing_address ?? "",
+        notes: props.order?.notes ?? "",
+      }
+    : {
+        items: [{ product_id: undefined as any, quantity: 1 }],
+        status: "pending",
+        customer_id: undefined,
+        shipping_address: "",
+        billing_address: "",
+        notes: "",
+      },
 })
 
 const [status] = defineField("status" as any)
-const [shipping_address, shippingAttrs] = defineField("shipping_address" as any)
-const [billing_address, billingAttrs] = defineField("billing_address" as any)
-const [notes, notesAttrs] = defineField("notes" as any)
-const [payment_method] = defineField("payment_method" as any)
+const [shipping_address] = defineField("shipping_address" as any)
+const [billing_address] = defineField("billing_address" as any)
+const [notes] = defineField("notes" as any)
+const [customer_id] = defineField("customer_id" as any)
 
 const statusOptions = [
   { label: "Pending", value: "pending" },
@@ -47,13 +74,6 @@ const statusOptions = [
   { label: "Shipped", value: "shipped" },
   { label: "Delivered", value: "delivered" },
   { label: "Cancelled", value: "cancelled" },
-]
-
-const paymentOptions = [
-  { label: "Credit Card", value: "credit_card" },
-  { label: "Bank Transfer", value: "bank_transfer" },
-  { label: "Cash", value: "cash" },
-  { label: "PayPal", value: "paypal" },
 ]
 
 const { push: addItem, remove: removeItem, fields: itemFields } = useFieldArray("items")
@@ -72,73 +92,105 @@ const onSubmit = handleSubmit((values) => {
           :model-value="status"
           @update:model-value="(v: string) => setFieldValue('status', v)"
           :options="statusOptions"
+          :disabled="isSubmitting"
         />
         <p v-if="errors.status" class="text-sm text-destructive">{{ errors.status }}</p>
       </div>
+      <div class="space-y-2">
+        <Label for="shipping_address">Shipping Address</Label>
+        <Textarea id="shipping_address" v-model="shipping_address" :disabled="isSubmitting" />
+      </div>
+      <div class="space-y-2">
+        <Label for="billing_address">Billing Address</Label>
+        <Textarea id="billing_address" v-model="billing_address" :disabled="isSubmitting" />
+      </div>
+      <div class="space-y-2">
+        <Label for="notes">Notes</Label>
+        <Textarea id="notes" v-model="notes" :disabled="isSubmitting" />
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <Button type="submit" :disabled="isSubmitting">
+          <Loader2 v-if="isSubmitting" class="mr-2 h-4 w-4 animate-spin" />
+          Update Order
+        </Button>
+      </div>
     </template>
 
-    <template v-if="!isEdit">
-      <div class="space-y-2">
+    <template v-else>
+      <div class="space-y-3">
         <Label>Order Items</Label>
         <div v-for="(field, idx) in itemFields" :key="field.key" class="flex items-end gap-2">
           <div class="flex-1 space-y-1">
-            <Label>Product ID</Label>
-            <Input
-              type="number"
-              :model-value="values.items?.[idx]?.product_id"
-              @input="setFieldValue(`items.${idx}.product_id`, Number(($event.target as HTMLInputElement).value))"
-              placeholder="Product ID"
+            <Label class="text-xs">Product</Label>
+            <SearchableSelect
+              :options="productOptions"
+              :value="values.items?.[idx]?.product_id ? String(values.items[idx].product_id) : ''"
+              @change="(v: string) => setFieldValue(`items.${idx}.product_id`, Number(v))"
+              placeholder="Search product..."
+              :disabled="isSubmitting"
             />
           </div>
           <div class="w-24 space-y-1">
-            <Label>Qty</Label>
+            <Label class="text-xs">Qty</Label>
             <Input
               type="number"
               :model-value="values.items?.[idx]?.quantity"
-              @input="setFieldValue(`items.${idx}.quantity`, Number(($event.target as HTMLInputElement).value))"
-              min="1"
+              @update:model-value="(v: string) => setFieldValue(`items.${idx}.quantity`, Number(v))"
+              placeholder="1"
+              :disabled="isSubmitting"
             />
           </div>
-          <Button type="button" variant="ghost" size="icon" @click="removeItem(idx)">
-            <Trash2 class="h-4 w-4 text-destructive" />
+          <Button type="button" variant="ghost" size="icon" :disabled="isSubmitting" @click="removeItem(idx)">
+            <Trash2 class="h-4 w-4" />
           </Button>
         </div>
-        <Button type="button" variant="outline" size="sm" @click="addItem({ product_id: undefined, quantity: 1 })">
-          <Plus class="mr-1 h-3 w-3" /> Add Item
+        <Button type="button" variant="outline" size="sm" :disabled="isSubmitting" @click="addItem({ product_id: undefined, quantity: 1 })">
+          <Plus class="mr-2 h-4 w-4" />
+          Add Item
         </Button>
-        <p v-if="errors.items" class="text-sm text-destructive">{{ errors.items }}</p>
+        <p v-if="errors.items" class="text-sm text-destructive">{{ (errors.items as any)?.message || "Items validation error" }}</p>
       </div>
 
       <div class="space-y-2">
-        <Label>Payment Method</Label>
+        <Label>Status</Label>
         <Select
-          :model-value="payment_method"
-          @update:model-value="(v: string) => setFieldValue('payment_method', v)"
-          :options="paymentOptions"
+          :model-value="status"
+          @update:model-value="(v: string) => setFieldValue('status', v)"
+          :options="statusOptions"
+          :disabled="isSubmitting"
         />
       </div>
+
+      <div class="space-y-2">
+        <Label>Customer</Label>
+        <SearchableSelect
+          :options="userOptions"
+          :value="customer_id ? String(customer_id) : ''"
+          @change="(v: string) => setFieldValue('customer_id', v ? Number(v) : undefined)"
+          placeholder="Search customer..."
+          :disabled="isSubmitting"
+        />
+      </div>
+
+      <div class="space-y-2">
+        <Label for="shipping_address">Shipping Address</Label>
+        <Textarea id="shipping_address" v-model="shipping_address" :disabled="isSubmitting" />
+      </div>
+      <div class="space-y-2">
+        <Label for="billing_address">Billing Address</Label>
+        <Textarea id="billing_address" v-model="billing_address" :disabled="isSubmitting" />
+      </div>
+      <div class="space-y-2">
+        <Label for="notes">Notes</Label>
+        <Textarea id="notes" v-model="notes" :disabled="isSubmitting" />
+      </div>
+
+      <div class="flex justify-end gap-2 pt-2">
+        <Button type="submit" :disabled="isSubmitting">
+          <Loader2 v-if="isSubmitting" class="mr-2 h-4 w-4 animate-spin" />
+          Create Order
+        </Button>
+      </div>
     </template>
-
-    <div class="space-y-2">
-      <Label for="shipping_address">Shipping Address</Label>
-      <Input id="shipping_address" v-model="shipping_address" v-bind="shippingAttrs" placeholder="123 Main St" />
-    </div>
-
-    <div class="space-y-2">
-      <Label for="billing_address">Billing Address</Label>
-      <Input id="billing_address" v-model="billing_address" v-bind="billingAttrs" placeholder="123 Main St" />
-    </div>
-
-    <div class="space-y-2">
-      <Label for="notes">Notes</Label>
-      <Input id="notes" v-model="notes" v-bind="notesAttrs" placeholder="Optional notes" />
-    </div>
-
-    <div class="flex justify-end gap-2 pt-2">
-      <Button type="submit" :disabled="isSubmitting">
-        <Loader2 v-if="isSubmitting" class="mr-2 h-4 w-4 animate-spin" />
-        {{ isEdit ? "Update" : "Create" }} Order
-      </Button>
-    </div>
   </form>
 </template>

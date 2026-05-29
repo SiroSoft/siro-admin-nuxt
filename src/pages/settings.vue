@@ -5,7 +5,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query"
 import { useForm } from "vee-validate"
 import { toTypedSchema } from "@vee-validate/zod"
 import { z } from "zod"
-import { Loader2, Moon, Sun } from "lucide-vue-next"
+import { Loader2, Moon, Sun, Monitor } from "lucide-vue-next"
 import { settingsService } from "~/services/settings.service"
 import PageHeader from "~/components/layout/PageHeader.vue"
 import Card from "~/components/ui/Card.vue"
@@ -32,12 +32,12 @@ const { data, isLoading, isError, refetch } = useQuery({
 const settingsSchema = z.object({
   app_name: z.string().min(1, "App name is required"),
   app_description: z.string().optional(),
-  language: z.string().optional(),
-  timezone: z.string().optional(),
-  currency: z.string().optional(),
-  pagination_per_page: z.number().int().min(1).max(100).default(15),
-  maintenance_mode: z.boolean().default(false),
-  email_notifications: z.boolean().default(true),
+  language: z.string().min(1),
+  timezone: z.string().min(1),
+  currency: z.string().min(1),
+  pagination_per_page: z.coerce.number().int().min(1).max(100),
+  maintenance_mode: z.boolean(),
+  email_notifications: z.boolean(),
 })
 
 const { handleSubmit, errors, defineField, setFieldValue, isSubmitting, resetForm } = useForm({
@@ -84,7 +84,7 @@ const updateMutation = useMutation({
   mutationFn: (formData: any) => settingsService.update(formData),
   onSuccess: () => {
     queryClient.invalidateQueries({ queryKey: ["settings"] })
-    useToast().success("Settings saved", "Settings have been updated successfully.")
+    useToast().success("Settings saved", "Application settings have been updated.")
   },
   onError: () => {
     useToast().error("Error", "Failed to save settings.")
@@ -95,29 +95,65 @@ const onSubmit = handleSubmit((values) => {
   updateMutation.mutate(values)
 })
 
-const languageOptions = [
-  { label: "English", value: "en" },
-  { label: "Spanish", value: "es" },
-  { label: "French", value: "fr" },
-  { label: "German", value: "de" },
-  { label: "Vietnamese", value: "vi" },
+const LANGUAGES = [
+  { value: "en", label: "English" },
+  { value: "vi", label: "Vietnamese" },
+  { value: "ja", label: "Japanese" },
+  { value: "ko", label: "Korean" },
+  { value: "zh", label: "Chinese" },
+  { value: "fr", label: "French" },
+  { value: "de", label: "German" },
+  { value: "es", label: "Spanish" },
 ]
 
-const currencyOptions = [
-  { label: "USD ($)", value: "USD" },
-  { label: "EUR (€)", value: "EUR" },
-  { label: "GBP (£)", value: "GBP" },
-  { label: "VND (₫)", value: "VND" },
+const TIMEZONES = [
+  "UTC",
+  "America/New_York",
+  "America/Chicago",
+  "America/Denver",
+  "America/Los_Angeles",
+  "Europe/London",
+  "Europe/Berlin",
+  "Europe/Paris",
+  "Asia/Tokyo",
+  "Asia/Shanghai",
+  "Asia/Ho_Chi_Minh",
+  "Asia/Singapore",
+  "Asia/Seoul",
+  "Asia/Dubai",
+  "Australia/Sydney",
+  "Pacific/Auckland",
 ]
 
-function toggleTheme() {
-  colorMode.preference = colorMode.value === "dark" ? "light" : "dark"
-}
+const CURRENCIES = [
+  { value: "USD", label: "USD - US Dollar" },
+  { value: "EUR", label: "EUR - Euro" },
+  { value: "VND", label: "VND - Vietnamese Dong" },
+  { value: "JPY", label: "JPY - Japanese Yen" },
+  { value: "GBP", label: "GBP - British Pound" },
+  { value: "CNY", label: "CNY - Chinese Yuan" },
+  { value: "KRW", label: "KRW - Korean Won" },
+  { value: "SGD", label: "SGD - Singapore Dollar" },
+  { value: "AUD", label: "AUD - Australian Dollar" },
+  { value: "CAD", label: "CAD - Canadian Dollar" },
+  { value: "INR", label: "INR - Indian Rupee" },
+  { value: "BRL", label: "BRL - Brazilian Real" },
+]
+
+const timezoneOptions = computed(() =>
+  TIMEZONES.map((tz) => ({ label: tz, value: tz }))
+)
+
+const themeOptions = [
+  { value: "light", label: "Light", icon: Sun },
+  { value: "dark", label: "Dark", icon: Moon },
+  { value: "system", label: "System", icon: Monitor },
+]
 </script>
 
 <template>
   <div class="space-y-6">
-    <PageHeader title="Settings" description="Application settings" />
+    <PageHeader title="Settings" description="Manage your application settings" />
 
     <div v-if="isLoading">
       <LoadingSkeleton />
@@ -128,117 +164,114 @@ function toggleTheme() {
     </div>
 
     <template v-else>
-      <form @submit="onSubmit" class="space-y-6">
+      <div class="grid gap-6 lg:grid-cols-2">
         <Card>
           <template #header>
             <span class="text-sm font-medium">Application</span>
           </template>
-          <div class="space-y-4">
+          <form @submit="onSubmit" class="space-y-4">
             <div class="space-y-2">
-              <Label for="app_name">Application Name</Label>
-              <Input id="app_name" v-model="app_name" v-bind="appNameAttrs" placeholder="Siro Admin" />
+              <Label for="app_name">App Name</Label>
+              <Input id="app_name" v-model="app_name" v-bind="appNameAttrs" placeholder="My App" :disabled="updateMutation.isPending.value" />
               <p v-if="errors.app_name" class="text-sm text-destructive">{{ errors.app_name }}</p>
             </div>
             <div class="space-y-2">
               <Label for="app_description">Description</Label>
-              <Input id="app_description" v-model="app_description" placeholder="Brief description of your application" />
+              <Input id="app_description" v-model="app_description" placeholder="Brief description" :disabled="updateMutation.isPending.value" />
             </div>
-          </div>
-        </Card>
-
-        <Card>
-          <template #header>
-            <span class="text-sm font-medium">Localization</span>
-          </template>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="space-y-2">
-              <Label>Language</Label>
-              <Select
-                :model-value="language"
-                @update:model-value="(v: string) => setFieldValue('language', v)"
-                :options="languageOptions"
-              />
+            <div class="grid grid-cols-2 gap-4">
+              <div class="space-y-2">
+                <Label>Language</Label>
+                <Select
+                  :model-value="language"
+                  @update:model-value="(v: string) => setFieldValue('language', v)"
+                  :options="LANGUAGES"
+                  :disabled="updateMutation.isPending.value"
+                />
+              </div>
+              <div class="space-y-2">
+                <Label>Timezone</Label>
+                <Select
+                  :model-value="timezone"
+                  @update:model-value="(v: string) => setFieldValue('timezone', v)"
+                  :options="timezoneOptions"
+                  :disabled="updateMutation.isPending.value"
+                />
+              </div>
             </div>
-            <div class="space-y-2">
-              <Label for="timezone">Timezone</Label>
-              <Input id="timezone" v-model="timezone" placeholder="UTC" />
+            <div class="grid grid-cols-2 gap-4">
+              <div class="space-y-2">
+                <Label>Currency</Label>
+                <Select
+                  :model-value="currency"
+                  @update:model-value="(v: string) => setFieldValue('currency', v)"
+                  :options="CURRENCIES"
+                  :disabled="updateMutation.isPending.value"
+                />
+              </div>
+              <div class="space-y-2">
+                <Label for="pagination_per_page">Items Per Page</Label>
+                <Input id="pagination_per_page" type="number" v-model="pagination_per_page" :disabled="updateMutation.isPending.value" />
+                <p v-if="errors.pagination_per_page" class="text-sm text-destructive">{{ errors.pagination_per_page }}</p>
+              </div>
             </div>
-            <div class="space-y-2">
-              <Label>Currency</Label>
-              <Select
-                :model-value="currency"
-                @update:model-value="(v: string) => setFieldValue('currency', v)"
-                :options="currencyOptions"
-              />
-            </div>
-          </div>
-        </Card>
-
-        <Card>
-          <template #header>
-            <span class="text-sm font-medium">Preferences</span>
-          </template>
-          <div class="space-y-4">
-            <div class="space-y-2">
-              <Label for="pagination_per_page">Items Per Page</Label>
-              <Input id="pagination_per_page" type="number" v-model="pagination_per_page" min="1" max="100" />
-            </div>
-            <div class="flex items-center justify-between">
-              <div>
+            <div class="flex items-center gap-6">
+              <div class="flex items-center gap-2">
+                <Switch :model-value="maintenance_mode" @update:model-value="(v: boolean) => setFieldValue('maintenance_mode', v)" :disabled="updateMutation.isPending.value" />
                 <Label>Maintenance Mode</Label>
-                <p class="text-xs text-muted-foreground">Disable public access to the application</p>
               </div>
-              <Switch :model-value="maintenance_mode" @update:model-value="(v: boolean) => setFieldValue('maintenance_mode', v)" />
-            </div>
-            <div class="flex items-center justify-between">
-              <div>
+              <div class="flex items-center gap-2">
+                <Switch :model-value="email_notifications" @update:model-value="(v: boolean) => setFieldValue('email_notifications', v)" :disabled="updateMutation.isPending.value" />
                 <Label>Email Notifications</Label>
-                <p class="text-xs text-muted-foreground">Receive email notifications for system events</p>
               </div>
-              <Switch :model-value="email_notifications" @update:model-value="(v: boolean) => setFieldValue('email_notifications', v)" />
             </div>
-          </div>
+            <div class="flex justify-end">
+              <Button type="submit" :disabled="updateMutation.isPending.value">
+                <Loader2 v-if="updateMutation.isPending.value" class="mr-2 h-4 w-4 animate-spin" />
+                Save Settings
+              </Button>
+            </div>
+          </form>
         </Card>
 
         <Card>
           <template #header>
             <span class="text-sm font-medium">Theme</span>
           </template>
-          <div class="flex items-center justify-between">
-            <div>
-              <Label>Dark Mode</Label>
-              <p class="text-xs text-muted-foreground">Toggle between light and dark theme</p>
-            </div>
-            <Button variant="outline" size="icon" @click="toggleTheme">
-              <Sun v-if="colorMode.value === 'dark'" class="h-4 w-4" />
-              <Moon v-else class="h-4 w-4" />
+          <div class="flex gap-2">
+            <Button
+              v-for="opt in themeOptions"
+              :key="opt.value"
+              :variant="colorMode.value === opt.value ? 'default' : 'outline'"
+              class="flex-1"
+              @click="colorMode.preference = opt.value"
+            >
+              <component :is="opt.icon" class="mr-2 h-4 w-4" />
+              {{ opt.label }}
             </Button>
           </div>
         </Card>
 
-        <Card>
+        <Card class="lg:col-span-2">
           <template #header>
             <span class="text-sm font-medium">API Info</span>
           </template>
-          <div class="space-y-2 text-sm">
-            <div class="flex justify-between">
-              <span class="text-muted-foreground">API URL</span>
-              <code class="font-mono text-xs">{{ config.public.apiUrl }}</code>
+          <div class="grid gap-4 sm:grid-cols-3">
+            <div class="space-y-1">
+              <p class="text-xs text-muted-foreground">API URL</p>
+              <p class="text-sm font-mono">{{ config.public.apiUrl }}</p>
             </div>
-            <div class="flex justify-between">
-              <span class="text-muted-foreground">App Name</span>
-              <code class="font-mono text-xs">{{ config.public.appName }}</code>
+            <div class="space-y-1">
+              <p class="text-xs text-muted-foreground">App Name</p>
+              <p class="text-sm font-medium">{{ config.public.appName }}</p>
+            </div>
+            <div class="space-y-1">
+              <p class="text-xs text-muted-foreground">Environment</p>
+              <p class="text-sm font-medium">{{ config.public.nodeEnv || config.public.appName }}</p>
             </div>
           </div>
         </Card>
-
-        <div class="flex justify-end">
-          <Button type="submit" :disabled="isSubmitting || updateMutation.isPending.value">
-            <Loader2 v-if="updateMutation.isPending.value" class="mr-2 h-4 w-4 animate-spin" />
-            Save Settings
-          </Button>
-        </div>
-      </form>
+      </div>
     </template>
   </div>
 </template>

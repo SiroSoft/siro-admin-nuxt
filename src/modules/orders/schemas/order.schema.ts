@@ -1,6 +1,8 @@
 import { z } from "zod"
 
 export const createOrderSchema = z.object({
+  status: z.string().default("pending"),
+  customer_id: z.number().optional(),
   shipping_address: z.string().optional(),
   billing_address: z.string().optional(),
   notes: z.string().optional(),

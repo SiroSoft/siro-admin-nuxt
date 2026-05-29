@@ -6,6 +6,7 @@ import Button from "~/components/ui/Button.vue"
 import Input from "~/components/ui/Input.vue"
 import Label from "~/components/ui/Label.vue"
 import Select from "~/components/ui/Select.vue"
+import ImageUpload from "~/components/ui/ImageUpload.vue"
 import { createUserSchema, updateUserSchema} from "~/modules/users/schemas/user.schema"
 import type { User } from "~/types/user"
 
@@ -27,10 +28,11 @@ const { handleSubmit, errors, defineField, setFieldValue, isSubmitting } = useFo
   initialValues: {
     name: props.user?.name ?? "",
     email: props.user?.email ?? "",
-    password: "",
-    password_confirmation: "",
+    ...(isEdit.value ? {} : { password: "", password_confirmation: "" }),
     role: props.user?.role ?? "viewer",
     status: props.user?.status ?? "active",
+    avatar: props.user?.avatar ?? "",
+    phone: (props.user as any)?.phone ?? "",
   },
 })
 
@@ -40,6 +42,8 @@ const [password, passwordAttrs] = defineField("password" as any)
 const [passwordConfirmation, passwordConfirmationAttrs] = defineField("password_confirmation" as any)
 const [role] = defineField("role" as any)
 const [status] = defineField("status" as any)
+const [avatar] = defineField("avatar" as any)
+const [phone] = defineField("phone" as any)
 
 const roleOptions = [
   { label: "Admin", value: "admin" },
@@ -61,6 +65,11 @@ const onSubmit = handleSubmit((values) => {
 <template>
   <form @submit="onSubmit" class="space-y-4">
     <div class="space-y-2">
+      <Label>Avatar</Label>
+      <ImageUpload :value="avatar ?? ''" @change="(v: string) => setFieldValue('avatar', v)" :disabled="isSubmitting" />
+    </div>
+
+    <div class="space-y-2">
       <Label for="name">Name</Label>
       <Input id="name" v-model="name" v-bind="nameAttrs" placeholder="John Doe" :disabled="isSubmitting" />
       <p v-if="errors.name" class="text-sm text-destructive">{{ errors.name }}</p>
@@ -70,6 +79,11 @@ const onSubmit = handleSubmit((values) => {
       <Label for="email">Email</Label>
       <Input id="email" type="email" v-model="email" v-bind="emailAttrs" placeholder="john@example.com" :disabled="isSubmitting" />
       <p v-if="errors.email" class="text-sm text-destructive">{{ errors.email }}</p>
+    </div>
+
+    <div class="space-y-2">
+      <Label for="phone">Phone</Label>
+      <Input id="phone" type="tel" v-model="phone" placeholder="+1 (555) 000-0000" :disabled="isSubmitting" />
     </div>
 
     <template v-if="!isEdit">
@@ -85,7 +99,7 @@ const onSubmit = handleSubmit((values) => {
       </div>
     </template>
 
-    <div class="grid grid-cols-2 gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <div class="space-y-2">
         <Label>Role</Label>
         <Select

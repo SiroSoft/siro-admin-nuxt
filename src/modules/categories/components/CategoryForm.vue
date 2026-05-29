@@ -36,7 +36,7 @@ const { handleSubmit, errors, defineField, setFieldValue, isSubmitting } = useFo
     color: props.category?.color ?? "",
     parent_id: props.category?.parent_id ?? undefined,
     sort_order: props.category?.sort_order ?? 0,
-    is_active: props.category?.is_active ?? true,
+    is_active: props.category?.is_active === 0 || props.category?.is_active === "0" || props.category?.is_active === false ? false : (props.category?.is_active ?? true),
   },
 })
 

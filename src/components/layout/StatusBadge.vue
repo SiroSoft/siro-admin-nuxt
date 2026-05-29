@@ -2,10 +2,10 @@
 import Badge from "~/components/ui/Badge.vue"
 
 interface Props {
-  status: string
+  status?: string | number | boolean | null
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), { status: "" })
 
 const statusMap: Record<string, { label: string; variant: "success" | "warning" | "destructive" | "secondary" | "default" }> = {
   active: { label: "Active", variant: "success" },
@@ -19,6 +19,7 @@ const statusMap: Record<string, { label: string; variant: "success" | "warning" 
   cancelled: { label: "Cancelled", variant: "destructive" },
   archived: { label: "Archived", variant: "secondary" },
   admin: { label: "Admin", variant: "default" },
+  user: { label: "User", variant: "secondary" },
   editor: { label: "Editor", variant: "warning" },
   viewer: { label: "Viewer", variant: "secondary" },
   healthy: { label: "Healthy", variant: "success" },
@@ -26,12 +27,21 @@ const statusMap: Record<string, { label: string; variant: "success" | "warning" 
   down: { label: "Down", variant: "destructive" },
 }
 
+function normalizeStatus(status: string | number | boolean | null | undefined): string {
+  if (status === null || status === undefined) return ""
+  if (typeof status === "boolean") return status ? "active" : "inactive"
+  if (typeof status === "number") return status === 1 ? "active" : "inactive"
+  return String(status)
+}
+
 const config = computed(() => {
-  const key = props.status.toLowerCase()
-  return statusMap[key] ?? { label: props.status, variant: "secondary" as const }
+  const normalized = normalizeStatus(props.status)
+  if (!normalized) return { label: "", variant: "secondary" as const }
+  const key = normalized.toLowerCase()
+  return statusMap[key] ?? { label: normalized, variant: "secondary" as const }
 })
 </script>
 
 <template>
-  <Badge :variant="config.variant">{{ config.label }}</Badge>
+  <Badge v-if="config.label" :variant="config.variant">{{ config.label }}</Badge>
 </template>

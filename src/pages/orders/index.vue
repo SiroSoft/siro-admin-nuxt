@@ -1,7 +1,8 @@
 <script setup lang="ts">
 definePageMeta({ middleware: "auth" })
 
-import { Plus } from "lucide-vue-next"
+import { Plus, Filter } from "lucide-vue-next"
+import StatusBadge from "~/components/layout/StatusBadge.vue"
 import { useCreateOrder, useUpdateOrder } from "~/composables/useOrders"
 import Button from "~/components/ui/Button.vue"
 import PageHeader from "~/components/layout/PageHeader.vue"
@@ -16,6 +17,7 @@ const editOrder = ref<Order | null>(null)
 const showCreate = ref(false)
 const sortBy = ref("")
 const sortOrder = ref<"asc" | "desc">("asc")
+const statusFilter = ref("")
 
 const debouncedSearch = useDebounce(search)
 
@@ -27,6 +29,7 @@ const params = computed(() => ({
   per_page: 10,
   sort: sortBy.value || undefined,
   order: sortOrder.value || undefined,
+  ...(statusFilter.value ? { status: statusFilter.value } : {}),
 }))
 
 function handleSort(key: string) {
@@ -52,8 +55,20 @@ function handlePageChange(newPage: number) {
       </Button>
     </PageHeader>
 
-    <div class="flex items-center gap-2">
+    <div class="flex flex-wrap items-center gap-2">
       <SearchInput v-model="search" placeholder="Search orders..." />
+      <div class="flex items-center gap-1 ml-auto">
+        <Filter class="h-4 w-4 text-muted-foreground" />
+        <button
+          v-for="status in ['', 'pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled']"
+          :key="status"
+          @click="statusFilter = status"
+          class="px-3 py-1.5 text-sm rounded-md transition-colors"
+          :class="statusFilter === status ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-accent'"
+        >
+          {{ status || 'All' }}
+        </button>
+      </div>
     </div>
 
     <OrderTable

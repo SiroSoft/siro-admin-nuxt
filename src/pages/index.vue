@@ -13,7 +13,7 @@ import EmptyState from "~/components/states/EmptyState.vue"
 import StatusBadge from "~/components/layout/StatusBadge.vue"
 import Button from "~/components/ui/Button.vue"
 import { useDashboard } from "~/composables/useDashboard"
-import { formatDate, formatNumber } from "~/utils"
+import { formatDate, formatNumber, formatRelativeTime } from "~/utils"
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, ChartTooltip, Legend)
 
@@ -35,7 +35,12 @@ const chartOptions = {
   },
 }
 
-const { data, isLoading, isError, error, refetch } = useDashboard()
+const { data, isLoading, isRefetching, isError, error, refetch } = useDashboard()
+const lastChecked = ref<string | null>(null)
+
+watch(data, () => {
+  lastChecked.value = new Date().toISOString()
+}, { immediate: true })
 
 const stats = computed(() => [
   { title: "Total Users", value: formatNumber(data.value?.total_users ?? 0), icon: Users, href: "/users" },
@@ -98,8 +103,8 @@ const chartData = computed(() => {
           <template #header>
             <div class="flex items-center justify-between">
               <span class="text-sm font-medium">Recent Activity</span>
-              <Button variant="ghost" size="icon" @click="refetch()">
-                <RefreshCw class="h-4 w-4" />
+              <Button variant="ghost" size="icon" @click="refetch()" :disabled="isRefetching">
+                <RefreshCw class="h-4 w-4" :class="{ 'animate-spin': isRefetching }" />
               </Button>
             </div>
           </template>
@@ -112,7 +117,7 @@ const chartData = computed(() => {
                 <div class="flex items-center gap-2 mt-0.5">
                   <span class="text-xs text-muted-foreground">{{ activity.user }}</span>
                   <span class="text-xs text-muted-foreground">·</span>
-                  <span class="text-xs text-muted-foreground">{{ formatDate(activity.created_at) }}</span>
+                  <span class="text-xs text-muted-foreground">{{ formatRelativeTime(activity.created_at) }}</span>
                 </div>
               </div>
             </div>
@@ -143,6 +148,10 @@ const chartData = computed(() => {
               <div class="flex items-center justify-between">
                 <span class="text-sm text-muted-foreground">Response Time</span>
                 <span class="text-sm font-medium">{{ data.api_status.response_time ?? '—' }}ms</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-sm text-muted-foreground">Last Checked</span>
+                <span class="text-sm font-medium">{{ lastChecked ? formatRelativeTime(lastChecked) : '—' }}</span>
               </div>
             </div>
             <div v-else>

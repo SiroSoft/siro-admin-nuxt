@@ -17,6 +17,7 @@ import Select from "~/components/ui/Select.vue"
 import LoadingSkeleton from "~/components/states/LoadingSkeleton.vue"
 import ErrorState from "~/components/states/ErrorState.vue"
 import Separator from "~/components/ui/Separator.vue"
+import AlertDialog from "~/components/ui/AlertDialog.vue"
 import { useRuntimeConfig } from "nuxt/app"
 import { useToast } from "~/composables/useToast"
 
@@ -144,6 +145,26 @@ const timezoneOptions = computed(() =>
   TIMEZONES.map((tz) => ({ label: tz, value: tz }))
 )
 
+const showMaintenanceAlert = ref(false)
+const maintenanceTarget = ref(false)
+const previousMaintenance = ref(false)
+
+function handleMaintenanceChange(v: boolean) {
+  maintenanceTarget.value = v
+  previousMaintenance.value = maintenance_mode.value
+  showMaintenanceAlert.value = true
+}
+
+function confirmMaintenanceToggle() {
+  setFieldValue("maintenance_mode", maintenanceTarget.value)
+  showMaintenanceAlert.value = false
+}
+
+function cancelMaintenanceToggle() {
+  setFieldValue("maintenance_mode", previousMaintenance.value)
+  showMaintenanceAlert.value = false
+}
+
 const themeOptions = [
   { value: "light", label: "Light", icon: Sun },
   { value: "dark", label: "Dark", icon: Moon },
@@ -217,7 +238,7 @@ const themeOptions = [
             </div>
             <div class="flex items-center gap-6">
               <div class="flex items-center gap-2">
-                <Switch :model-value="maintenance_mode" @update:model-value="(v: boolean) => setFieldValue('maintenance_mode', v)" :disabled="updateMutation.isPending.value" />
+                <Switch :model-value="maintenance_mode" @update:model-value="handleMaintenanceChange" :disabled="updateMutation.isPending.value" />
                 <Label>Maintenance Mode</Label>
               </div>
               <div class="flex items-center gap-2">
@@ -273,5 +294,14 @@ const themeOptions = [
         </Card>
       </div>
     </template>
+
+    <AlertDialog
+      :open="showMaintenanceAlert"
+      @update:open="(v: boolean) => { if (!v) cancelMaintenanceToggle(); showMaintenanceAlert = v }"
+      @confirm="confirmMaintenanceToggle"
+      title="Confirm Maintenance Mode"
+      description="Enabling maintenance mode will prevent users from accessing the application. Are you sure?"
+      confirmText="Enable"
+    />
   </div>
 </template>

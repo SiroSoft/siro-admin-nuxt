@@ -13,17 +13,31 @@ definePageMeta({
   layout: "auth",
 })
 
-const { login, isLoginPending, loginError } = useAuth()
+const { login, isLoginPending, loginError, isLoading } = useAuth()
 const showPassword = ref(false)
+const rememberMe = ref(false)
 
-const { handleSubmit, errors, defineField } = useForm({
+const { handleSubmit, errors, defineField, setFieldValue } = useForm({
   validationSchema: toTypedSchema(loginSchema),
 })
 
 const [email, emailAttrs] = defineField("email")
 const [password, passwordAttrs] = defineField("password")
 
+onMounted(() => {
+  const saved = localStorage.getItem("remembered_email")
+  if (saved) {
+    setFieldValue("email", saved)
+    rememberMe.value = true
+  }
+})
+
 const onSubmit = handleSubmit((values) => {
+  if (rememberMe.value) {
+    localStorage.setItem("remembered_email", values.email)
+  } else {
+    localStorage.removeItem("remembered_email")
+  }
   login(values)
 })
 
@@ -44,7 +58,11 @@ const serverError = computed(() => {
       </div>
     </template>
 
-    <form @submit="onSubmit" class="space-y-4">
+    <div v-if="isLoading && !isLoginPending" class="flex items-center justify-center py-8">
+      <Loader2 class="h-6 w-6 animate-spin text-muted-foreground" />
+    </div>
+
+    <form v-else @submit="onSubmit" class="space-y-4">
       <div class="space-y-2">
         <Label for="email">Email</Label>
         <Input id="email" type="email" v-model="email" v-bind="emailAttrs" placeholder="admin@example.com" autocomplete="email" />
@@ -67,7 +85,7 @@ const serverError = computed(() => {
 
       <div class="flex items-center justify-between">
         <label class="flex items-center gap-2 text-sm">
-          <input type="checkbox" class="h-4 w-4 rounded border-primary text-primary focus:ring-ring" />
+          <input type="checkbox" v-model="rememberMe" class="h-4 w-4 rounded border-primary text-primary focus:ring-ring" />
           Remember me
         </label>
         <NuxtLink to="/forgot-password" class="text-sm text-primary hover:underline">Forgot password?</NuxtLink>

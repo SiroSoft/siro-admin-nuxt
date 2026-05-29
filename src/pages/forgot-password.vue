@@ -2,7 +2,7 @@
 import { useForm } from "vee-validate"
 import { toTypedSchema } from "@vee-validate/zod"
 import { z } from "zod"
-import { Loader2, Mail, ArrowLeft } from "lucide-vue-next"
+import { Loader2, Mail, ArrowLeft, CheckCircle2 } from "lucide-vue-next"
 import Button from "~/components/ui/Button.vue"
 import Input from "~/components/ui/Input.vue"
 import Label from "~/components/ui/Label.vue"
@@ -24,9 +24,14 @@ const { handleSubmit, errors, defineField, isSubmitting } = useForm({
 
 const [email, emailAttrs] = defineField("email")
 
-const onSubmit = handleSubmit((values) => {
-  submitted.value = true
-  useToast().success("Email sent", "If an account exists with that email, you will receive a password reset link.")
+const onSubmit = handleSubmit(async (values) => {
+  try {
+    submitted.value = true
+    useToast().success("Email sent", "If an account exists with that email, you will receive a password reset link.")
+  } catch {
+    submitted.value = false
+    useToast().error("Error", "Failed to send reset link. Please try again.")
+  }
 })
 </script>
 
@@ -57,7 +62,7 @@ const onSubmit = handleSubmit((values) => {
 
     <div v-else class="text-center space-y-4">
       <div class="rounded-full bg-primary/10 p-3 mx-auto w-fit">
-        <Mail class="h-6 w-6 text-primary" />
+        <CheckCircle2 class="h-6 w-6 text-primary" />
       </div>
       <p class="text-sm text-muted-foreground">
         We've sent a password reset link to <strong class="text-foreground">{{ email }}</strong>

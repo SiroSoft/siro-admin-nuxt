@@ -1,7 +1,7 @@
 <script setup lang="ts">
 definePageMeta({ middleware: "auth" })
 
-import { Plus } from "lucide-vue-next"
+import { Plus, Filter } from "lucide-vue-next"
 import { useCreateProduct, useUpdateProduct } from "~/composables/useProducts"
 import Button from "~/components/ui/Button.vue"
 import PageHeader from "~/components/layout/PageHeader.vue"
@@ -19,6 +19,7 @@ const sortOrder = ref<"asc" | "desc">("asc")
 const categoryFilter = ref("")
 const minPrice = ref("")
 const maxPrice = ref("")
+const statusFilter = ref<string | undefined>(undefined)
 
 const debouncedSearch = useDebounce(search)
 
@@ -33,6 +34,7 @@ const params = computed(() => ({
   ...(categoryFilter.value ? { category_id: categoryFilter.value } : {}),
   ...(minPrice.value ? { min_price: minPrice.value } : {}),
   ...(maxPrice.value ? { max_price: maxPrice.value } : {}),
+  ...(statusFilter.value !== undefined ? { is_active: statusFilter.value } : {}),
 }))
 
 function handleSort(key: string) {
@@ -60,6 +62,17 @@ function handlePageChange(newPage: number) {
 
     <div class="flex flex-wrap items-center gap-2">
       <SearchInput v-model="search" placeholder="Search products..." />
+      <div class="flex items-center gap-1">
+        <button
+          v-for="opt in [{ label: 'All', value: undefined }, { label: 'Active', value: true }, { label: 'Inactive', value: false }]"
+          :key="String(opt.value)"
+          @click="statusFilter = opt.value"
+          class="px-3 py-1.5 text-sm rounded-md transition-colors"
+          :class="statusFilter === opt.value ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-accent'"
+        >
+          {{ opt.label }}
+        </button>
+      </div>
       <input v-model="categoryFilter" placeholder="Category ID" class="flex h-9 w-24 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" />
       <input v-model="minPrice" type="number" step="0.01" placeholder="Min price" class="flex h-9 w-24 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" />
       <input v-model="maxPrice" type="number" step="0.01" placeholder="Max price" class="flex h-9 w-24 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" />

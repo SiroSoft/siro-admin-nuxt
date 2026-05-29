@@ -17,15 +17,19 @@ interface Props {
   sortBy?: string
   sortOrder?: "asc" | "desc"
   params?: Record<string, any>
+  selectedIds?: Set<number>
 }
 
-const props = withDefaults(defineProps<Props>(), {})
+const props = withDefaults(defineProps<Props>(), {
+  selectedIds: () => new Set<number>(),
+})
 
 const emit = defineEmits<{
   edit: [user: User]
   create: []
   sort: [key: string]
   pageChange: [page: number]
+  "update:selectedIds": [ids: Set<number>]
 }>()
 
 const deleteId = ref<number | null>(null)
@@ -33,7 +37,30 @@ const paramsRef = computed(() => props.params)
 const { users, meta, isLoading, isError, error, refetch } = useUsers(paramsRef as any)
 const deleteMutation = useDeleteUser()
 
+const allSelected = computed(() =>
+  users.value.length > 0 && users.value.every((u: User) => props.selectedIds.has(u.id!))
+)
+
+function toggleSelect(userId: number) {
+  const next = new Set(props.selectedIds)
+  if (next.has(userId)) {
+    next.delete(userId)
+  } else {
+    next.add(userId)
+  }
+  emit("update:selectedIds", next)
+}
+
+function toggleSelectAll() {
+  if (allSelected.value) {
+    emit("update:selectedIds", new Set())
+  } else {
+    emit("update:selectedIds", new Set(users.value.map((u: User) => u.id!)))
+  }
+}
+
 const columns = [
+  { key: "select", label: "" },
   { key: "name", label: "Name", sortable: true },
   { key: "email", label: "Email", sortable: true },
   { key: "role", label: "Role" },
@@ -66,6 +93,12 @@ const columns = [
       :sort-order="props.sortOrder"
       @sort="emit('sort', $event)"
     >
+      <template #header-select>
+        <input type="checkbox" :checked="allSelected" @change="toggleSelectAll" class="h-4 w-4 rounded border-primary text-primary focus:ring-ring" />
+      </template>
+      <template #cell-select="{ item }: { item: User }">
+        <input type="checkbox" :checked="props.selectedIds.has(item.id!)" @change="toggleSelect(item.id!)" class="h-4 w-4 rounded border-primary text-primary focus:ring-ring" />
+      </template>
       <template #cell-role="{ item }: { item: User }">
         <StatusBadge :status="item.role" />
       </template>

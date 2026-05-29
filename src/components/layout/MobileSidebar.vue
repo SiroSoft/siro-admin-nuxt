@@ -65,7 +65,7 @@ onUnmounted(() => {
         :aria-current="$route.path === item.href || $route.path.startsWith(item.href + '/') ? 'page' : undefined"
         @click="uiStore.setMobileSidebar(false)"
         :class="cn(
-          'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-150',
+          'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-150 active:scale-[0.98]',
           $route.path === item.href || $route.path.startsWith(item.href + '/')
             ? 'bg-sidebar-accent text-sidebar-foreground'
             : 'text-sidebar-muted hover:bg-sidebar-accent hover:text-sidebar-foreground',
@@ -79,7 +79,7 @@ onUnmounted(() => {
     <div class="mt-4 pt-4 border-t border-sidebar-border">
       <button
         @click="handleLogout"
-        class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-sidebar-muted hover:bg-sidebar-accent hover:text-sidebar-foreground transition-colors"
+        class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-sidebar-muted hover:bg-sidebar-accent hover:text-sidebar-foreground transition-colors active:scale-[0.98]"
       >
         <LogOut class="h-4 w-4" />
         Logout

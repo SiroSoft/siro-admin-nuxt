@@ -27,7 +27,7 @@ onMounted(() => {
       )"
     >
       <Header />
-      <main class="p-4 lg:p-6">
+      <main class="p-4 lg:p-6 animate-fade-in">
         <slot />
       </main>
     </div>

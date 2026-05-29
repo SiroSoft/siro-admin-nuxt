@@ -88,7 +88,7 @@ const chartData = computed(() => {
           v-for="stat in stats"
           :key="stat.title"
           :to="stat.href"
-          class="rounded-xl border bg-card text-card-foreground shadow-sm p-6 hover:shadow-md transition-shadow"
+          class="rounded-xl border bg-card text-card-foreground shadow-sm p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
         >
           <div class="flex flex-row items-center justify-between pb-2">
             <span class="text-sm font-medium text-muted-foreground">{{ stat.title }}</span>

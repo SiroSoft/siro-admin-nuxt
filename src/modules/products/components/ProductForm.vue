@@ -44,7 +44,7 @@ const { handleSubmit, errors, defineField, setFieldValue, isSubmitting } = useFo
     width: props.product?.width ?? undefined,
     height: props.product?.height ?? undefined,
     length: props.product?.length ?? undefined,
-    cover_image: (props.product as any)?.images?.[0]?.url ?? "",
+    cover_image: (props.product as any)?.cover_image ?? "",
     is_active: props.product?.is_active ?? true,
     is_featured: props.product?.is_featured ?? false,
     category_id: props.product?.category_id ?? undefined,

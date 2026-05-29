@@ -53,7 +53,7 @@ const serverError = computed(() => {
   <Card>
     <template #header>
       <div class="text-center space-y-4">
-        <img src="/logo.svg" alt="Siro Admin" class="mx-auto h-12 w-12" />
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" class="mx-auto h-12 w-12"><rect width="32" height="32" rx="8" fill="#2563eb"/><path d="M12 5h10l-4 10h4l-6 14 2-12h-4l2-12z" fill="white"/></svg>
         <div>
           <h3 class="text-2xl font-bold">Siro Admin</h3>
           <p class="text-sm text-muted-foreground mt-1">Sign in to your account</p>

@@ -40,7 +40,7 @@ function handleLogout() {
   >
     <div :class="cn('flex h-14 items-center border-b border-sidebar-border px-4 gap-2', uiStore.sidebarCollapsed && 'justify-center')">
       <NuxtLink to="/" class="flex items-center gap-2 truncate">
-        <img src="/logo.svg" alt="Siro Admin" class="h-7 w-7 shrink-0" />
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" class="h-7 w-7 shrink-0"><rect width="32" height="32" rx="8" fill="#2563eb"/><path d="M12 5h10l-4 10h4l-6 14 2-12h-4l2-12z" fill="white"/></svg>
         <span v-if="!uiStore.sidebarCollapsed" class="text-sm font-bold text-sidebar-foreground">
           {{ config.public.appName }}
         </span>

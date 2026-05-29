@@ -10,7 +10,8 @@ export function useAuth() {
   const loginMutation = useMutation({
     mutationFn: (data: LoginRequest) => authService.login(data),
     onSuccess: (res) => {
-      authStore.login(res.user, res.access_token, res.refresh_token)
+      const payload = res.data!
+      authStore.login(payload.user!, payload.token!, payload.refresh_token!)
       router.push("/")
     },
   })

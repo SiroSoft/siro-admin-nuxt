@@ -52,9 +52,12 @@ const serverError = computed(() => {
 <template>
   <Card>
     <template #header>
-      <div class="text-center">
-        <h3 class="text-2xl font-bold">Siro Admin</h3>
-        <p class="text-sm text-muted-foreground mt-1">Sign in to your account</p>
+      <div class="text-center space-y-4">
+        <img src="/logo.svg" alt="Siro Admin" class="mx-auto h-12 w-12" />
+        <div>
+          <h3 class="text-2xl font-bold">Siro Admin</h3>
+          <p class="text-sm text-muted-foreground mt-1">Sign in to your account</p>
+        </div>
       </div>
     </template>
 

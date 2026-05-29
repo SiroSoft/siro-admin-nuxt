@@ -38,10 +38,13 @@ function handleLogout() {
       uiStore.sidebarCollapsed ? 'w-16' : 'w-60',
     )"
   >
-    <div :class="cn('flex h-14 items-center border-b border-sidebar-border px-4', uiStore.sidebarCollapsed && 'justify-center')">
-      <span v-if="!uiStore.sidebarCollapsed" class="text-sm font-bold text-sidebar-foreground truncate">
-        {{ config.public.appName }}
-      </span>
+    <div :class="cn('flex h-14 items-center border-b border-sidebar-border px-4 gap-2', uiStore.sidebarCollapsed && 'justify-center')">
+      <NuxtLink to="/" class="flex items-center gap-2 truncate">
+        <img src="/logo.svg" alt="Siro Admin" class="h-7 w-7 shrink-0" />
+        <span v-if="!uiStore.sidebarCollapsed" class="text-sm font-bold text-sidebar-foreground">
+          {{ config.public.appName }}
+        </span>
+      </NuxtLink>
       <button
         @click="uiStore.toggleSidebar()"
         :class="cn('ml-auto text-sidebar-foreground hover:bg-sidebar-accent rounded-lg p-2', uiStore.sidebarCollapsed && 'ml-0')"

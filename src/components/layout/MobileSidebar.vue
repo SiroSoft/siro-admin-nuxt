@@ -49,7 +49,7 @@ function handleLogout() {
         :to="item.href"
         @click="uiStore.setMobileSidebar(false)"
         :class="cn(
-          'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
+          'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-150',
           $route.path === item.href || $route.path.startsWith(item.href + '/')
             ? 'bg-sidebar-accent text-sidebar-foreground'
             : 'text-sidebar-muted hover:bg-sidebar-accent hover:text-sidebar-foreground',

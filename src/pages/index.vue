@@ -13,15 +13,24 @@ import EmptyState from "~/components/states/EmptyState.vue"
 import StatusBadge from "~/components/layout/StatusBadge.vue"
 import Button from "~/components/ui/Button.vue"
 import { useDashboard } from "~/composables/useDashboard"
+import { useAuth } from "~/composables/useAuth"
 import { formatDate, formatNumber, formatRelativeTime, cn } from "~/utils"
 import Avatar from "~/components/ui/Avatar.vue"
 
 const iconColors: Record<string, string> = {
-  "Total Users": "bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400",
-  "Active Users": "bg-cyan-100 text-cyan-600 dark:bg-cyan-900/30 dark:text-cyan-400",
-  "Total Orders": "bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400",
-  "Total Products": "bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400",
-  Revenue: "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400",
+  "Total Users": "bg-gradient-to-br from-blue-500/10 to-blue-600/20 text-blue-600 dark:from-blue-500/20 dark:to-blue-600/30 dark:text-blue-400 ring-1 ring-blue-500/20",
+  "Active Users": "bg-gradient-to-br from-cyan-500/10 to-cyan-600/20 text-cyan-600 dark:from-cyan-500/20 dark:to-cyan-600/30 dark:text-cyan-400 ring-1 ring-cyan-500/20",
+  "Total Orders": "bg-gradient-to-br from-orange-500/10 to-orange-600/20 text-orange-600 dark:from-orange-500/20 dark:to-orange-600/30 dark:text-orange-400 ring-1 ring-orange-500/20",
+  "Total Products": "bg-gradient-to-br from-purple-500/10 to-purple-600/20 text-purple-600 dark:from-purple-500/20 dark:to-purple-600/30 dark:text-purple-400 ring-1 ring-purple-500/20",
+  Revenue: "bg-gradient-to-br from-emerald-500/10 to-emerald-600/20 text-emerald-600 dark:from-emerald-500/20 dark:to-emerald-600/30 dark:text-emerald-400 ring-1 ring-emerald-500/20",
+}
+
+const gradColors: Record<string, string> = {
+  "Total Users": "from-blue-600 to-blue-400",
+  "Active Users": "from-cyan-600 to-cyan-400",
+  "Total Orders": "from-orange-600 to-orange-400",
+  "Total Products": "from-purple-600 to-purple-400",
+  Revenue: "from-emerald-600 to-emerald-400",
 }
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, ChartTooltip, Legend)
@@ -46,6 +55,9 @@ const chartOptions = {
 
 const { data, isLoading, isRefetching, isError, error, refetch } = useDashboard()
 const lastChecked = ref<string | null>(null)
+const { user } = useAuth()
+const hour = new Date().getHours()
+const greeting = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening"
 
 watch(data, () => {
   lastChecked.value = new Date().toISOString()
@@ -77,12 +89,28 @@ const chartData = computed(() => {
 
 <template>
   <div class="space-y-6">
-    <PageHeader title="Dashboard" description="Overview of your application">
-      <Button variant="outline" size="sm" @click="refetch()" :disabled="isRefetching">
-        <RefreshCw class="mr-2 h-4 w-4" :class="{ 'animate-spin': isRefetching }" />
-        Refresh
-      </Button>
-    </PageHeader>
+    <template v-if="isError">
+      <PageHeader title="Dashboard" description="Overview of your application">
+        <Button variant="outline" size="sm" @click="refetch()" :disabled="isRefetching">
+          <RefreshCw class="mr-2 h-4 w-4" :class="{ 'animate-spin': isRefetching }" />
+          Refresh
+        </Button>
+      </PageHeader>
+    </template>
+    <template v-else>
+      <div class="rounded-xl bg-gradient-to-br from-primary/5 via-primary/10 to-primary/5 p-6 border">
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="text-2xl font-bold tracking-tight">{{ greeting }}, {{ user?.name || "there" }} 👋</h1>
+            <p class="text-muted-foreground mt-1">Here's what's happening with your application today.</p>
+          </div>
+          <Button variant="outline" size="sm" @click="refetch()" :disabled="isRefetching">
+            <RefreshCw class="mr-2 h-4 w-4" :class="{ 'animate-spin': isRefetching }" />
+            Refresh
+          </Button>
+        </div>
+      </div>
+    </template>
 
     <div v-if="isLoading">
       <StatsSkeleton />
@@ -102,16 +130,20 @@ const chartData = computed(() => {
           v-for="stat in stats"
           :key="stat.title"
           :to="stat.href"
-          class="rounded-xl border bg-card text-card-foreground shadow-sm p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg border-l-4 border-l-primary/20"
+          class="relative overflow-hidden rounded-xl border bg-card text-card-foreground shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-xl cursor-pointer group"
         >
-          <div class="flex items-center justify-between">
-            <div :class="['rounded-xl p-3', iconColors[stat.title] || 'bg-muted']">
-              <component :is="stat.icon" class="h-5 w-5" />
+          <div class="absolute inset-0 opacity-[0.03] bg-gradient-to-br dark:opacity-[0.08]" :class="gradColors[stat.title]" />
+          <div class="p-6 relative">
+            <div class="flex items-center justify-between">
+              <div :class="['rounded-xl p-3 transition-transform group-hover:scale-110', iconColors[stat.title] || 'bg-muted']">
+                <component :is="stat.icon" class="h-5 w-5" />
+              </div>
+              <div class="h-16 w-16 rounded-full opacity-10 blur-2xl bg-gradient-to-br" :class="gradColors[stat.title]" />
             </div>
-          </div>
-          <div class="mt-4">
-            <p class="text-sm font-medium text-muted-foreground">{{ stat.title }}</p>
-            <p class="text-2xl font-bold tracking-tight mt-1">{{ stat.value }}</p>
+            <div class="mt-4">
+              <p class="text-sm font-medium text-muted-foreground">{{ stat.title }}</p>
+              <p class="text-2xl font-bold tracking-tight mt-1">{{ stat.value }}</p>
+            </div>
           </div>
         </NuxtLink>
       </div>

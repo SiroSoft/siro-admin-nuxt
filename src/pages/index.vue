@@ -1,7 +1,7 @@
 <script setup lang="ts">
 definePageMeta({ middleware: "auth" })
 
-import { Users, ShoppingCart, Package, DollarSign, Activity, RefreshCw, ExternalLink, TrendingUp } from "lucide-vue-next"
+import { Users, ShoppingCart, Package, DollarSign, Activity, RefreshCw, TrendingUp, ArrowRight, Plus, Eye, Settings } from "lucide-vue-next"
 import { Bar } from "vue-chartjs"
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip as ChartTooltip, Legend } from "chart.js"
 import Card from "~/components/ui/Card.vue"
@@ -13,7 +13,16 @@ import EmptyState from "~/components/states/EmptyState.vue"
 import StatusBadge from "~/components/layout/StatusBadge.vue"
 import Button from "~/components/ui/Button.vue"
 import { useDashboard } from "~/composables/useDashboard"
-import { formatDate, formatNumber, formatRelativeTime } from "~/utils"
+import { formatDate, formatNumber, formatRelativeTime, cn } from "~/utils"
+import Avatar from "~/components/ui/Avatar.vue"
+
+const iconColors: Record<string, string> = {
+  "Total Users": "bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400",
+  "Active Users": "bg-cyan-100 text-cyan-600 dark:bg-cyan-900/30 dark:text-cyan-400",
+  "Total Orders": "bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400",
+  "Total Products": "bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400",
+  Revenue: "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400",
+}
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, ChartTooltip, Legend)
 
@@ -93,13 +102,17 @@ const chartData = computed(() => {
           v-for="stat in stats"
           :key="stat.title"
           :to="stat.href"
-          class="rounded-xl border bg-card text-card-foreground shadow-sm p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
+          class="rounded-xl border bg-card text-card-foreground shadow-sm p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg border-l-4 border-l-primary/20"
         >
-          <div class="flex flex-row items-center justify-between pb-2">
-            <span class="text-sm font-medium text-muted-foreground">{{ stat.title }}</span>
-            <component :is="stat.icon" class="h-4 w-4 text-muted-foreground" />
+          <div class="flex items-center justify-between">
+            <div :class="['rounded-xl p-3', iconColors[stat.title] || 'bg-muted']">
+              <component :is="stat.icon" class="h-5 w-5" />
+            </div>
           </div>
-          <div class="text-2xl font-bold">{{ stat.value }}</div>
+          <div class="mt-4">
+            <p class="text-sm font-medium text-muted-foreground">{{ stat.title }}</p>
+            <p class="text-2xl font-bold tracking-tight mt-1">{{ stat.value }}</p>
+          </div>
         </NuxtLink>
       </div>
 
@@ -114,16 +127,12 @@ const chartData = computed(() => {
             </div>
           </template>
           <div v-if="data?.recent_activity?.length" class="space-y-4">
-            <div v-for="activity in data.recent_activity.slice(0, 10)" :key="activity.id" class="flex items-start gap-3">
-              <div class="h-2 w-2 mt-2 rounded-full bg-primary shrink-0" />
+            <div v-for="activity in data.recent_activity.slice(0, 8)" :key="activity.id" class="flex items-start gap-3">
+              <Avatar class="h-8 w-8 shrink-0" :fallback="(activity.user ?? '?').charAt(0).toUpperCase()" />
               <div class="flex-1 min-w-0">
                 <p class="text-sm font-medium truncate">{{ activity.action }}</p>
                 <p class="text-xs text-muted-foreground truncate">{{ activity.description }}</p>
-                <div class="flex items-center gap-2 mt-0.5">
-                  <span class="text-xs text-muted-foreground">{{ activity.user }}</span>
-                  <span class="text-xs text-muted-foreground">·</span>
-                  <span class="text-xs text-muted-foreground">{{ formatRelativeTime(activity.created_at) }}</span>
-                </div>
+                <p class="text-xs text-muted-foreground mt-1">{{ formatRelativeTime(activity.created_at) }}</p>
               </div>
             </div>
           </div>
@@ -168,26 +177,30 @@ const chartData = computed(() => {
             <template #header>
               <span class="text-sm font-medium">Quick Actions</span>
             </template>
-            <div class="grid grid-cols-2 gap-2">
-              <NuxtLink to="/users" class="flex items-center gap-2 rounded-lg border p-3 text-sm hover:bg-accent transition-colors">
-                <Users class="h-4 w-4" />
-                <span>Users</span>
-                <ExternalLink class="h-3 w-3 ml-auto text-muted-foreground" />
+            <div class="grid gap-2">
+              <NuxtLink to="/users/new" class="group">
+                <Button class="w-full justify-start">
+                  <Plus class="mr-2 h-4 w-4" /> New User
+                  <ArrowRight class="ml-auto h-4 w-4 opacity-0 -translate-x-2 transition-all group-hover:opacity-100 group-hover:translate-x-0" />
+                </Button>
               </NuxtLink>
-              <NuxtLink to="/orders" class="flex items-center gap-2 rounded-lg border p-3 text-sm hover:bg-accent transition-colors">
-                <ShoppingCart class="h-4 w-4" />
-                <span>Orders</span>
-                <ExternalLink class="h-3 w-3 ml-auto text-muted-foreground" />
+              <NuxtLink to="/orders" class="group">
+                <Button variant="secondary" class="w-full justify-start">
+                  <Eye class="mr-2 h-4 w-4" /> View Orders
+                  <ArrowRight class="ml-auto h-4 w-4 opacity-0 -translate-x-2 transition-all group-hover:opacity-100 group-hover:translate-x-0" />
+                </Button>
               </NuxtLink>
-              <NuxtLink to="/products" class="flex items-center gap-2 rounded-lg border p-3 text-sm hover:bg-accent transition-colors">
-                <Package class="h-4 w-4" />
-                <span>Products</span>
-                <ExternalLink class="h-3 w-3 ml-auto text-muted-foreground" />
+              <NuxtLink to="/products" class="group">
+                <Button variant="secondary" class="w-full justify-start">
+                  <Package class="mr-2 h-4 w-4" /> Manage Products
+                  <ArrowRight class="ml-auto h-4 w-4 opacity-0 -translate-x-2 transition-all group-hover:opacity-100 group-hover:translate-x-0" />
+                </Button>
               </NuxtLink>
-              <NuxtLink to="/posts" class="flex items-center gap-2 rounded-lg border p-3 text-sm hover:bg-accent transition-colors">
-                <Activity class="h-4 w-4" />
-                <span>Posts</span>
-                <ExternalLink class="h-3 w-3 ml-auto text-muted-foreground" />
+              <NuxtLink to="/settings" class="group">
+                <Button variant="secondary" class="w-full justify-start">
+                  <Settings class="mr-2 h-4 w-4" /> Settings
+                  <ArrowRight class="ml-auto h-4 w-4 opacity-0 -translate-x-2 transition-all group-hover:opacity-100 group-hover:translate-x-0" />
+                </Button>
               </NuxtLink>
             </div>
           </Card>

@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref } from "vue"
-import { Upload, X, Link } from "lucide-vue-next"
+import { Upload, X, Link, Loader2 } from "lucide-vue-next"
 import Button from "~/components/ui/Button.vue"
 import Input from "~/components/ui/Input.vue"
+import { uploadService } from "~/services/upload.service"
 
 interface Props {
   value?: string
@@ -17,15 +18,19 @@ const emit = defineEmits<{
 }>()
 
 const urlInput = ref("")
+const uploading = ref(false)
 const fileInputRef = ref<HTMLInputElement | null>(null)
 
-function handleFile(file: File) {
-  const reader = new FileReader()
-  reader.onload = (e) => {
-    const dataUrl = e.target?.result as string
-    emit("change", dataUrl)
+async function handleFile(file: File) {
+  uploading.value = true
+  try {
+    const url = await uploadService.upload(file)
+    emit("change", url)
+  } catch (err) {
+    console.error("Upload failed", err)
+  } finally {
+    uploading.value = false
   }
-  reader.readAsDataURL(file)
 }
 
 function handleDrop(e: DragEvent) {
@@ -70,6 +75,10 @@ function handleRemove() {
           <X class="h-3 w-3" />
         </Button>
       </div>
+      <template v-else-if="uploading">
+        <Loader2 class="mb-2 h-8 w-8 animate-spin text-muted-foreground" />
+        <p class="text-sm text-muted-foreground">Uploading...</p>
+      </template>
       <template v-else>
         <Upload class="mb-2 h-8 w-8 text-muted-foreground" />
         <p class="text-sm text-muted-foreground">Drag & drop or click to upload</p>
@@ -78,10 +87,10 @@ function handleRemove() {
           type="file"
           accept="image/*"
           class="hidden"
-          :disabled="props.disabled"
+          :disabled="props.disabled || uploading"
           @change="($event.target as HTMLInputElement).files?.[0] && handleFile(($event.target as HTMLInputElement).files![0])"
         />
-        <Button type="button" variant="outline" size="sm" class="mt-2" :disabled="props.disabled" @click="fileInputRef?.click()">
+        <Button type="button" variant="outline" size="sm" class="mt-2" :disabled="props.disabled || uploading" @click="fileInputRef?.click()">
           Browse
         </Button>
       </template>

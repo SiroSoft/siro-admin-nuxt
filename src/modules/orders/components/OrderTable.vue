@@ -83,7 +83,7 @@ const columns = [
           <Button variant="ghost" size="icon" @click="emit('edit', item)" :aria-label="`Edit order #${item.id}`">
             <Edit class="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="icon" @click="deleteId = item.id" :aria-label="`Delete order #${item.id}`">
+          <Button variant="ghost" size="icon" @click="deleteId = item.id ?? null" :aria-label="`Delete order #${item.id}`">
             <Trash2 class="h-4 w-4 text-destructive" />
           </Button>
         </div>

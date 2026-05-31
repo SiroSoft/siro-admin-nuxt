@@ -36,6 +36,6 @@ onMounted(() => {
     <slot />
   </div>
   <div v-else class="flex min-h-screen items-center justify-center p-8">
-    <LoadingSkeleton rows="4" />
+    <LoadingSkeleton :rows="4" />
   </div>
 </template>

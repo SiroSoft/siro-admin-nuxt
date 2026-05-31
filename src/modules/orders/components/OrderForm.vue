@@ -124,8 +124,8 @@ const onSubmit = handleSubmit((values) => {
             <Label class="text-xs">Product</Label>
             <SearchableSelect
               :options="productOptions"
-              :value="values.items?.[idx]?.product_id ? String(values.items[idx].product_id) : ''"
-              @change="(v: string) => setFieldValue(`items.${idx}.product_id`, Number(v))"
+              :value="(values as any).items?.[idx]?.product_id ? String((values as any).items[idx].product_id) : ''"
+              @change="(v: string) => setFieldValue(`items.${idx}.product_id` as any, Number(v))"
               placeholder="Search product..."
               :disabled="isSubmitting"
             />
@@ -134,8 +134,8 @@ const onSubmit = handleSubmit((values) => {
             <Label class="text-xs">Qty</Label>
             <Input
               type="number"
-              :model-value="values.items?.[idx]?.quantity"
-              @update:model-value="(v: string) => setFieldValue(`items.${idx}.quantity`, Number(v))"
+              :model-value="(values as any).items?.[idx]?.quantity"
+              @update:model-value="(v: string) => setFieldValue(`items.${idx}.quantity` as any, Number(v))"
               placeholder="1"
               :disabled="isSubmitting"
             />

@@ -2408,8 +2408,32 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                    content?: never;
             };
         };
     };
+}
+
+// ── Manually added types (not auto-generated) ──
+
+export interface PaginationParams {
+  page?: number
+  per_page?: number
+  search?: string
+  sort?: string
+  order?: "asc" | "desc"
+  status?: string
+}
+
+export interface PaginationMeta {
+  current_page: number
+  last_page: number
+  per_page: number
+  total: number
+}
+
+export interface ApiResponse<T = unknown> {
+  data: T
+  message?: string
+  errors?: Record<string, string[]>
 }

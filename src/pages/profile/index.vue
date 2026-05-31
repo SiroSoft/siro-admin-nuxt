@@ -89,7 +89,7 @@ const onPasswordSubmit = handlePasswordSubmit((values) => {
 })
 
 const initials = computed(() => {
-  if (!authStore.user) return ""
+  if (!authStore.user?.name) return ""
   return authStore.user.name
     .split(" ")
     .map((n: string) => n[0])

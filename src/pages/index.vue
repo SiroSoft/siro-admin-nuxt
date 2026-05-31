@@ -115,8 +115,8 @@ const chartData = computed(() => {
     <div v-if="isLoading">
       <StatsSkeleton />
       <div class="mt-6 grid gap-4 md:grid-cols-2">
-        <LoadingSkeleton rows="4" />
-        <LoadingSkeleton rows="4" />
+        <LoadingSkeleton :rows="4" />
+        <LoadingSkeleton :rows="4" />
       </div>
     </div>
 

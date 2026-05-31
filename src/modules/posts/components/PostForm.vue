@@ -63,7 +63,7 @@ const categoryOptions = computed(() =>
   categories.value.map((cat: any) => ({ label: cat.name, value: String(cat.id) }))
 )
 
-const selectedTagIds = computed(() => tag_ids ?? [])
+const selectedTagIds = computed(() => (tag_ids as unknown as number[]) ?? [])
 
 function toggleTag(tagId: number) {
   const current = selectedTagIds.value ?? []
@@ -112,7 +112,7 @@ const onSubmit = handleSubmit((values) => {
         <Label>Status</Label>
         <Select
           :model-value="status"
-          @update:model-value="(v: string) => setFieldValue('status', v)"
+          @update:model-value="(v: string) => setFieldValue('status', v as 'draft' | 'published' | 'archived')"
           :options="statusOptions"
           :disabled="isSubmitting"
         />
@@ -136,10 +136,10 @@ const onSubmit = handleSubmit((values) => {
           v-for="tag in tags"
           :key="tag.id"
           type="button"
-          :variant="selectedTagIds.includes(tag.id) ? 'default' : 'outline'"
+          :variant="tag.id !== undefined && selectedTagIds.includes(tag.id) ? 'default' : 'outline'"
           size="sm"
           :disabled="isSubmitting"
-          @click="toggleTag(tag.id)"
+          @click="tag.id !== undefined && toggleTag(tag.id)"
         >
           {{ tag.name }}
         </Button>

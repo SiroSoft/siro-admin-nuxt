@@ -30,7 +30,7 @@ const { handleSubmit, errors, defineField, setFieldValue, isSubmitting } = useFo
     email: props.user?.email ?? "",
     ...(isEdit.value ? {} : { password: "", password_confirmation: "" }),
     role: props.user?.role ?? "viewer",
-    status: props.user?.status ?? "active",
+    status: String(props.user?.status ?? "") || "active",
     avatar: props.user?.avatar ?? "",
     phone: props.user?.phone ?? "",
   },

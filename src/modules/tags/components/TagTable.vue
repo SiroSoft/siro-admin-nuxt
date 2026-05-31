@@ -74,7 +74,7 @@ const columns = [
           <Button variant="ghost" size="icon" @click="emit('edit', item)" :aria-label="`Edit ${item.name ?? 'tag'}`">
             <Edit class="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="icon" @click="deleteId = item.id" :aria-label="`Delete ${item.name ?? 'tag'}`">
+          <Button variant="ghost" size="icon" @click="deleteId = item.id ?? null" :aria-label="`Delete ${item.name ?? 'tag'}`">
             <Trash2 class="h-4 w-4 text-destructive" />
           </Button>
         </div>

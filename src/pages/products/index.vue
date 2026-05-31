@@ -19,7 +19,7 @@ const sortOrder = ref<"asc" | "desc">("asc")
 const categoryFilter = ref("")
 const minPrice = ref("")
 const maxPrice = ref("")
-const statusFilter = ref<string | undefined>(undefined)
+const statusFilter = ref<boolean | undefined>(undefined)
 
 const debouncedSearch = useDebounce(search)
 

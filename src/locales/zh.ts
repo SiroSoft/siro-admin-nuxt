@@ -229,6 +229,27 @@ export default {
     pasteUrl: '或粘贴图片链接...',
     set: '设置',
   },
+  register: {
+    title: '创建账户',
+    name: '姓名',
+    submit: '创建账户',
+    success: '账户创建成功',
+    haveAccount: '已有账户？',
+    loginHere: '在此登录',
+    namePlaceholder: '张三',
+  },
+  resetPassword: {
+    title: '重置密码',
+    submit: '重置密码',
+    success: '密码重置成功',
+    invalidToken: '无效或缺失的重置令牌',
+  },
+  verifyEmail: {
+    title: '验证邮箱',
+    submit: '验证邮箱',
+    success: '邮箱验证成功',
+    invalidToken: '无效或过期的验证令牌',
+  },
   errors: {
     notFound: '未找到',
     serverError: '服务器内部错误',

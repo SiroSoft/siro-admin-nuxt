@@ -21,6 +21,7 @@ import AlertDialog from "~/components/ui/AlertDialog.vue"
 import { useRuntimeConfig } from "nuxt/app"
 import { useToast } from "~/composables/useToast"
 import type { UpdateSettingsRequest } from "~/types/settings"
+import { serverService } from "~/services/server.service"
 
 const queryClient = useQueryClient()
 const colorMode = useColorMode()
@@ -150,6 +151,13 @@ const timezoneOptions = computed(() =>
 const showMaintenanceAlert = ref(false)
 const maintenanceTarget = ref(false)
 const previousMaintenance = ref(false)
+
+const serverInfo = ref<any>(null)
+onMounted(async () => {
+  try {
+    serverInfo.value = await serverService.getInfo()
+  } catch { /* ignore */ }
+})
 
 function handleMaintenanceChange(v: boolean) {
   maintenanceTarget.value = v
@@ -291,6 +299,30 @@ const themeOptions = [
             <div class="space-y-1">
               <p class="text-xs text-muted-foreground">{{ t('settings.environment') }}</p>
               <p class="text-sm font-medium">{{ config.public.nodeEnv || config.public.appName }}</p>
+            </div>
+          </div>
+        </Card>
+
+        <Card v-if="serverInfo" class="lg:col-span-2">
+          <template #header>
+            <span class="text-sm font-medium">System Info</span>
+          </template>
+          <div class="grid gap-4 sm:grid-cols-4">
+            <div class="space-y-1">
+              <p class="text-xs text-muted-foreground">PHP Version</p>
+              <p class="text-sm font-mono">{{ serverInfo.php_version }}</p>
+            </div>
+            <div class="space-y-1">
+              <p class="text-xs text-muted-foreground">Server</p>
+              <p class="text-sm font-mono">{{ serverInfo.server }}</p>
+            </div>
+            <div class="space-y-1">
+              <p class="text-xs text-muted-foreground">Database driver</p>
+              <p class="text-sm font-mono">{{ serverInfo.db_driver }}</p>
+            </div>
+            <div class="space-y-1">
+              <p class="text-xs text-muted-foreground">Current time</p>
+              <p class="text-sm font-mono">{{ serverInfo.current_time }}</p>
             </div>
           </div>
         </Card>

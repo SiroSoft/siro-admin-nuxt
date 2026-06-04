@@ -1,7 +1,9 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/vue-query"
 import { profileService } from "~/services/profile.service"
 import { useToast } from "~/composables/useToast"
-import type { UpdateProfileRequest, ChangePasswordRequest } from "~/types/api"
+import type { components } from "~/types/api"
+type UpdateProfileRequest = components["schemas"]["UpdateProfileRequest"]
+type ChangePasswordRequest = components["schemas"]["ChangePasswordRequest"]
 
 export function useProfile() {
   const queryClient = useQueryClient()
@@ -12,7 +14,7 @@ export function useProfile() {
   })
 
   const updateMutation = useMutation({
-    mutationFn: (data: UpdateProfileRequest) => profileService.update(data),
+    mutationFn: (data: UpdateProfileRequest) => profileService.update({ name: data.name ?? "", email: data.email ?? "", avatar: data.avatar }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["profile"] })
       useToast().success("Profile updated", "Your profile has been updated.")

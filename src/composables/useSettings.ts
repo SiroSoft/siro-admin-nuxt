@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/vue-query"
-import settingsService from "~/services/settings.service"
-import type { UpdateSettingsRequest } from "~/types/api"
+import { settingsService } from "~/services/settings.service"
+import type { UpdateSettingsRequest } from "~/types/settings"
 
 export function useSettings() {
   const queryClient = useQueryClient()

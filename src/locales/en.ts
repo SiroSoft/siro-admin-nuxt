@@ -229,6 +229,27 @@ export default {
     pasteUrl: 'Or paste image URL...',
     set: 'Set',
   },
+  register: {
+    title: 'Create an account',
+    name: 'Name',
+    submit: 'Create account',
+    success: 'Account created successfully',
+    haveAccount: 'Already have an account?',
+    loginHere: 'Login here',
+    namePlaceholder: 'John Doe',
+  },
+  resetPassword: {
+    title: 'Reset password',
+    submit: 'Reset password',
+    success: 'Password has been reset successfully',
+    invalidToken: 'Invalid or missing reset token',
+  },
+  verifyEmail: {
+    title: 'Verify email',
+    submit: 'Verify email',
+    success: 'Email verified successfully',
+    invalidToken: 'Invalid or expired verification token',
+  },
   errors: {
     notFound: 'Not Found',
     serverError: 'Internal Server Error',

@@ -37,11 +37,6 @@ export default defineNuxtConfig({
     },
   },
 
-  nitro: {
-    render: {
-      publicAssets: { dir: 'public' },
-    },
-  },
 
   routeRules: {
     '/**': {

@@ -28,15 +28,15 @@ const { handleSubmit, errors, defineField, setFieldValue, isSubmitting } = useFo
   initialValues: {
     name: props.tag?.name ?? "",
     color: props.tag?.color ?? "",
-    description: (props.tag as any)?.description ?? "",
-    is_active: (props.tag as any)?.is_active ?? true,
+    description: props.tag?.description ?? "",
+    is_active: props.tag?.is_active ?? true,
   },
 })
 
 const [name, nameAttrs] = defineField("name")
-const [color] = defineField("color" as any)
-const [description] = defineField("description" as any)
-const [is_active] = defineField("is_active" as any)
+const [color] = defineField("color")
+const [description] = defineField("description")
+const [is_active] = defineField("is_active")
 
 const onSubmit = handleSubmit((values) => {
   emit("submit", values)

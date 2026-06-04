@@ -4,7 +4,9 @@ definePageMeta({
 })
 
 import { Plus, Download, Trash2 } from "lucide-vue-next"
+import type { User } from "~/types/user"
 import { useCreateUser, useUpdateUser, useDeleteUser } from "~/composables/useUsers"
+import { usersService } from "~/services/users.service"
 import Button from "~/components/ui/Button.vue"
 import PageHeader from "~/components/layout/PageHeader.vue"
 import SearchInput from "~/components/forms/SearchInput.vue"
@@ -13,7 +15,6 @@ import UserFormDialog from "~/modules/users/components/UserFormDialog.vue"
 import DeleteDialog from "~/components/dialogs/DeleteDialog.vue"
 import { useQueryClient } from "@tanstack/vue-query"
 import { useToast } from "~/composables/useToast"
-import type { User } from "~/types/user"
 
 const search = ref("")
 const page = ref(1)
@@ -50,15 +51,18 @@ function handlePageChange(newPage: number) {
   page.value = newPage
 }
 
-function handleExport() {
+async function handleExport() {
+  const res = await usersService.list({ per_page: 10000, page: 1 })
+  const allUsers = res.data
+  const rows = (selectedIds.value.size > 0
+    ? allUsers.filter((u) => u.id && selectedIds.value.has(u.id))
+    : allUsers
+  ).map((u) =>
+    [u.name, u.email, u.role, u.status, u.created_at].map((v) => `"${v ?? ""}"`).join(",")
+  )
+  if (rows.length === 0) return
   const headers = ["Name", "Email", "Role", "Status", "Created"]
-  const rows = selectedIds.value.size > 0
-    ? [] // would need access to users data; for CSV we export selected or all
-    : []
-  const csvContent = [
-    headers.join(","),
-    ...rows,
-  ].join("\n")
+  const csvContent = [headers.join(","), ...rows].join("\n")
   const blob = new Blob([csvContent], { type: "text/csv" })
   const url = URL.createObjectURL(blob)
   const a = document.createElement("a")

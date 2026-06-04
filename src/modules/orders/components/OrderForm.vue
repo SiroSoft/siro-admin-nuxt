@@ -61,11 +61,11 @@ const { handleSubmit, errors, defineField, setFieldValue, isSubmitting, values }
       },
 })
 
-const [status] = defineField("status" as any)
-const [shipping_address] = defineField("shipping_address" as any)
-const [billing_address] = defineField("billing_address" as any)
-const [notes] = defineField("notes" as any)
-const [customer_id] = defineField("customer_id" as any)
+const [status] = defineField("status")
+const [shipping_address] = defineField("shipping_address")
+const [billing_address] = defineField("billing_address")
+const [notes] = defineField("notes")
+const [customer_id] = defineField("customer_id")
 
 const statusOptions = [
   { label: "Pending", value: "pending" },
@@ -125,7 +125,7 @@ const onSubmit = handleSubmit((values) => {
             <SearchableSelect
               :options="productOptions"
               :value="(values as any).items?.[idx]?.product_id ? String((values as any).items[idx].product_id) : ''"
-              @change="(v: string) => setFieldValue(`items.${idx}.product_id` as any, Number(v))"
+              @change="(v: string) => setFieldValue(`items.${idx}.product_id`, Number(v))"
               placeholder="Search product..."
               :disabled="isSubmitting"
             />
@@ -135,7 +135,7 @@ const onSubmit = handleSubmit((values) => {
             <Input
               type="number"
               :model-value="(values as any).items?.[idx]?.quantity"
-              @update:model-value="(v: string) => setFieldValue(`items.${idx}.quantity` as any, Number(v))"
+              @update:model-value="(v: string) => setFieldValue(`items.${idx}.quantity`, Number(v))"
               placeholder="1"
               :disabled="isSubmitting"
             />
@@ -148,7 +148,7 @@ const onSubmit = handleSubmit((values) => {
           <Plus class="mr-2 h-4 w-4" />
           Add Item
         </Button>
-        <p v-if="errors.items" class="text-sm text-destructive">{{ (errors.items as any)?.message || "Items validation error" }}</p>
+        <p v-if="errors.items" class="text-sm text-destructive">{{ errors.items || "Items validation error" }}</p>
       </div>
 
       <div class="space-y-2">

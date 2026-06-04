@@ -73,13 +73,13 @@ watch(data, (val) => {
 }, { immediate: true })
 
 const [app_name, appNameAttrs] = defineField("app_name")
-const [app_description] = defineField("app_description" as any)
-const [language] = defineField("language" as any)
-const [timezone] = defineField("timezone" as any)
-const [currency] = defineField("currency" as any)
-const [pagination_per_page] = defineField("pagination_per_page" as any)
-const [maintenance_mode] = defineField("maintenance_mode" as any)
-const [email_notifications] = defineField("email_notifications" as any)
+const [app_description] = defineField("app_description")
+const [language] = defineField("language")
+const [timezone] = defineField("timezone")
+const [currency] = defineField("currency")
+const [pagination_per_page] = defineField("pagination_per_page")
+const [maintenance_mode] = defineField("maintenance_mode")
+const [email_notifications] = defineField("email_notifications")
 
 const updateMutation = useMutation({
   mutationFn: (formData: any) => settingsService.update(formData),

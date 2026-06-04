@@ -39,9 +39,17 @@ function handleDrop(e: DragEvent) {
   if (file && file.type.startsWith("image/")) handleFile(file)
 }
 
+const URL_PROTOCOL_RE = /^(https?:\/\/|data:)/i
+
+function isValidImageUrl(url: string): boolean {
+  return URL_PROTOCOL_RE.test(url)
+}
+
 function handleUrlSubmit() {
-  if (urlInput.value) {
-    emit("change", urlInput.value)
+  const val = urlInput.value.trim()
+  if (val) {
+    if (!isValidImageUrl(val)) return
+    emit("change", val)
     urlInput.value = ""
   }
 }

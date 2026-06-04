@@ -14,7 +14,7 @@ import Button from "~/components/ui/Button.vue"
 import Input from "~/components/ui/Input.vue"
 import Label from "~/components/ui/Label.vue"
 import Avatar from "~/components/ui/Avatar.vue"
-import Skeleton from "~/components/ui/Skeleton.vue"
+
 import Separator from "~/components/ui/Separator.vue"
 import ImageUpload from "~/components/ui/ImageUpload.vue"
 import { useToast } from "~/composables/useToast"
@@ -52,16 +52,16 @@ const { handleSubmit: handlePasswordSubmit, errors: passwordErrors, defineField:
 
 const [pName, pNameAttrs] = defineProfileField("name")
 const [pEmail, pEmailAttrs] = defineProfileField("email")
-const [pAvatar] = defineProfileField("avatar" as any)
+const [pAvatar] = defineProfileField("avatar")
 
 const [currentPassword, cpAttrs] = definePasswordField("current_password")
 const [newPassword, npAttrs] = definePasswordField("new_password")
-const [newPasswordConfirmation, npcAttrs] = definePasswordField("new_password_confirmation" as any)
+const [newPasswordConfirmation, npcAttrs] = definePasswordField("new_password_confirmation")
 
 const profileMutation = useMutation({
   mutationFn: (data: { name: string; email: string; avatar?: string }) => profileService.update(data),
   onSuccess: (userData) => {
-    authStore.setUser(userData as any)
+    authStore.setUser(userData)
     useToast().success("Profile updated", "Your profile has been updated.")
   },
   onError: () => {
@@ -85,7 +85,7 @@ const onProfileSubmit = handleProfileSubmit((values) => {
 })
 
 const onPasswordSubmit = handlePasswordSubmit((values) => {
-  passwordMutation.mutate(values as any)
+  passwordMutation.mutate(values)
 })
 
 const initials = computed(() => {

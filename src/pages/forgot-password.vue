@@ -8,6 +8,7 @@ import Input from "~/components/ui/Input.vue"
 import Label from "~/components/ui/Label.vue"
 import Card from "~/components/ui/Card.vue"
 import { useToast } from "~/composables/useToast"
+import api from "~/services/api"
 
 definePageMeta({ layout: "auth" })
 
@@ -26,10 +27,10 @@ const [email, emailAttrs] = defineField("email")
 
 const onSubmit = handleSubmit(async (values) => {
   try {
+    await api.post("/api/auth/forgot-password", { email: values.email })
     submitted.value = true
     useToast().success("Email sent", "If an account exists with that email, you will receive a password reset link.")
   } catch {
-    submitted.value = false
     useToast().error("Error", "Failed to send reset link. Please try again.")
   }
 })

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { AxiosError } from "axios"
 import { useForm } from "vee-validate"
 import { toTypedSchema } from "@vee-validate/zod"
 import { Eye, EyeOff, Loader2 } from "lucide-vue-next"
@@ -43,7 +44,11 @@ const onSubmit = handleSubmit((values) => {
 
 const serverError = computed(() => {
   if (loginError.value) {
-    return (loginError.value as any)?.response?.data?.message || "Invalid credentials"
+    const err = loginError.value
+    if (err instanceof AxiosError) {
+      return err.response?.data?.message || "Invalid credentials"
+    }
+    return "Invalid credentials"
   }
   return null
 })

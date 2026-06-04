@@ -1,7 +1,7 @@
 <script setup lang="ts">
 definePageMeta({ middleware: "auth" })
 
-import { Users, ShoppingCart, Package, DollarSign, Activity, RefreshCw, TrendingUp, ArrowRight, Plus, Eye, Settings } from "lucide-vue-next"
+import { Users, ShoppingCart, Package, DollarSign, Activity, RefreshCw, TrendingUp, ArrowRight, Eye, Settings } from "lucide-vue-next"
 import { Bar } from "vue-chartjs"
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip as ChartTooltip, Legend } from "chart.js"
 import Card from "~/components/ui/Card.vue"

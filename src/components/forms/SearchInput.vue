@@ -5,10 +5,12 @@ import { useDebounce } from "~/composables/useDebounce"
 interface Props {
   modelValue?: string
   placeholder?: string
+  maxlength?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
   placeholder: "Search...",
+  maxlength: 200,
 })
 
 const emit = defineEmits<{
@@ -37,6 +39,7 @@ watch(
     <input
       v-model="localValue"
       :placeholder="props.placeholder"
+      :maxlength="props.maxlength"
       class="flex h-9 w-full rounded-md border border-input bg-transparent pl-9 pr-8 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
     />
     <button

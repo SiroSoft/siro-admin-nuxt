@@ -122,7 +122,7 @@ const columns = [
 
     <Pagination
       v-if="meta"
-      :current-page="meta.current_page"
+      :current-page="meta.page"
       :last-page="meta.last_page"
       :total="meta.total"
       @page-change="emit('pageChange', $event)"

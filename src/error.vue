@@ -2,8 +2,10 @@
 import Card from "~/components/ui/Card.vue"
 import Button from "~/components/ui/Button.vue"
 
+import type { NuxtError } from "#app"
+
 interface Props {
-  error: any
+  error: NuxtError
 }
 
 const props = defineProps<Props>()

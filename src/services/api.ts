@@ -39,6 +39,10 @@ function processQueue(error: unknown) {
 
 api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
+    const locale = localStorage.getItem("siro_locale") || "en"
+    if (config.headers) {
+      config.headers["X-Locale"] = locale
+    }
     const token = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN)
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`

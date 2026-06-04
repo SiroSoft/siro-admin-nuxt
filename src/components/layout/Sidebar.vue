@@ -11,19 +11,20 @@ import {
 const uiStore = useUiStore()
 const authStore = useAuthStore()
 const config = useRuntimeConfig()
+const { t } = useI18n()
 const router = useRouter()
 
-const navItems = [
-  { href: "/", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/users", label: "Users", icon: Users },
-  { href: "/orders", label: "Orders", icon: ShoppingCart },
-  { href: "/products", label: "Products", icon: Package },
-  { href: "/posts", label: "Posts", icon: FileText },
-  { href: "/categories", label: "Categories", icon: FolderTree },
-  { href: "/tags", label: "Tags", icon: Tags },
-  { href: "/profile", label: "Profile", icon: User },
-  { href: "/settings", label: "Settings", icon: Settings },
-]
+const navItems = computed(() => [
+  { href: "/", label: t('common.dashboard'), icon: LayoutDashboard },
+  { href: "/users", label: t('common.users'), icon: Users },
+  { href: "/orders", label: t('common.orders'), icon: ShoppingCart },
+  { href: "/products", label: t('common.products'), icon: Package },
+  { href: "/posts", label: t('common.posts'), icon: FileText },
+  { href: "/categories", label: t('common.categories'), icon: FolderTree },
+  { href: "/tags", label: t('common.tags'), icon: Tags },
+  { href: "/profile", label: t('common.profile'), icon: User },
+  { href: "/settings", label: t('common.settings'), icon: Settings },
+])
 
 function handleLogout() {
   authStore.logout()
@@ -82,7 +83,7 @@ function handleLogout() {
         )"
       >
         <LogOut class="h-4 w-4 shrink-0" />
-        <span v-if="!uiStore.sidebarCollapsed">Logout</span>
+        <span v-if="!uiStore.sidebarCollapsed">{{ t('common.logout') }}</span>
       </button>
     </div>
   </aside>

@@ -67,15 +67,16 @@ const [billing_address] = defineField("billing_address")
 const [notes] = defineField("notes")
 const [customer_id] = defineField("customer_id")
 
-const statusOptions = [
-  { label: "Pending", value: "pending" },
-  { label: "Confirmed", value: "confirmed" },
-  { label: "Processing", value: "processing" },
-  { label: "Shipped", value: "shipped" },
-  { label: "Delivered", value: "delivered" },
-  { label: "Cancelled", value: "cancelled" },
-]
+const statusOptions = computed(() => [
+  { label: t('orders.status_pending'), value: "pending" },
+  { label: t('orders.status_confirmed'), value: "confirmed" },
+  { label: t('orders.status_processing'), value: "processing" },
+  { label: t('orders.status_shipped'), value: "shipped" },
+  { label: t('orders.status_delivered'), value: "delivered" },
+  { label: t('orders.status_cancelled'), value: "cancelled" },
+])
 
+const { t } = useI18n()
 const { push: addItem, remove: removeItem, fields: itemFields } = useFieldArray("items")
 
 const onSubmit = handleSubmit((values) => {
@@ -87,7 +88,7 @@ const onSubmit = handleSubmit((values) => {
   <form @submit="onSubmit" class="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
     <template v-if="isEdit">
       <div class="space-y-2">
-        <Label>Status</Label>
+        <Label>{{ t('common.status') }}</Label>
         <Select
           :model-value="status"
           @update:model-value="(v: string) => setFieldValue('status', v)"
@@ -97,41 +98,41 @@ const onSubmit = handleSubmit((values) => {
         <p v-if="errors.status" class="text-sm text-destructive">{{ errors.status }}</p>
       </div>
       <div class="space-y-2">
-        <Label for="shipping_address">Shipping Address</Label>
+        <Label for="shipping_address">{{ t('orders.shippingAddress') }}</Label>
         <Textarea id="shipping_address" v-model="shipping_address" :disabled="isSubmitting" />
       </div>
       <div class="space-y-2">
-        <Label for="billing_address">Billing Address</Label>
+        <Label for="billing_address">{{ t('orders.billingAddress') }}</Label>
         <Textarea id="billing_address" v-model="billing_address" :disabled="isSubmitting" />
       </div>
       <div class="space-y-2">
-        <Label for="notes">Notes</Label>
+        <Label for="notes">{{ t('orders.notes') }}</Label>
         <Textarea id="notes" v-model="notes" :disabled="isSubmitting" />
       </div>
       <div class="flex justify-end gap-2 pt-2">
         <Button type="submit" :disabled="isSubmitting">
           <Loader2 v-if="isSubmitting" class="mr-2 h-4 w-4 animate-spin" />
-          Update Order
+          {{ t('orders.update') }}
         </Button>
       </div>
     </template>
 
     <template v-else>
       <div class="space-y-3">
-        <Label>Order Items</Label>
+        <Label>{{ t('orders.orderItems') }}</Label>
         <div v-for="(field, idx) in itemFields" :key="field.key" class="flex items-end gap-2">
           <div class="flex-1 space-y-1">
-            <Label class="text-xs">Product</Label>
+            <Label class="text-xs">{{ t('orders.product') }}</Label>
             <SearchableSelect
               :options="productOptions"
               :value="(values as any).items?.[idx]?.product_id ? String((values as any).items[idx].product_id) : ''"
               @change="(v: string) => setFieldValue(`items.${idx}.product_id`, Number(v))"
-              placeholder="Search product..."
+              :placeholder="t('common.search') + '...'"
               :disabled="isSubmitting"
             />
           </div>
           <div class="w-24 space-y-1">
-            <Label class="text-xs">Qty</Label>
+            <Label class="text-xs">{{ t('orders.qty') }}</Label>
             <Input
               type="number"
               :model-value="(values as any).items?.[idx]?.quantity"
@@ -146,13 +147,13 @@ const onSubmit = handleSubmit((values) => {
         </div>
         <Button type="button" variant="outline" size="sm" :disabled="isSubmitting" @click="addItem({ product_id: undefined, quantity: 1 })">
           <Plus class="mr-2 h-4 w-4" />
-          Add Item
+          {{ t('orders.addItem') }}
         </Button>
         <p v-if="errors.items" class="text-sm text-destructive">{{ errors.items || "Items validation error" }}</p>
       </div>
 
       <div class="space-y-2">
-        <Label>Status</Label>
+        <Label>{{ t('common.status') }}</Label>
         <Select
           :model-value="status"
           @update:model-value="(v: string) => setFieldValue('status', v)"
@@ -162,33 +163,33 @@ const onSubmit = handleSubmit((values) => {
       </div>
 
       <div class="space-y-2">
-        <Label>Customer</Label>
+        <Label>{{ t('orders.customer') }}</Label>
         <SearchableSelect
           :options="userOptions"
           :value="customer_id ? String(customer_id) : ''"
           @change="(v: string) => setFieldValue('customer_id', v ? Number(v) : undefined)"
-          placeholder="Search customer..."
+          :placeholder="t('common.search') + '...'"
           :disabled="isSubmitting"
         />
       </div>
 
       <div class="space-y-2">
-        <Label for="shipping_address">Shipping Address</Label>
+        <Label for="shipping_address">{{ t('orders.shippingAddress') }}</Label>
         <Textarea id="shipping_address" v-model="shipping_address" :disabled="isSubmitting" />
       </div>
       <div class="space-y-2">
-        <Label for="billing_address">Billing Address</Label>
+        <Label for="billing_address">{{ t('orders.billingAddress') }}</Label>
         <Textarea id="billing_address" v-model="billing_address" :disabled="isSubmitting" />
       </div>
       <div class="space-y-2">
-        <Label for="notes">Notes</Label>
+        <Label for="notes">{{ t('orders.notes') }}</Label>
         <Textarea id="notes" v-model="notes" :disabled="isSubmitting" />
       </div>
 
       <div class="flex justify-end gap-2 pt-2">
         <Button type="submit" :disabled="isSubmitting">
           <Loader2 v-if="isSubmitting" class="mr-2 h-4 w-4 animate-spin" />
-          Create Order
+          {{ t('orders.create') }}
         </Button>
       </div>
     </template>

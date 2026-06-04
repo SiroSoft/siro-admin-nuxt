@@ -8,6 +8,7 @@ interface Props {
   total: number
 }
 
+const { t } = useI18n()
 const props = defineProps<Props>()
 
 const emit = defineEmits<{
@@ -28,7 +29,7 @@ const pages = computed(() => {
 <template>
   <div v-if="props.lastPage > 1" class="flex items-center justify-between pt-4">
     <p class="text-sm text-muted-foreground">
-      Page {{ props.currentPage }} of {{ props.lastPage }} ({{ props.total }} total)
+      {{ t('common.page') }} {{ props.currentPage }} {{ t('common.of') }} {{ props.lastPage }} ({{ props.total }} {{ t('common.total').toLowerCase() }})
     </p>
     <div class="flex items-center gap-1">
       <Button

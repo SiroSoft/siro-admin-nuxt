@@ -32,6 +32,7 @@ const emit = defineEmits<{
   "update:selectedIds": [ids: Set<number>]
 }>()
 
+const { t } = useI18n()
 const deleteId = ref<number | null>(null)
 const paramsRef = computed(() => props.params)
 const { users, meta, isLoading, isError, error, refetch } = useUsers(paramsRef as any)
@@ -59,15 +60,15 @@ function toggleSelectAll() {
   }
 }
 
-const columns = [
+const columns = computed(() => [
   { key: "select", label: "" },
-  { key: "name", label: "Name", sortable: true },
-  { key: "email", label: "Email", sortable: true },
-  { key: "role", label: "Role" },
-  { key: "status", label: "Status" },
-  { key: "created_at", label: "Created", sortable: true },
+  { key: "name", label: t('users.name'), sortable: true },
+  { key: "email", label: t('users.email'), sortable: true },
+  { key: "role", label: t('users.role') },
+  { key: "status", label: t('common.status') },
+  { key: "created_at", label: t('users.createdAt'), sortable: true },
   { key: "actions", label: "" },
-]
+])
 </script>
 
 <template>
@@ -75,11 +76,11 @@ const columns = [
     <ErrorState @retry="refetch()" />
   </div>
   <div v-else-if="!isLoading && users.length === 0">
-    <EmptyState title="No users found" description="Get started by creating your first user.">
+    <EmptyState :title="`${t('common.noData')}`" description="Get started by creating your first user.">
       <template #action>
         <Button @click="emit('create')">
           <Plus class="mr-2 h-4 w-4" />
-          Create User
+          {{ t('users.create') }}
         </Button>
       </template>
     </EmptyState>

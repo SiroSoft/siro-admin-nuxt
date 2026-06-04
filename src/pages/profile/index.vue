@@ -20,6 +20,7 @@ import ImageUpload from "~/components/ui/ImageUpload.vue"
 import { useToast } from "~/composables/useToast"
 import { formatDate } from "~/utils"
 
+const { t } = useI18n()
 const authStore = useAuthStore()
 
 const profileSchema = z.object({
@@ -101,12 +102,12 @@ const initials = computed(() => {
 
 <template>
   <div class="space-y-6">
-    <PageHeader title="Profile" description="Manage your account settings" />
+    <PageHeader :title="t('profile.title')" :description="t('profile.description')" />
 
     <div class="grid gap-6 lg:grid-cols-3">
       <Card class="lg:col-span-1">
         <template #header>
-          <span class="text-sm font-medium">Account Info</span>
+          <span class="text-sm font-medium">{{ t('profile.accountInfo') }}</span>
         </template>
         <div class="flex flex-col items-center text-center">
           <Avatar :fallback="initials" class="h-24 w-24 mb-4 text-2xl" />
@@ -114,7 +115,7 @@ const initials = computed(() => {
           <p class="text-sm text-muted-foreground">{{ authStore.user?.email }}</p>
           <p class="text-xs text-muted-foreground mt-1 capitalize">{{ authStore.user?.role }}</p>
           <p v-if="authStore.user?.created_at" class="text-xs text-muted-foreground mt-4">
-            Member since {{ formatDate(authStore.user.created_at) }}
+            {{ t('profile.memberSince', { date: formatDate(authStore.user.created_at) }) }}
           </p>
         </div>
       </Card>
@@ -124,12 +125,12 @@ const initials = computed(() => {
           <template #header>
             <div class="flex items-center gap-2">
               <User class="h-4 w-4" />
-              <span class="text-sm font-medium">Profile Details</span>
+              <span class="text-sm font-medium">{{ t('profile.profileDetails') }}</span>
             </div>
           </template>
           <form @submit="onProfileSubmit" class="space-y-4">
             <div class="space-y-2">
-              <Label>Avatar</Label>
+              <Label>{{ t('profile.avatar') }}</Label>
               <ImageUpload
                 :value="pAvatar"
                 @change="(url: string) => setProfileFieldValue('avatar', url)"
@@ -137,19 +138,19 @@ const initials = computed(() => {
               />
             </div>
             <div class="space-y-2">
-              <Label for="pName">Name</Label>
+              <Label for="pName">{{ t('common.name') }}</Label>
               <Input id="pName" v-model="pName" v-bind="pNameAttrs" placeholder="Your name" :disabled="profileMutation.isPending.value" />
               <p v-if="profileErrors.name" class="text-sm text-destructive">{{ profileErrors.name }}</p>
             </div>
             <div class="space-y-2">
-              <Label for="pEmail">Email</Label>
+              <Label for="pEmail">{{ t('common.email') }}</Label>
               <Input id="pEmail" type="email" v-model="pEmail" v-bind="pEmailAttrs" placeholder="email@example.com" :disabled="profileMutation.isPending.value" />
               <p v-if="profileErrors.email" class="text-sm text-destructive">{{ profileErrors.email }}</p>
             </div>
             <div class="flex gap-2">
               <Button type="submit" :disabled="profileMutation.isPending.value">
                 <Loader2 v-if="profileMutation.isPending.value" class="mr-2 h-4 w-4 animate-spin" />
-                Save Changes
+                {{ t('profile.saveChanges') }}
               </Button>
               <Button
                 type="button"
@@ -157,7 +158,7 @@ const initials = computed(() => {
                 :disabled="profileMutation.isPending.value"
                 @click="resetProfileForm({ values: { name: authStore.user?.name ?? '', email: authStore.user?.email ?? '', avatar: authStore.user?.avatar ?? '' } })"
               >
-                Cancel
+                {{ t('common.cancel') }}
               </Button>
             </div>
           </form>
@@ -167,30 +168,30 @@ const initials = computed(() => {
           <template #header>
             <div class="flex items-center gap-2">
               <Lock class="h-4 w-4" />
-              <span class="text-sm font-medium">Change Password</span>
+              <span class="text-sm font-medium">{{ t('profile.changePassword') }}</span>
             </div>
           </template>
           <form @submit="onPasswordSubmit" class="space-y-4">
             <div class="space-y-2">
-              <Label for="currentPassword">Current Password</Label>
+              <Label for="currentPassword">{{ t('profile.currentPassword') }}</Label>
               <Input id="currentPassword" type="password" v-model="currentPassword" v-bind="cpAttrs" placeholder="••••••••" :disabled="passwordMutation.isPending.value" />
               <p v-if="passwordErrors.current_password" class="text-sm text-destructive">{{ passwordErrors.current_password }}</p>
             </div>
             <Separator />
             <div class="space-y-2">
-              <Label for="newPassword">New Password</Label>
+              <Label for="newPassword">{{ t('profile.newPassword') }}</Label>
               <Input id="newPassword" type="password" v-model="newPassword" v-bind="npAttrs" placeholder="••••••••" :disabled="passwordMutation.isPending.value" />
               <p v-if="passwordErrors.new_password" class="text-sm text-destructive">{{ passwordErrors.new_password }}</p>
             </div>
             <div class="space-y-2">
-              <Label for="newPasswordConfirmation">Confirm New Password</Label>
+              <Label for="newPasswordConfirmation">{{ t('profile.confirmNewPassword') }}</Label>
               <Input id="newPasswordConfirmation" type="password" v-model="newPasswordConfirmation" v-bind="npcAttrs" placeholder="••••••••" :disabled="passwordMutation.isPending.value" />
               <p v-if="passwordErrors.new_password_confirmation" class="text-sm text-destructive">{{ passwordErrors.new_password_confirmation }}</p>
             </div>
             <div class="flex justify-end">
               <Button type="submit" :disabled="passwordMutation.isPending.value">
                 <Loader2 v-if="passwordMutation.isPending.value" class="mr-2 h-4 w-4 animate-spin" />
-                Change Password
+                {{ t('profile.changePassword') }}
               </Button>
             </div>
           </form>

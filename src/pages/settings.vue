@@ -25,6 +25,7 @@ const queryClient = useQueryClient()
 const colorMode = useColorMode()
 const config = useRuntimeConfig()
 
+const { t } = useI18n()
 const { data, isLoading, isError, refetch } = useQuery({
   queryKey: ["settings"],
   queryFn: () => settingsService.get(),
@@ -174,7 +175,7 @@ const themeOptions = [
 
 <template>
   <div class="space-y-6">
-    <PageHeader title="Settings" description="Manage your application settings" />
+    <PageHeader :title="t('settings.title')" description="Manage your application settings" />
 
     <div v-if="isLoading">
       <LoadingSkeleton />
@@ -188,21 +189,21 @@ const themeOptions = [
       <div class="grid gap-6 lg:grid-cols-2">
         <Card>
           <template #header>
-            <span class="text-sm font-medium">Application</span>
+            <span class="text-sm font-medium">{{ t('common.application') }}</span>
           </template>
           <form @submit="onSubmit" class="space-y-4">
             <div class="space-y-2">
-              <Label for="app_name">App Name</Label>
+              <Label for="app_name">{{ t('settings.appName') }}</Label>
               <Input id="app_name" v-model="app_name" v-bind="appNameAttrs" placeholder="My App" :disabled="updateMutation.isPending.value" />
               <p v-if="errors.app_name" class="text-sm text-destructive">{{ errors.app_name }}</p>
             </div>
             <div class="space-y-2">
-              <Label for="app_description">Description</Label>
+              <Label for="app_description">{{ t('common.description') }}</Label>
               <Input id="app_description" v-model="app_description" placeholder="Brief description" :disabled="updateMutation.isPending.value" />
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div class="space-y-2">
-                <Label>Language</Label>
+                <Label>{{ t('settings.language') }}</Label>
                 <Select
                   :model-value="language"
                   @update:model-value="(v: string) => setFieldValue('language', v)"
@@ -211,7 +212,7 @@ const themeOptions = [
                 />
               </div>
               <div class="space-y-2">
-                <Label>Timezone</Label>
+                <Label>{{ t('settings.timezone') }}</Label>
                 <Select
                   :model-value="timezone"
                   @update:model-value="(v: string) => setFieldValue('timezone', v)"
@@ -222,7 +223,7 @@ const themeOptions = [
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div class="space-y-2">
-                <Label>Currency</Label>
+                <Label>{{ t('settings.currency') }}</Label>
                 <Select
                   :model-value="currency"
                   @update:model-value="(v: string) => setFieldValue('currency', v)"
@@ -231,7 +232,7 @@ const themeOptions = [
                 />
               </div>
               <div class="space-y-2">
-                <Label for="pagination_per_page">Items Per Page</Label>
+                <Label for="pagination_per_page">{{ t('settings.itemsPerPage') }}</Label>
                 <Input id="pagination_per_page" type="number" v-model="pagination_per_page" :disabled="updateMutation.isPending.value" />
                 <p v-if="errors.pagination_per_page" class="text-sm text-destructive">{{ errors.pagination_per_page }}</p>
               </div>
@@ -239,17 +240,17 @@ const themeOptions = [
             <div class="flex items-center gap-6">
               <div class="flex items-center gap-2">
                 <Switch :model-value="maintenance_mode" @update:model-value="handleMaintenanceChange" :disabled="updateMutation.isPending.value" />
-                <Label>Maintenance Mode</Label>
+                <Label>{{ t('settings.maintenanceMode') }}</Label>
               </div>
               <div class="flex items-center gap-2">
                 <Switch :model-value="email_notifications" @update:model-value="(v: boolean) => setFieldValue('email_notifications', v)" :disabled="updateMutation.isPending.value" />
-                <Label>Email Notifications</Label>
+                <Label>{{ t('settings.emailNotifications') }}</Label>
               </div>
             </div>
             <div class="flex justify-end">
               <Button type="submit" :disabled="updateMutation.isPending.value">
                 <Loader2 v-if="updateMutation.isPending.value" class="mr-2 h-4 w-4 animate-spin" />
-                Save Settings
+                {{ t('settings.saveSettings') }}
               </Button>
             </div>
           </form>
@@ -257,7 +258,7 @@ const themeOptions = [
 
         <Card>
           <template #header>
-            <span class="text-sm font-medium">Theme</span>
+            <span class="text-sm font-medium">{{ t('common.theme') }}</span>
           </template>
           <div class="flex gap-2">
             <Button
@@ -268,26 +269,26 @@ const themeOptions = [
               @click="colorMode.preference = opt.value"
             >
               <component :is="opt.icon" class="mr-2 h-4 w-4" />
-              {{ opt.label }}
+              {{ t(`common.${opt.value}`) }}
             </Button>
           </div>
         </Card>
 
         <Card class="lg:col-span-2">
           <template #header>
-            <span class="text-sm font-medium">API Info</span>
+            <span class="text-sm font-medium">{{ t('settings.apiInfo') }}</span>
           </template>
           <div class="grid gap-4 sm:grid-cols-3">
             <div class="space-y-1">
-              <p class="text-xs text-muted-foreground">API URL</p>
+              <p class="text-xs text-muted-foreground">{{ t('settings.apiUrl') }}</p>
               <p class="text-sm font-mono">{{ config.public.apiUrl }}</p>
             </div>
             <div class="space-y-1">
-              <p class="text-xs text-muted-foreground">App Name</p>
+              <p class="text-xs text-muted-foreground">{{ t('settings.appName') }}</p>
               <p class="text-sm font-medium">{{ config.public.appName }}</p>
             </div>
             <div class="space-y-1">
-              <p class="text-xs text-muted-foreground">Environment</p>
+              <p class="text-xs text-muted-foreground">{{ t('settings.environment') }}</p>
               <p class="text-sm font-medium">{{ config.public.nodeEnv || config.public.appName }}</p>
             </div>
           </div>
@@ -299,9 +300,9 @@ const themeOptions = [
       :open="showMaintenanceAlert"
       @update:open="(v: boolean) => { if (!v) cancelMaintenanceToggle(); showMaintenanceAlert = v }"
       @confirm="confirmMaintenanceToggle"
-      title="Confirm Maintenance Mode"
-      description="Enabling maintenance mode will prevent users from accessing the application. Are you sure?"
-      confirmText="Enable"
+      :title="t('settings.confirmMaintenanceTitle')"
+      :description="t('settings.confirmMaintenanceDesc')"
+      :confirmText="t('settings.enable')"
     />
   </div>
 </template>

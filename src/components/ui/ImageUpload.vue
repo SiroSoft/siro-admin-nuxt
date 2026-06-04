@@ -17,6 +17,7 @@ const emit = defineEmits<{
   change: [url: string]
 }>()
 
+const { t } = useI18n()
 const urlInput = ref("")
 const uploading = ref(false)
 const fileInputRef = ref<HTMLInputElement | null>(null)
@@ -85,11 +86,11 @@ function handleRemove() {
       </div>
       <template v-else-if="uploading">
         <Loader2 class="mb-2 h-8 w-8 animate-spin text-muted-foreground" />
-        <p class="text-sm text-muted-foreground">Uploading...</p>
+        <p class="text-sm text-muted-foreground">{{ t('common.loading') }}</p>
       </template>
       <template v-else>
         <Upload class="mb-2 h-8 w-8 text-muted-foreground" />
-        <p class="text-sm text-muted-foreground">Drag & drop or click to upload</p>
+        <p class="text-sm text-muted-foreground">{{ t('imageUpload.dragDrop') }}</p>
         <input
           ref="fileInputRef"
           type="file"
@@ -99,14 +100,14 @@ function handleRemove() {
           @change="($event.target as HTMLInputElement).files?.[0] && handleFile(($event.target as HTMLInputElement).files![0])"
         />
         <Button type="button" variant="outline" size="sm" class="mt-2" :disabled="props.disabled || uploading" @click="fileInputRef?.click()">
-          Browse
+          {{ t('imageUpload.browse') }}
         </Button>
       </template>
     </div>
     <div v-if="!props.value" class="flex gap-2">
-      <Input v-model="urlInput" placeholder="Or paste image URL..." :disabled="props.disabled" />
+      <Input v-model="urlInput" :placeholder="t('imageUpload.pasteUrl')" :disabled="props.disabled" />
       <Button type="button" variant="outline" size="sm" :disabled="props.disabled || !urlInput" @click="handleUrlSubmit">
-        <Link class="h-3 w-3 mr-1" /> Set
+        <Link class="h-3 w-3 mr-1" /> {{ t('imageUpload.set') }}
       </Button>
     </div>
     <p v-if="props.error" class="text-sm text-destructive">{{ props.error }}</p>

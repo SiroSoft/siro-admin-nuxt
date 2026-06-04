@@ -18,6 +18,7 @@ const sortBy = ref("")
 const sortOrder = ref<"asc" | "desc">("asc")
 const statusFilter = ref("")
 
+const { t } = useI18n()
 const debouncedSearch = useDebounce(search)
 
 const createMutation = useCreatePost()
@@ -47,23 +48,23 @@ function handlePageChange(newPage: number) {
 
 <template>
   <div class="space-y-4">
-    <PageHeader title="Posts" description="Manage posts">
+    <PageHeader :title="t('posts.title')" description="Manage posts">
       <Button @click="showCreate = true">
         <Plus class="mr-2 h-4 w-4" />
-        Create Post
+        {{ t('posts.create') }}
       </Button>
     </PageHeader>
 
     <div class="flex flex-wrap items-center gap-2">
-      <SearchInput v-model="search" placeholder="Search posts..." />
+      <SearchInput v-model="search" :placeholder="t('common.search') + '...'" />
       <select
         v-model="statusFilter"
         class="flex h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
       >
-        <option value="">All Statuses</option>
-        <option value="draft">Draft</option>
-        <option value="published">Published</option>
-        <option value="archived">Archived</option>
+        <option value="">{{ t('posts.allStatuses') }}</option>
+        <option value="draft">{{ t('posts.status_draft') }}</option>
+        <option value="published">{{ t('posts.status_published') }}</option>
+        <option value="archived">{{ t('posts.status_archived') }}</option>
       </select>
     </div>
 

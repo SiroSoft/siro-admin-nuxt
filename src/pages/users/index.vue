@@ -13,6 +13,7 @@ import SearchInput from "~/components/forms/SearchInput.vue"
 import UserTable from "~/modules/users/components/UserTable.vue"
 import UserFormDialog from "~/modules/users/components/UserFormDialog.vue"
 import DeleteDialog from "~/components/dialogs/DeleteDialog.vue"
+const { t } = useI18n()
 import { useQueryClient } from "@tanstack/vue-query"
 import { useToast } from "~/composables/useToast"
 
@@ -61,7 +62,7 @@ async function handleExport() {
     [u.name, u.email, u.role, u.status, u.created_at].map((v) => `"${v ?? ""}"`).join(",")
   )
   if (rows.length === 0) return
-  const headers = ["Name", "Email", "Role", "Status", "Created"]
+  const headers = [t('users.name'), t('users.email'), t('users.role'), t('common.status'), t('users.createdAt')]
   const csvContent = [headers.join(","), ...rows].join("\n")
   const blob = new Blob([csvContent], { type: "text/csv" })
   const url = URL.createObjectURL(blob)
@@ -94,24 +95,24 @@ function handleConfirmDeleteSelected() {
 
 <template>
   <div class="space-y-4">
-    <PageHeader title="Users" description="Manage system users">
+    <PageHeader :title="t('users.title')" description="Manage system users">
       <Button @click="showCreate = true">
         <Plus class="mr-2 h-4 w-4" />
-        Create User
+        {{ t('users.create') }}
       </Button>
     </PageHeader>
 
     <div class="flex flex-wrap items-center gap-2">
-      <SearchInput v-model="search" placeholder="Search users..." />
+      <SearchInput v-model="search" :placeholder="t('common.search') + '...'" />
       <div v-if="selectedIds.size > 0" class="flex flex-wrap items-center gap-2 ml-auto">
-        <span class="text-sm text-muted-foreground">{{ selectedIds.size }} selected</span>
+        <span class="text-sm text-muted-foreground">{{ selectedIds.size }} {{ t('common.selected') }}</span>
         <Button variant="outline" size="sm" @click="handleExport">
           <Download class="mr-1 h-4 w-4" />
-          Export
+          {{ t('common.export') }}
         </Button>
         <Button variant="destructive" size="sm" @click="handleDeleteSelected">
           <Trash2 class="mr-1 h-4 w-4" />
-          Delete
+          {{ t('common.delete') }}
         </Button>
       </div>
     </div>
@@ -138,8 +139,8 @@ function handleConfirmDeleteSelected() {
       @update:open="confirmDeleteSelected = $event"
       @confirm="handleConfirmDeleteSelected"
       :is-pending="deleteMutation.isPending.value"
-      title="Delete users"
-      :description="`Are you sure you want to delete ${selectedIds.size} user(s)? This action cannot be undone.`"
+      :title="t('users.delete')"
+      :description="`${t('users.confirmDelete')} ${t('common.actions')} ${selectedIds.size} ${t('users.title').toLowerCase()}.`"
     />
   </div>
 </template>

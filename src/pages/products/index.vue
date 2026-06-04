@@ -21,6 +21,7 @@ const minPrice = ref("")
 const maxPrice = ref("")
 const statusFilter = ref<boolean | undefined>(undefined)
 
+const { t } = useI18n()
 const debouncedSearch = useDebounce(search)
 
 const createMutation = useCreateProduct()
@@ -53,18 +54,18 @@ function handlePageChange(newPage: number) {
 
 <template>
   <div class="space-y-4">
-    <PageHeader title="Products" description="Manage products">
+    <PageHeader :title="t('products.title')" description="Manage products">
       <Button @click="showCreate = true">
         <Plus class="mr-2 h-4 w-4" />
-        Create Product
+        {{ t('products.create') }}
       </Button>
     </PageHeader>
 
     <div class="flex flex-wrap items-center gap-2">
-      <SearchInput v-model="search" placeholder="Search products..." />
+      <SearchInput v-model="search" :placeholder="t('common.search') + '...'" />
       <div class="flex flex-wrap items-center gap-1">
         <button
-          v-for="opt in [{ label: 'All', value: undefined }, { label: 'Active', value: true }, { label: 'Inactive', value: false }]"
+          v-for="opt in [{ label: t('common.all'), value: undefined }, { label: t('common.active'), value: true }, { label: t('common.inactive'), value: false }]"
           :key="String(opt.value)"
           @click="statusFilter = opt.value"
           class="px-3 py-1.5 text-sm rounded-md transition-colors"
@@ -73,9 +74,9 @@ function handlePageChange(newPage: number) {
           {{ opt.label }}
         </button>
       </div>
-      <input v-model="categoryFilter" placeholder="Category ID" class="flex h-9 w-24 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" />
-      <input v-model="minPrice" type="number" step="0.01" placeholder="Min price" class="flex h-9 w-24 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" />
-      <input v-model="maxPrice" type="number" step="0.01" placeholder="Max price" class="flex h-9 w-24 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" />
+      <input v-model="categoryFilter" :placeholder="t('products.category') + ' ID'" class="flex h-9 w-24 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" />
+      <input v-model="minPrice" type="number" step="0.01" :placeholder="t('common.min') + ' ' + t('products.price').toLowerCase()" class="flex h-9 w-24 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" />
+      <input v-model="maxPrice" type="number" step="0.01" :placeholder="t('common.max') + ' ' + t('products.price').toLowerCase()" class="flex h-9 w-24 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" />
     </div>
 
     <ProductTable

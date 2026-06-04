@@ -12,6 +12,7 @@ import api from "~/services/api"
 
 definePageMeta({ layout: "auth" })
 
+const { t } = useI18n()
 const router = useRouter()
 const submitted = ref(false)
 
@@ -40,16 +41,16 @@ const onSubmit = handleSubmit(async (values) => {
   <Card>
     <template #header>
       <div class="text-center">
-        <h3 class="text-2xl font-bold">Forgot password?</h3>
+        <h3 class="text-2xl font-bold">{{ t('forgotPassword.title') }}</h3>
         <p class="text-sm text-muted-foreground mt-1">
-          {{ submitted ? "Check your email for a reset link" : "Enter your email and we'll send you a reset link" }}
+          {{ submitted ? t('forgotPassword.sentDescription') : t('forgotPassword.description') }}
         </p>
       </div>
     </template>
 
     <form v-if="!submitted" @submit="onSubmit" class="space-y-4">
       <div class="space-y-2">
-        <Label for="email">Email</Label>
+        <Label for="email">{{ t('auth.email') }}</Label>
         <Input id="email" type="email" v-model="email" v-bind="emailAttrs" placeholder="name@example.com" autocomplete="email" />
         <p v-if="errors.email" class="text-sm text-destructive">{{ errors.email }}</p>
       </div>
@@ -57,7 +58,7 @@ const onSubmit = handleSubmit(async (values) => {
       <Button type="submit" class="w-full" :disabled="isSubmitting">
         <Loader2 v-if="isSubmitting" class="mr-2 h-4 w-4 animate-spin" />
         <Mail v-else class="mr-2 h-4 w-4" />
-        Send reset link
+        {{ t('forgotPassword.sendResetLink') }}
       </Button>
     </form>
 
@@ -66,14 +67,14 @@ const onSubmit = handleSubmit(async (values) => {
         <CheckCircle2 class="h-6 w-6 text-primary" />
       </div>
       <p class="text-sm text-muted-foreground">
-        We've sent a password reset link to <strong class="text-foreground">{{ email }}</strong>
+        {{ t('forgotPassword.sentWithEmail', { email: email ?? '' }) }}
       </p>
     </div>
 
     <div class="mt-4 text-center">
       <button type="button" @click="router.push('/login')" class="text-sm text-muted-foreground hover:text-foreground inline-flex items-center gap-1" aria-label="Back to login">
         <ArrowLeft class="h-3 w-3" />
-        Back to login
+        {{ t('forgotPassword.backToLogin') }}
       </button>
     </div>
   </Card>

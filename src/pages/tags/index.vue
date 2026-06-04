@@ -17,6 +17,7 @@ const showCreate = ref(false)
 const sortBy = ref("")
 const sortOrder = ref<"asc" | "desc">("asc")
 
+const { t } = useI18n()
 const debouncedSearch = useDebounce(search)
 
 const createMutation = useCreateTag()
@@ -45,15 +46,15 @@ function handlePageChange(newPage: number) {
 
 <template>
   <div class="space-y-4">
-    <PageHeader title="Tags" description="Manage tags">
+    <PageHeader :title="t('tags.title')" description="Manage tags">
       <Button @click="showCreate = true">
         <Plus class="mr-2 h-4 w-4" />
-        Create Tag
+        {{ t('tags.create') }}
       </Button>
     </PageHeader>
 
     <div class="flex flex-wrap items-center gap-2">
-      <SearchInput v-model="search" placeholder="Search tags..." />
+      <SearchInput v-model="search" :placeholder="t('common.search') + '...'" />
     </div>
 
     <TagTable

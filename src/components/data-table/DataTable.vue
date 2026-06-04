@@ -6,6 +6,8 @@ import TableRow from "~/components/ui/TableRow.vue"
 import TableHead from "~/components/ui/TableHead.vue"
 import TableCell from "~/components/ui/TableCell.vue"
 
+const { t } = useI18n()
+
 interface Column<T = any> {
   key: string
   label: string
@@ -76,7 +78,7 @@ function getSortIcon(key: string) {
           <TableRow>
             <TableCell :colspan="columns.length" class="h-24 text-center text-muted-foreground">
               <div class="flex flex-col items-center gap-2">
-                <span>No results found.</span>
+                <span>{{ t('common.noData') }}</span>
                 <slot name="empty-action" />
               </div>
             </TableCell>

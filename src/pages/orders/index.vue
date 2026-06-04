@@ -19,6 +19,7 @@ const sortBy = ref("")
 const sortOrder = ref<"asc" | "desc">("asc")
 const statusFilter = ref("")
 
+const { t } = useI18n()
 const debouncedSearch = useDebounce(search)
 
 const createMutation = useCreateOrder()
@@ -48,15 +49,15 @@ function handlePageChange(newPage: number) {
 
 <template>
   <div class="space-y-4">
-    <PageHeader title="Orders" description="Manage orders">
+    <PageHeader :title="t('orders.title')" description="Manage orders">
       <Button @click="showCreate = true">
         <Plus class="mr-2 h-4 w-4" />
-        Create Order
+        {{ t('orders.create') }}
       </Button>
     </PageHeader>
 
     <div class="flex flex-wrap items-center gap-2">
-      <SearchInput v-model="search" placeholder="Search orders..." />
+      <SearchInput v-model="search" :placeholder="t('common.search') + '...'" />
       <div class="flex flex-wrap items-center gap-1 ml-auto">
         <Filter class="h-4 w-4 text-muted-foreground" />
         <button
@@ -66,7 +67,7 @@ function handlePageChange(newPage: number) {
           class="px-3 py-1.5 text-sm rounded-md transition-colors"
           :class="statusFilter === status ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-accent'"
         >
-          {{ status || 'All' }}
+          {{ status ? t(`orders.status_${status}`) : t('common.all') }}
         </button>
       </div>
     </div>

@@ -25,19 +25,20 @@ const emit = defineEmits<{
   pageChange: [page: number]
 }>()
 
+const { t } = useI18n()
 const deleteId = ref<number | null>(null)
 const paramsRef = computed(() => props.params)
 const { tags, meta, isLoading, isError, refetch } = useTags(paramsRef as any)
 const deleteMutation = useDeleteTag()
 
-const columns = [
+const columns = computed(() => [
   { key: "id", label: "ID", sortable: true },
-  { key: "name", label: "Name", sortable: true },
-  { key: "slug", label: "Slug" },
+  { key: "name", label: t('tags.name'), sortable: true },
+  { key: "slug", label: t('categories.slug') },
   { key: "color", label: "Color" },
-  { key: "created_at", label: "Created", sortable: true },
+  { key: "created_at", label: t('users.createdAt'), sortable: true },
   { key: "actions", label: "" },
-]
+])
 </script>
 
 <template>
@@ -45,9 +46,9 @@ const columns = [
     <ErrorState @retry="refetch()" />
   </div>
   <div v-else-if="!isLoading && tags.length === 0">
-    <EmptyState title="No tags found" description="Get started by creating your first tag.">
+    <EmptyState :title="`${t('common.noData')}`" description="Get started by creating your first tag.">
       <template #action>
-        <Button @click="emit('create')">Create Tag</Button>
+        <Button @click="emit('create')">{{ t('tags.create') }}</Button>
       </template>
     </EmptyState>
   </div>

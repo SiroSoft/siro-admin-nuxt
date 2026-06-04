@@ -40,6 +40,7 @@ function toggleTheme() {
       <Moon :class="cn('h-5 w-5', colorMode.value !== 'dark' && 'hidden')" />
     </Button>
 
+    <LocaleSwitcher />
     <LayoutUserNav />
   </header>
 </template>

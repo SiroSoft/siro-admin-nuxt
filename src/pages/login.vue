@@ -14,6 +14,7 @@ definePageMeta({
   layout: "auth",
 })
 
+const { t } = useI18n()
 const { login, isLoginPending, loginError, isLoading } = useAuth()
 const showPassword = ref(false)
 const rememberMe = ref(false)
@@ -46,9 +47,9 @@ const serverError = computed(() => {
   if (loginError.value) {
     const err = loginError.value
     if (err instanceof AxiosError) {
-      return err.response?.data?.message || "Invalid credentials"
+      return err.response?.data?.message || t('auth.invalidCredentials')
     }
-    return "Invalid credentials"
+    return t('auth.invalidCredentials')
   }
   return null
 })
@@ -61,7 +62,7 @@ const serverError = computed(() => {
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" class="mx-auto h-12 w-12"><rect width="32" height="32" rx="8" fill="#2563eb"/><path d="M12 5h10l-4 10h4l-6 14 2-12h-4l2-12z" fill="white"/></svg>
         <div>
           <h3 class="text-2xl font-bold">Siro Admin</h3>
-          <p class="text-sm text-muted-foreground mt-1">Sign in to your account</p>
+          <p class="text-sm text-muted-foreground mt-1">{{ t('auth.signIn') }}</p>
         </div>
       </div>
     </template>
@@ -72,16 +73,16 @@ const serverError = computed(() => {
 
     <form v-else @submit="onSubmit" class="space-y-4">
       <div class="space-y-2">
-        <Label for="email">Email <span class="text-destructive">*</span></Label>
+        <Label for="email">{{ t('auth.email') }} <span class="text-destructive">*</span></Label>
         <Input id="email" type="email" v-model="email" v-bind="emailAttrs" placeholder="admin@example.com" autocomplete="email" autofocus />
         <p v-if="errors.email" class="text-sm text-destructive">{{ errors.email }}</p>
       </div>
 
       <div class="space-y-2">
-        <Label for="password">Password <span class="text-destructive">*</span></Label>
+        <Label for="password">{{ t('auth.password') }} <span class="text-destructive">*</span></Label>
         <div class="relative">
           <Input id="password" :type="showPassword ? 'text' : 'password'" v-model="password" v-bind="passwordAttrs" placeholder="••••••••" autocomplete="current-password" />
-          <button type="button" @click="showPassword = !showPassword" class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground" :aria-label="showPassword ? 'Hide password' : 'Show password'">
+          <button type="button" @click="showPassword = !showPassword" class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground" :aria-label="showPassword ? t('auth.hidePassword') : t('auth.showPassword')">
             <EyeOff v-if="showPassword" class="h-4 w-4" />
             <Eye v-else class="h-4 w-4" />
           </button>
@@ -94,14 +95,14 @@ const serverError = computed(() => {
       <div class="flex items-center justify-between">
         <label class="flex items-center gap-2 text-sm">
           <input type="checkbox" v-model="rememberMe" class="h-4 w-4 rounded border-primary text-primary focus:ring-ring" />
-          Remember me
+          {{ t('auth.rememberMe') }}
         </label>
-        <NuxtLink to="/forgot-password" class="text-sm text-primary hover:underline">Forgot password?</NuxtLink>
+        <NuxtLink to="/forgot-password" class="text-sm text-primary hover:underline">{{ t('auth.forgotPassword') }}</NuxtLink>
       </div>
 
       <Button type="submit" class="w-full" :disabled="isLoginPending">
         <Loader2 v-if="isLoginPending" class="mr-2 h-4 w-4 animate-spin" />
-        Sign in
+        {{ t('common.login') }}
       </Button>
     </form>
   </Card>

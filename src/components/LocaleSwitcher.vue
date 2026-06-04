@@ -7,6 +7,9 @@ const { locale, setLocale, t } = useI18n()
 const locales = [
   { value: "en", label: "EN" },
   { value: "vi", label: "VI" },
+  { value: "de", label: "DE" },
+  { value: "zh", label: "中文" },
+  { value: "ja", label: "日本語" },
 ]
 </script>
 
@@ -19,7 +22,7 @@ const locales = [
       :variant="locale === loc.value ? 'default' : 'ghost'"
       size="sm"
       class="h-7 min-w-7 px-2 text-xs"
-      @click="setLocale(loc.value as 'en' | 'vi')"
+      @click="setLocale(loc.value as 'en' | 'vi' | 'de' | 'zh' | 'ja')"
     >
       {{ loc.label }}
     </Button>

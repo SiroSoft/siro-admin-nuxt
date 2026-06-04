@@ -8,31 +8,41 @@ type Messages = typeof en
 type TranslationKey = NestedKeyOf<Messages> | (string & {})
 
 export function useI18n() {
-  const locale = useState<"en" | "vi">("locale", () => {
+  const locale = useState<"en" | "vi" | "de" | "zh" | "ja">("locale", () => {
     if (import.meta.client) {
-      return (localStorage.getItem("siro_locale") as "en" | "vi") || "en"
+      return (localStorage.getItem("siro_locale") as "en" | "vi" | "de" | "zh" | "ja") || "en"
     }
     return "en"
   })
 
   const messages = useState<Record<string, Messages>>("messages", () => ({}))
 
-  async function loadLocale(loc: "en" | "vi") {
+  async function loadLocale(loc: "en" | "vi" | "de" | "zh" | "ja") {
     if (messages.value[loc]) return
     if (import.meta.client) {
-      const mod = loc === "vi" ? await import("~/locales/vi") : await import("~/locales/en")
+      const mod =
+        loc === "vi" ? await import("~/locales/vi") :
+        loc === "de" ? await import("~/locales/de") :
+        loc === "zh" ? await import("~/locales/zh") :
+        loc === "ja" ? await import("~/locales/ja") :
+        await import("~/locales/en")
       messages.value[loc] = mod.default as Messages
     } else {
-      const mod = loc === "vi" ? await import("~/locales/vi") : await import("~/locales/en")
+      const mod =
+        loc === "vi" ? await import("~/locales/vi") :
+        loc === "de" ? await import("~/locales/de") :
+        loc === "zh" ? await import("~/locales/zh") :
+        loc === "ja" ? await import("~/locales/ja") :
+        await import("~/locales/en")
       messages.value[loc] = mod.default as Messages
     }
   }
 
-  async function initLocale(loc: "en" | "vi") {
+  async function initLocale(loc: "en" | "vi" | "de" | "zh" | "ja") {
     await loadLocale(loc)
   }
 
-  function setLocale(loc: "en" | "vi") {
+  function setLocale(loc: "en" | "vi" | "de" | "zh" | "ja") {
     locale.value = loc
     if (import.meta.client) {
       localStorage.setItem("siro_locale", loc)

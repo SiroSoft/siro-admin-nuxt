@@ -12,7 +12,29 @@ import Select from "~/components/ui/Select.vue"
 import ImageUpload from "~/components/ui/ImageUpload.vue"
 import { createProductSchema, updateProductSchema } from "~/modules/products/schemas/product.schema"
 import { useCategories } from "~/composables/useCategories"
-import type { Product } from "~/types/product"
+import type { Category } from "~/types/category"
+import type { CreateProductRequest, UpdateProductRequest, Product } from "~/types/product"
+
+interface ProductFormType {
+  name: string
+  description: string
+  short_description: string
+  price: number
+  compare_price: number | undefined
+  cost_price: number | undefined
+  sku: string
+  barcode: string
+  stock: number
+  stock_min: number | undefined
+  weight: number | undefined
+  width: number | undefined
+  height: number | undefined
+  length: number | undefined
+  cover_image: string
+  is_active: boolean
+  is_featured: boolean
+  category_id: number | undefined
+}
 
 interface Props {
   product?: Product
@@ -21,14 +43,14 @@ interface Props {
 const props = defineProps<Props>()
 
 const emit = defineEmits<{
-  submit: [data: any]
+  submit: [data: CreateProductRequest | UpdateProductRequest]
 }>()
 
 const isEdit = computed(() => !!props.product)
 const schema = computed(() => isEdit.value ? updateProductSchema : createProductSchema)
 const { categories } = useCategories(ref({ per_page: 100 }))
 
-const { handleSubmit, errors, defineField, setFieldValue, isSubmitting } = useForm({
+const { handleSubmit, errors, defineField, setFieldValue, isSubmitting } = useForm<ProductFormType>({
   validationSchema: toTypedSchema(schema.value),
   initialValues: {
     name: props.product?.name ?? "",
@@ -45,7 +67,7 @@ const { handleSubmit, errors, defineField, setFieldValue, isSubmitting } = useFo
     width: props.product?.width ?? undefined,
     height: props.product?.height ?? undefined,
     length: props.product?.length ?? undefined,
-    cover_image: (props.product as any)?.cover_image ?? "",
+    cover_image: props.product?.cover_image ?? "",
     is_active: props.product?.is_active ?? true,
     is_featured: props.product?.is_featured ?? false,
     category_id: props.product?.category_id ?? undefined,
@@ -53,26 +75,26 @@ const { handleSubmit, errors, defineField, setFieldValue, isSubmitting } = useFo
 })
 
 const [name, nameAttrs] = defineField("name")
-const [description] = defineField("description" as any)
-const [short_description] = defineField("short_description" as any)
-const [price] = defineField("price" as any)
-const [sku] = defineField("sku" as any)
-const [stock] = defineField("stock" as any)
-const [stock_min] = defineField("stock_min" as any)
-const [weight] = defineField("weight" as any)
-const [width] = defineField("width" as any)
-const [height] = defineField("height" as any)
-const [length] = defineField("length" as any)
-const [barcode] = defineField("barcode" as any)
-const [compare_price] = defineField("compare_price" as any)
-const [cost_price] = defineField("cost_price" as any)
-const [is_active] = defineField("is_active" as any)
-const [is_featured] = defineField("is_featured" as any)
-const [cover_image] = defineField("cover_image" as any)
-const [category_id] = defineField("category_id" as any)
+const [description] = defineField("description")
+const [short_description] = defineField("short_description")
+const [price] = defineField("price")
+const [sku] = defineField("sku")
+const [stock] = defineField("stock")
+const [stock_min] = defineField("stock_min")
+const [weight] = defineField("weight")
+const [width] = defineField("width")
+const [height] = defineField("height")
+const [length] = defineField("length")
+const [barcode] = defineField("barcode")
+const [compare_price] = defineField("compare_price")
+const [cost_price] = defineField("cost_price")
+const [is_active] = defineField("is_active")
+const [is_featured] = defineField("is_featured")
+const [cover_image] = defineField("cover_image")
+const [category_id] = defineField("category_id")
 
 const categoryOptions = computed(() =>
-  categories.value.map((cat: any) => ({ label: cat.name, value: String(cat.id) }))
+  categories.value.map((cat: Category) => ({ label: cat.name, value: String(cat.id) }))
 )
 
 const onSubmit = handleSubmit((values) => {

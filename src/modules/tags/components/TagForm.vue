@@ -8,7 +8,7 @@ import Textarea from "~/components/ui/Textarea.vue"
 import Label from "~/components/ui/Label.vue"
 import Switch from "~/components/ui/Switch.vue"
 import { createTagSchema, updateTagSchema } from "~/modules/tags/schemas/tag.schema"
-import type { Tag } from "~/types/tag"
+import type { CreateTagRequest, UpdateTagRequest, Tag } from "~/types/tag"
 
 interface Props {
   tag?: Tag
@@ -17,7 +17,7 @@ interface Props {
 const props = defineProps<Props>()
 
 const emit = defineEmits<{
-  submit: [data: any]
+  submit: [data: CreateTagRequest | UpdateTagRequest]
 }>()
 
 const isEdit = computed(() => !!props.tag)

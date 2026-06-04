@@ -8,6 +8,7 @@ import EmptyState from "~/components/states/EmptyState.vue"
 import ErrorState from "~/components/states/ErrorState.vue"
 import DeleteDialog from "~/components/dialogs/DeleteDialog.vue"
 import { usePosts, useDeletePost } from "~/composables/usePosts"
+import type { Ref } from "vue"
 import type { Post } from "~/types/post"
 import { formatDate } from "~/utils"
 
@@ -28,7 +29,7 @@ const emit = defineEmits<{
 
 const deleteId = ref<number | null>(null)
 const paramsRef = computed(() => props.params)
-const { posts, meta, isLoading, isError, refetch } = usePosts(paramsRef as any)
+const { posts, meta, isLoading, isError, refetch } = usePosts(paramsRef as Ref<Record<string, string | number | undefined>>)
 const deleteMutation = useDeletePost()
 
 const columns = [

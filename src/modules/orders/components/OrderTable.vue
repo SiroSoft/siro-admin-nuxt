@@ -8,6 +8,7 @@ import EmptyState from "~/components/states/EmptyState.vue"
 import ErrorState from "~/components/states/ErrorState.vue"
 import DeleteDialog from "~/components/dialogs/DeleteDialog.vue"
 import { useOrders, useDeleteOrder } from "~/composables/useOrders"
+import type { Ref } from "vue"
 import type { Order } from "~/types/order"
 import { formatDate, formatNumber } from "~/utils"
 
@@ -29,7 +30,7 @@ const emit = defineEmits<{
 
 const deleteId = ref<number | null>(null)
 const paramsRef = computed(() => props.params)
-const { orders, meta, isLoading, isError, refetch } = useOrders(paramsRef as any)
+const { orders, meta, isLoading, isError, refetch } = useOrders(paramsRef as Ref<Record<string, string | number | undefined>>)
 const deleteMutation = useDeleteOrder()
 
 const columns = [

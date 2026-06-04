@@ -1,7 +1,7 @@
 <script setup lang="ts">
 definePageMeta({ middleware: "auth" })
 
-import { Users, ShoppingCart, Package, DollarSign, Activity, RefreshCw, TrendingUp, ArrowRight, Eye, Settings } from "lucide-vue-next"
+import { Users, ShoppingCart, Package, DollarSign, Activity, RefreshCw, ArrowRight, Eye, Settings } from "lucide-vue-next"
 import { Bar } from "vue-chartjs"
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip as ChartTooltip, Legend } from "chart.js"
 import Card from "~/components/ui/Card.vue"
@@ -67,11 +67,11 @@ const stats = computed(() => [
 const chartData = computed(() => {
   if (!data.value?.monthly_revenue?.length) return null
   return {
-    labels: data.value.monthly_revenue.map((r: any) => r.month),
+    labels: data.value.monthly_revenue.map((r: { month?: string; revenue?: number }) => r.month),
     datasets: [
       {
         label: t('dashboard.totalRevenue'),
-        data: data.value.monthly_revenue.map((r: any) => r.revenue),
+        data: data.value.monthly_revenue.map((r: { month?: string; revenue?: number }) => r.revenue),
         backgroundColor: "hsl(var(--primary))",
         borderRadius: 4,
       },

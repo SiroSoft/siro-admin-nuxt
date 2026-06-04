@@ -37,5 +37,24 @@ export default defineNuxtConfig({
     },
   },
 
+  nitro: {
+    render: {
+      publicAssets: { dir: 'public' },
+    },
+  },
+
+  routeRules: {
+    '/**': {
+      headers: {
+        'X-Frame-Options': 'DENY',
+        'X-Content-Type-Options': 'nosniff',
+        'Referrer-Policy': 'strict-origin-when-cross-origin',
+        'X-XSS-Protection': '0',
+        'Strict-Transport-Security': 'max-age=63072000; includeSubDomains; preload',
+        'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' http://localhost:* https:;",
+      },
+    },
+  },
+
   compatibilityDate: "2026-05-28",
 });

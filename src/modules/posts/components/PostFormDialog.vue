@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Dialog from "~/components/ui/Dialog.vue"
 import PostForm from "~/modules/posts/components/PostForm.vue"
-import type { Post } from "~/types/post"
+import type { CreatePostRequest, UpdatePostRequest, Post } from "~/types/post"
 
 interface Props {
   open?: boolean
@@ -12,7 +12,7 @@ const props = defineProps<Props>()
 
 const emit = defineEmits<{
   "update:open": [value: boolean]
-  submit: [data: any]
+  submit: [data: CreatePostRequest | UpdatePostRequest]
 }>()
 
 const title = computed(() => props.post ? "Edit Post" : "Create Post")

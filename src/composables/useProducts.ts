@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/vue-query"
 import { productsService } from "~/services/products.service"
+import { useI18n } from "~/composables/useI18n"
 import type { PaginationParams } from "~/types/api"
 import type { CreateProductRequest, UpdateProductRequest } from "~/types/product"
 
@@ -31,45 +32,48 @@ export function useProduct(id: Ref<number | null>) {
 
 export function useCreateProduct() {
   const queryClient = useQueryClient()
+  const { t } = useI18n()
 
   return useMutation({
     mutationFn: (data: CreateProductRequest) => productsService.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["products"] })
-      useToast().success("Product created", "Product has been created successfully.")
+      useToast().success(t('toast.productCreated'), t('toast.productCreatedDesc'))
     },
     onError: () => {
-      useToast().error("Error", "Failed to create product.")
+      useToast().error(t('toast.error'), t('toast.productCreateError'))
     },
   })
 }
 
 export function useUpdateProduct(id: Ref<number>) {
   const queryClient = useQueryClient()
+  const { t } = useI18n()
 
   return useMutation({
     mutationFn: (data: UpdateProductRequest) => productsService.update(id.value, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["products"] })
-      useToast().success("Product updated", "Product has been updated successfully.")
+      useToast().success(t('toast.productUpdated'), t('toast.productUpdatedDesc'))
     },
     onError: () => {
-      useToast().error("Error", "Failed to update product.")
+      useToast().error(t('toast.error'), t('toast.productUpdateError'))
     },
   })
 }
 
 export function useDeleteProduct() {
   const queryClient = useQueryClient()
+  const { t } = useI18n()
 
   return useMutation({
     mutationFn: (id: number) => productsService.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["products"] })
-      useToast().success("Product deleted", "Product has been deleted successfully.")
+      useToast().success(t('toast.productDeleted'), t('toast.productDeletedDesc'))
     },
     onError: () => {
-      useToast().error("Error", "Failed to delete product.")
+      useToast().error(t('toast.error'), t('toast.productDeleteError'))
     },
   })
 }

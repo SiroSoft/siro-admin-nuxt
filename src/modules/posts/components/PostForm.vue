@@ -13,7 +13,20 @@ import ImageUpload from "~/components/ui/ImageUpload.vue"
 import { createPostSchema, updatePostSchema } from "~/modules/posts/schemas/post.schema"
 import { useCategories } from "~/composables/useCategories"
 import { useTags } from "~/composables/useTags"
-import type { Post } from "~/types/post"
+import type { Category } from "~/types/category"
+import type { Tag } from "~/types/tag"
+import type { CreatePostRequest, UpdatePostRequest, Post } from "~/types/post"
+
+interface PostFormType {
+  title: string
+  content: string
+  excerpt: string
+  cover_image: string
+  status: string
+  featured: boolean
+  category_id: number | undefined
+  tag_ids: number[]
+}
 
 interface Props {
   post?: Post
@@ -22,7 +35,7 @@ interface Props {
 const props = defineProps<Props>()
 
 const emit = defineEmits<{
-  submit: [data: any]
+  submit: [data: CreatePostRequest | UpdatePostRequest]
 }>()
 
 const isEdit = computed(() => !!props.post)
@@ -30,7 +43,7 @@ const schema = computed(() => isEdit.value ? updatePostSchema : createPostSchema
 const { categories } = useCategories(ref({ per_page: 100 }))
 const { tags } = useTags(ref({ per_page: 200 }))
 
-const { handleSubmit, errors, defineField, setFieldValue, isSubmitting } = useForm({
+const { handleSubmit, errors, defineField, setFieldValue, isSubmitting } = useForm<PostFormType>({
   validationSchema: toTypedSchema(schema.value),
   initialValues: {
     title: props.post?.title ?? "",
@@ -40,18 +53,18 @@ const { handleSubmit, errors, defineField, setFieldValue, isSubmitting } = useFo
     status: props.post?.status ?? "draft",
     featured: props.post?.featured ?? false,
     category_id: props.post?.category_id ?? undefined,
-    tag_ids: props.post?.tags?.map((t: any) => t.id).filter(Boolean) ?? [],
+    tag_ids: props.post?.tags?.map((t: Tag) => t.id).filter(Boolean) ?? [],
   },
 })
 
 const [title, titleAttrs] = defineField("title")
-const [content] = defineField("content" as any)
-const [excerpt] = defineField("excerpt" as any)
-const [status] = defineField("status" as any)
-const [featured] = defineField("featured" as any)
-const [category_id] = defineField("category_id" as any)
-const [cover_image] = defineField("cover_image" as any)
-const [tag_ids] = defineField("tag_ids" as any)
+const [content] = defineField("content")
+const [excerpt] = defineField("excerpt")
+const [status] = defineField("status")
+const [featured] = defineField("featured")
+const [category_id] = defineField("category_id")
+const [cover_image] = defineField("cover_image")
+const [tag_ids] = defineField("tag_ids")
 
 const statusOptions = [
   { label: "Draft", value: "draft" },
@@ -60,7 +73,7 @@ const statusOptions = [
 ]
 
 const categoryOptions = computed(() =>
-  categories.value.map((cat: any) => ({ label: cat.name, value: String(cat.id) }))
+  categories.value.map((cat: Category) => ({ label: cat.name, value: String(cat.id) }))
 )
 
 const selectedTagIds = computed(() => (tag_ids as unknown as number[]) ?? [])

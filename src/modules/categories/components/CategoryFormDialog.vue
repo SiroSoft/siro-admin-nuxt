@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Dialog from "~/components/ui/Dialog.vue"
 import CategoryForm from "~/modules/categories/components/CategoryForm.vue"
-import type { Category } from "~/types/category"
+import type { Category, CreateCategoryRequest, UpdateCategoryRequest } from "~/types/category"
 
 interface Props {
   open?: boolean
@@ -12,7 +12,7 @@ const props = defineProps<Props>()
 
 const emit = defineEmits<{
   "update:open": [value: boolean]
-  submit: [data: any]
+  submit: [data: CreateCategoryRequest | UpdateCategoryRequest]
 }>()
 
 const title = computed(() => props.category ? "Edit Category" : "Create Category")

@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/vue-query"
 import { postsService } from "~/services/posts.service"
+import { useI18n } from "~/composables/useI18n"
 import type { PaginationParams } from "~/types/api"
 import type { CreatePostRequest, UpdatePostRequest } from "~/types/post"
 
@@ -31,45 +32,48 @@ export function usePost(id: Ref<number | null>) {
 
 export function useCreatePost() {
   const queryClient = useQueryClient()
+  const { t } = useI18n()
 
   return useMutation({
     mutationFn: (data: CreatePostRequest) => postsService.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] })
-      useToast().success("Post created", "Post has been created successfully.")
+      useToast().success(t('toast.postCreated'), t('toast.postCreatedDesc'))
     },
     onError: () => {
-      useToast().error("Error", "Failed to create post.")
+      useToast().error(t('toast.error'), t('toast.postCreateError'))
     },
   })
 }
 
 export function useUpdatePost(id: Ref<number>) {
   const queryClient = useQueryClient()
+  const { t } = useI18n()
 
   return useMutation({
     mutationFn: (data: UpdatePostRequest) => postsService.update(id.value, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] })
-      useToast().success("Post updated", "Post has been updated successfully.")
+      useToast().success(t('toast.postUpdated'), t('toast.postUpdatedDesc'))
     },
     onError: () => {
-      useToast().error("Error", "Failed to update post.")
+      useToast().error(t('toast.error'), t('toast.postUpdateError'))
     },
   })
 }
 
 export function useDeletePost() {
   const queryClient = useQueryClient()
+  const { t } = useI18n()
 
   return useMutation({
     mutationFn: (id: number) => postsService.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] })
-      useToast().success("Post deleted", "Post has been deleted successfully.")
+      useToast().success(t('toast.postDeleted'), t('toast.postDeletedDesc'))
     },
     onError: () => {
-      useToast().error("Error", "Failed to delete post.")
+      useToast().error(t('toast.error'), t('toast.postDeleteError'))
     },
   })
 }

@@ -20,6 +20,7 @@ import Separator from "~/components/ui/Separator.vue"
 import AlertDialog from "~/components/ui/AlertDialog.vue"
 import { useRuntimeConfig } from "nuxt/app"
 import { useToast } from "~/composables/useToast"
+import type { UpdateSettingsRequest } from "~/types/settings"
 
 const queryClient = useQueryClient()
 const colorMode = useColorMode()
@@ -83,7 +84,7 @@ const [maintenance_mode] = defineField("maintenance_mode")
 const [email_notifications] = defineField("email_notifications")
 
 const updateMutation = useMutation({
-  mutationFn: (formData: any) => settingsService.update(formData),
+  mutationFn: (formData: UpdateSettingsRequest) => settingsService.update(formData),
   onSuccess: () => {
     queryClient.invalidateQueries({ queryKey: ["settings"] })
     useToast().success("Settings saved", "Application settings have been updated.")

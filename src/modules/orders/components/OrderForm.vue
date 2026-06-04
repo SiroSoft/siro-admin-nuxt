@@ -11,7 +11,9 @@ import SearchableSelect from "~/components/ui/SearchableSelect.vue"
 import { createOrderSchema, updateOrderSchema } from "~/modules/orders/schemas/order.schema"
 import { useProducts } from "~/composables/useProducts"
 import { useUsers } from "~/composables/useUsers"
-import type { Order } from "~/types/order"
+import type { Product } from "~/types/product"
+import type { User } from "~/types/user"
+import type { Order, CreateOrderRequest, UpdateOrderRequest } from "~/types/order"
 
 interface Props {
   order?: Order
@@ -19,8 +21,17 @@ interface Props {
 
 const props = defineProps<Props>()
 
+interface OrderFormType {
+  status: string
+  shipping_address: string
+  billing_address: string
+  notes: string
+  items?: { product_id: number | undefined; quantity: number }[]
+  customer_id?: number | undefined
+}
+
 const emit = defineEmits<{
-  submit: [data: any]
+  submit: [data: CreateOrderRequest | UpdateOrderRequest]
 }>()
 
 const isEdit = computed(() => !!props.order)
@@ -29,20 +40,20 @@ const { products } = useProducts(ref({ per_page: 200 }))
 const { users } = useUsers(ref({ per_page: 200 }))
 
 const productOptions = computed(() =>
-  products.value.map((p: any) => ({
+  products.value.map((p: Product) => ({
     label: `${p.name} (${p.sku})`,
     value: String(p.id),
   }))
 )
 
 const userOptions = computed(() =>
-  users.value.map((u: any) => ({
+  users.value.map((u: User) => ({
     label: `${u.name} (${u.email})`,
     value: String(u.id),
   }))
 )
 
-const { handleSubmit, errors, defineField, setFieldValue, isSubmitting, values } = useForm({
+const { handleSubmit, errors, defineField, setFieldValue, isSubmitting, values } = useForm<OrderFormType>({
   validationSchema: toTypedSchema(schema.value),
   initialValues: isEdit.value
     ? {
@@ -52,7 +63,7 @@ const { handleSubmit, errors, defineField, setFieldValue, isSubmitting, values }
         notes: props.order?.notes ?? "",
       }
     : {
-        items: [{ product_id: undefined as any, quantity: 1 }],
+        items: [{ product_id: undefined, quantity: 1 }] as { product_id: number | undefined; quantity: number }[],
         status: "pending",
         customer_id: undefined,
         shipping_address: "",
@@ -125,7 +136,7 @@ const onSubmit = handleSubmit((values) => {
             <Label class="text-xs">{{ t('orders.product') }}</Label>
             <SearchableSelect
               :options="productOptions"
-              :value="(values as any).items?.[idx]?.product_id ? String((values as any).items[idx].product_id) : ''"
+              :value="values.items?.[idx]?.product_id ? String(values.items[idx].product_id) : ''"
               @change="(v: string) => setFieldValue(`items.${idx}.product_id`, Number(v))"
               :placeholder="t('common.search') + '...'"
               :disabled="isSubmitting"
@@ -135,7 +146,7 @@ const onSubmit = handleSubmit((values) => {
             <Label class="text-xs">{{ t('orders.qty') }}</Label>
             <Input
               type="number"
-              :model-value="(values as any).items?.[idx]?.quantity"
+              :model-value="values.items?.[idx]?.quantity"
               @update:model-value="(v: string) => setFieldValue(`items.${idx}.quantity`, Number(v))"
               placeholder="1"
               :disabled="isSubmitting"

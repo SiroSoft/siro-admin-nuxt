@@ -8,6 +8,7 @@ import EmptyState from "~/components/states/EmptyState.vue"
 import ErrorState from "~/components/states/ErrorState.vue"
 import DeleteDialog from "~/components/dialogs/DeleteDialog.vue"
 import { useCategories, useDeleteCategory } from "~/composables/useCategories"
+import type { Ref } from "vue"
 import type { Category } from "~/types/category"
 import { formatDate } from "~/utils"
 
@@ -28,7 +29,7 @@ const emit = defineEmits<{
 
 const deleteId = ref<number | null>(null)
 const paramsRef = computed(() => props.params)
-const { categories, meta, isLoading, isError, refetch } = useCategories(paramsRef as any)
+const { categories, meta, isLoading, isError, refetch } = useCategories(paramsRef as Ref<Record<string, string | number | undefined>>)
 const deleteMutation = useDeleteCategory()
 
 const columns = [

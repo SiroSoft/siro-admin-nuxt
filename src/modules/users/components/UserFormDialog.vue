@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Dialog from "~/components/ui/Dialog.vue"
 import UserForm from "~/modules/users/components/UserForm.vue"
-import type { User } from "~/types/user"
+import type { CreateUserRequest, UpdateUserRequest, User } from "~/types/user"
 
 interface Props {
   open?: boolean
@@ -12,7 +12,7 @@ const props = defineProps<Props>()
 
 const emit = defineEmits<{
   "update:open": [value: boolean]
-  submit: [data: any]
+  submit: [data: CreateUserRequest | UpdateUserRequest]
 }>()
 
 const title = computed(() => props.user ? "Edit User" : "Create User")

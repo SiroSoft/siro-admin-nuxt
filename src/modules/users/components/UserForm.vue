@@ -8,7 +8,18 @@ import Label from "~/components/ui/Label.vue"
 import Select from "~/components/ui/Select.vue"
 import ImageUpload from "~/components/ui/ImageUpload.vue"
 import { createUserSchema, updateUserSchema} from "~/modules/users/schemas/user.schema"
-import type { User } from "~/types/user"
+import type { CreateUserRequest, UpdateUserRequest, User } from "~/types/user"
+
+interface UserFormType {
+  name: string
+  email: string
+  password?: string
+  password_confirmation?: string
+  role: string
+  status: string
+  avatar: string
+  phone: string
+}
 
 interface Props {
   user?: User
@@ -17,13 +28,13 @@ interface Props {
 const props = defineProps<Props>()
 
 const emit = defineEmits<{
-  submit: [data: any]
+  submit: [data: CreateUserRequest | UpdateUserRequest]
 }>()
 
 const isEdit = computed(() => !!props.user)
 const schema = computed(() => isEdit.value ? updateUserSchema : createUserSchema)
 
-const { handleSubmit, errors, defineField, setFieldValue, isSubmitting } = useForm({
+const { handleSubmit, errors, defineField, setFieldValue, isSubmitting } = useForm<UserFormType>({
   validationSchema: toTypedSchema(schema.value),
   initialValues: {
     name: props.user?.name ?? "",
@@ -38,12 +49,12 @@ const { handleSubmit, errors, defineField, setFieldValue, isSubmitting } = useFo
 
 const [name, nameAttrs] = defineField("name")
 const [email, emailAttrs] = defineField("email")
-const [password, passwordAttrs] = defineField("password" as any)
-const [passwordConfirmation, passwordConfirmationAttrs] = defineField("password_confirmation" as any)
-const [role] = defineField("role" as any)
-const [status] = defineField("status" as any)
-const [avatar] = defineField("avatar" as any)
-const [phone] = defineField("phone" as any)
+const [password, passwordAttrs] = defineField("password")
+const [passwordConfirmation, passwordConfirmationAttrs] = defineField("password_confirmation")
+const [role] = defineField("role")
+const [status] = defineField("status")
+const [avatar] = defineField("avatar")
+const [phone] = defineField("phone")
 
 const roleOptions = [
   { label: "Admin", value: "admin" },

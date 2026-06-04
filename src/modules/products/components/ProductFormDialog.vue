@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Dialog from "~/components/ui/Dialog.vue"
 import ProductForm from "~/modules/products/components/ProductForm.vue"
-import type { Product } from "~/types/product"
+import type { CreateProductRequest, UpdateProductRequest, Product } from "~/types/product"
 
 interface Props {
   open?: boolean
@@ -12,7 +12,7 @@ const props = defineProps<Props>()
 
 const emit = defineEmits<{
   "update:open": [value: boolean]
-  submit: [data: any]
+  submit: [data: CreateProductRequest | UpdateProductRequest]
 }>()
 
 const title = computed(() => props.product ? "Edit Product" : "Create Product")

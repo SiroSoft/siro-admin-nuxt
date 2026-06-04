@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/vue-query"
 import { usersService } from "~/services/users.service"
+import { useI18n } from "~/composables/useI18n"
 import type { PaginationParams } from "~/types/api"
 import type { CreateUserRequest, UpdateUserRequest } from "~/types/user"
 
@@ -31,45 +32,48 @@ export function useUser(id: Ref<number | null>) {
 
 export function useCreateUser() {
   const queryClient = useQueryClient()
+  const { t } = useI18n()
 
   return useMutation({
     mutationFn: (data: CreateUserRequest) => usersService.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] })
-      useToast().success("User created", "User has been created successfully.")
+      useToast().success(t('toast.userCreated'), t('toast.userCreatedDesc'))
     },
     onError: () => {
-      useToast().error("Error", "Failed to create user.")
+      useToast().error(t('toast.error'), t('toast.userCreateError'))
     },
   })
 }
 
 export function useUpdateUser(id: Ref<number>) {
   const queryClient = useQueryClient()
+  const { t } = useI18n()
 
   return useMutation({
     mutationFn: (data: UpdateUserRequest) => usersService.update(id.value, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] })
-      useToast().success("User updated", "User has been updated successfully.")
+      useToast().success(t('toast.userUpdated'), t('toast.userUpdatedDesc'))
     },
     onError: () => {
-      useToast().error("Error", "Failed to update user.")
+      useToast().error(t('toast.error'), t('toast.userUpdateError'))
     },
   })
 }
 
 export function useDeleteUser() {
   const queryClient = useQueryClient()
+  const { t } = useI18n()
 
   return useMutation({
     mutationFn: (id: number) => usersService.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] })
-      useToast().success("User deleted", "User has been deleted successfully.")
+      useToast().success(t('toast.userDeleted'), t('toast.userDeletedDesc'))
     },
     onError: () => {
-      useToast().error("Error", "Failed to delete user.")
+      useToast().error(t('toast.error'), t('toast.userDeleteError'))
     },
   })
 }

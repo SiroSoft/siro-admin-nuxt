@@ -9,6 +9,7 @@ import EmptyState from "~/components/states/EmptyState.vue"
 import ErrorState from "~/components/states/ErrorState.vue"
 import DeleteDialog from "~/components/dialogs/DeleteDialog.vue"
 import { useUsers, useDeleteUser } from "~/composables/useUsers"
+import type { Ref } from "vue"
 import type { User } from "~/types/user"
 import type { PaginationMeta } from "~/types/api"
 import { formatDate } from "~/utils"
@@ -35,7 +36,7 @@ const emit = defineEmits<{
 const { t } = useI18n()
 const deleteId = ref<number | null>(null)
 const paramsRef = computed(() => props.params)
-const { users, meta, isLoading, isError, error, refetch } = useUsers(paramsRef as any)
+const { users, meta, isLoading, isError, error, refetch } = useUsers(paramsRef as Ref<Record<string, string | number | undefined>>)
 const deleteMutation = useDeleteUser()
 
 const allSelected = computed(() =>

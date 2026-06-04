@@ -11,7 +11,17 @@ import Select from "~/components/ui/Select.vue"
 import ImageUpload from "~/components/ui/ImageUpload.vue"
 import { createCategorySchema, updateCategorySchema } from "~/modules/categories/schemas/category.schema"
 import { useCategories } from "~/composables/useCategories"
-import type { Category } from "~/types/category"
+import type { Category, CreateCategoryRequest, UpdateCategoryRequest } from "~/types/category"
+
+interface CategoryFormType {
+  name: string
+  description: string
+  icon: string
+  color: string
+  parent_id: number | undefined
+  sort_order: number
+  is_active: boolean
+}
 
 interface Props {
   category?: Category
@@ -20,14 +30,14 @@ interface Props {
 const props = defineProps<Props>()
 
 const emit = defineEmits<{
-  submit: [data: any]
+  submit: [data: CreateCategoryRequest | UpdateCategoryRequest]
 }>()
 
 const isEdit = computed(() => !!props.category)
 const schema = computed(() => isEdit.value ? updateCategorySchema : createCategorySchema)
 const { categories } = useCategories(ref({ per_page: 100 }))
 
-const { handleSubmit, errors, defineField, setFieldValue, isSubmitting } = useForm({
+const { handleSubmit, errors, defineField, setFieldValue, isSubmitting } = useForm<CategoryFormType>({
   validationSchema: toTypedSchema(schema.value),
   initialValues: {
     name: props.category?.name ?? "",
@@ -41,19 +51,19 @@ const { handleSubmit, errors, defineField, setFieldValue, isSubmitting } = useFo
 })
 
 const [name, nameAttrs] = defineField("name")
-const [description] = defineField("description" as any)
-const [icon] = defineField("icon" as any)
-const [color] = defineField("color" as any)
-const [sort_order] = defineField("sort_order" as any)
-const [is_active] = defineField("is_active" as any)
-const [parent_id] = defineField("parent_id" as any)
+const [description] = defineField("description")
+const [icon] = defineField("icon")
+const [color] = defineField("color")
+const [sort_order] = defineField("sort_order")
+const [is_active] = defineField("is_active")
+const [parent_id] = defineField("parent_id")
 
 const parentCategories = computed(() =>
-  categories.value.filter((cat: any) => !isEdit.value || cat.id !== props.category?.id)
+  categories.value.filter((cat: Category) => !isEdit.value || cat.id !== props.category?.id)
 )
 
 const parentOptions = computed(() =>
-  parentCategories.value.map((cat: any) => ({ label: cat.name, value: String(cat.id) }))
+  parentCategories.value.map((cat: Category) => ({ label: cat.name, value: String(cat.id) }))
 )
 
 const onSubmit = handleSubmit((values) => {

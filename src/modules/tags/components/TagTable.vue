@@ -7,6 +7,7 @@ import EmptyState from "~/components/states/EmptyState.vue"
 import ErrorState from "~/components/states/ErrorState.vue"
 import DeleteDialog from "~/components/dialogs/DeleteDialog.vue"
 import { useTags, useDeleteTag } from "~/composables/useTags"
+import type { Ref } from "vue"
 import type { Tag } from "~/types/tag"
 import { formatDate } from "~/utils"
 
@@ -28,7 +29,7 @@ const emit = defineEmits<{
 const { t } = useI18n()
 const deleteId = ref<number | null>(null)
 const paramsRef = computed(() => props.params)
-const { tags, meta, isLoading, isError, refetch } = useTags(paramsRef as any)
+const { tags, meta, isLoading, isError, refetch } = useTags(paramsRef as Ref<Record<string, string | number | undefined>>)
 const deleteMutation = useDeleteTag()
 
 const columns = computed(() => [

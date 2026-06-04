@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Dialog from "~/components/ui/Dialog.vue"
 import OrderForm from "~/modules/orders/components/OrderForm.vue"
-import type { Order } from "~/types/order"
+import type { CreateOrderRequest, UpdateOrderRequest, Order } from "~/types/order"
 
 interface Props {
   open?: boolean
@@ -12,7 +12,7 @@ const props = defineProps<Props>()
 
 const emit = defineEmits<{
   "update:open": [value: boolean]
-  submit: [data: any]
+  submit: [data: CreateOrderRequest | UpdateOrderRequest]
 }>()
 
 const title = computed(() => props.order ? "Edit Order" : "Create Order")

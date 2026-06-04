@@ -8,6 +8,7 @@ import EmptyState from "~/components/states/EmptyState.vue"
 import ErrorState from "~/components/states/ErrorState.vue"
 import DeleteDialog from "~/components/dialogs/DeleteDialog.vue"
 import { useProducts, useDeleteProduct } from "~/composables/useProducts"
+import type { Ref } from "vue"
 import type { Product } from "~/types/product"
 import { formatDate, formatNumber } from "~/utils"
 
@@ -28,7 +29,7 @@ const emit = defineEmits<{
 
 const deleteId = ref<number | null>(null)
 const paramsRef = computed(() => props.params)
-const { products, meta, isLoading, isError, refetch } = useProducts(paramsRef as any)
+const { products, meta, isLoading, isError, refetch } = useProducts(paramsRef as Ref<Record<string, string | number | undefined>>)
 const deleteMutation = useDeleteProduct()
 
 const columns = [

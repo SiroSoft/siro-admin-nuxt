@@ -4,7 +4,7 @@ import type { Settings, UpdateSettingsRequest } from "~/types/settings"
 export const settingsService = {
   async get() {
     const res = await api.get<{ data: Settings; message: string }>("/api/settings")
-    return res.data
+    return res.data.data
   },
 
   async update(data: UpdateSettingsRequest) {

@@ -33,10 +33,10 @@ const { tags, meta, isLoading, isError, refetch } = useTags(paramsRef as Ref<Rec
 const deleteMutation = useDeleteTag()
 
 const columns = computed(() => [
-  { key: "id", label: "ID", sortable: true },
+  { key: "id", label: t('common.id'), sortable: true },
   { key: "name", label: t('tags.name'), sortable: true },
   { key: "slug", label: t('categories.slug') },
-  { key: "color", label: "Color" },
+  { key: "color", label: t('tags.color') },
   { key: "created_at", label: t('users.createdAt'), sortable: true },
   { key: "actions", label: "" },
 ])
@@ -47,7 +47,7 @@ const columns = computed(() => [
     <ErrorState @retry="refetch()" />
   </div>
   <div v-else-if="!isLoading && tags.length === 0">
-    <EmptyState :title="`${t('common.noData')}`" description="Get started by creating your first tag.">
+    <EmptyState :title="t('common.noData')" :description="t('tags.title')">
       <template #action>
         <Button @click="emit('create')">{{ t('tags.create') }}</Button>
       </template>

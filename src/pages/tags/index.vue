@@ -8,7 +8,7 @@ import PageHeader from "~/components/layout/PageHeader.vue"
 import SearchInput from "~/components/forms/SearchInput.vue"
 import TagTable from "~/modules/tags/components/TagTable.vue"
 import TagFormDialog from "~/modules/tags/components/TagFormDialog.vue"
-import type { Tag } from "~/types/tag"
+import type { Tag, CreateTagRequest, UpdateTagRequest } from "~/types/tag"
 
 const search = ref("")
 const page = ref(1)
@@ -21,6 +21,10 @@ const { t } = useI18n()
 const debouncedSearch = useDebounce(search)
 
 const createMutation = useCreateTag()
+
+function handleCreateTag(data: CreateTagRequest | UpdateTagRequest) {
+  createMutation.mutate(data as CreateTagRequest, { onSuccess: () => { showCreate.value = false } })
+}
 
 const params = computed(() => ({
   page: page.value,
@@ -46,7 +50,7 @@ function handlePageChange(newPage: number) {
 
 <template>
   <div class="space-y-4">
-    <PageHeader :title="t('tags.title')" description="Manage tags">
+    <PageHeader :title="t('tags.title')" :description="t('tags.title')">
       <Button @click="showCreate = true">
         <Plus class="mr-2 h-4 w-4" />
         {{ t('tags.create') }}
@@ -70,7 +74,7 @@ function handlePageChange(newPage: number) {
     <TagFormDialog
       :open="showCreate"
       @update:open="showCreate = $event"
-      @submit="createMutation.mutate($event, { onSuccess: () => showCreate = false })"
+      @submit="handleCreateTag($event)"
     />
   </div>
 </template>

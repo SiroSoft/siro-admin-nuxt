@@ -1,5 +1,6 @@
 export default {
   common: {
+    id: 'ID',
     dashboard: 'ダッシュボード',
     users: 'ユーザー',
     products: '商品',
@@ -37,6 +38,7 @@ export default {
     view: '表示',
     manage: '管理',
     selected: '選択済み',
+    goHome: 'ホームに戻る',
     description: '説明',
     application: 'アプリケーション',
     theme: 'テーマ',
@@ -120,6 +122,7 @@ export default {
     stock: '在庫',
     category: 'カテゴリー',
     image: '画像',
+    sku: 'SKU',
     description: '説明',
     confirmDelete: 'この商品を削除してもよろしいですか？',
   },
@@ -144,6 +147,7 @@ export default {
     notes: '備考',
     product: '商品',
     qty: '数量',
+    payment: '支払い',
   },
   categories: {
     title: 'カテゴリー',
@@ -154,7 +158,7 @@ export default {
     slug: 'スラッグ',
     confirmDelete: 'このカテゴリーを削除してもよろしいですか？',
   },
-  tags: { title: 'タグ', create: 'タグを作成', edit: 'タグを編集', delete: 'タグを削除', name: '名前' },
+  tags: { title: 'タグ', create: 'タグを作成', edit: 'タグを編集', delete: 'タグを削除', name: '名前', color: '色' },
   posts: {
     title: '投稿',
     create: '投稿を作成',
@@ -204,6 +208,10 @@ export default {
     confirmNewPassword: '新しいパスワード（確認）',
     saveChanges: '変更を保存',
     cancel: 'キャンセル',
+    emailVerified: '確認済み',
+    emailNotVerified: '未確認',
+    resendVerification: '確認メールを再送信',
+    verificationSent: '確認メールを送信しました',
   },
   forgotPassword: {
     title: 'パスワードをお忘れですか？',

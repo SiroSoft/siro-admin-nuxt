@@ -27,18 +27,19 @@ const emit = defineEmits<{
   pageChange: [page: number]
 }>()
 
+const { t } = useI18n()
 const deleteId = ref<number | null>(null)
 const paramsRef = computed(() => props.params)
 const { posts, meta, isLoading, isError, refetch } = usePosts(paramsRef as Ref<Record<string, string | number | undefined>>)
 const deleteMutation = useDeletePost()
 
 const columns = [
-  { key: "id", label: "ID", sortable: true },
-  { key: "title", label: "Title", sortable: true },
-  { key: "author_name", label: "Author" },
-  { key: "status", label: "Status" },
-  { key: "category_name", label: "Category" },
-  { key: "created_at", label: "Created", sortable: true },
+  { key: "id", label: t('common.id'), sortable: true },
+  { key: "title", label: t('posts.title_field'), sortable: true },
+  { key: "author_name", label: t('posts.author') },
+  { key: "status", label: t('common.status') },
+  { key: "category_name", label: t('products.category') },
+  { key: "created_at", label: t('users.createdAt'), sortable: true },
   { key: "actions", label: "" },
 ]
 </script>
@@ -48,9 +49,9 @@ const columns = [
     <ErrorState @retry="refetch()" />
   </div>
   <div v-else-if="!isLoading && posts.length === 0">
-    <EmptyState title="No posts found" description="Get started by creating your first post.">
+    <EmptyState :title="t('common.noData')" :description="t('posts.title')">
       <template #action>
-        <Button @click="emit('create')">Create Post</Button>
+        <Button @click="emit('create')">{{ t('posts.create') }}</Button>
       </template>
     </EmptyState>
   </div>

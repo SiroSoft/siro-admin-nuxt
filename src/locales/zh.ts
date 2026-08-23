@@ -1,5 +1,6 @@
 export default {
   common: {
+    id: 'ID',
     dashboard: '仪表盘',
     users: '用户',
     products: '产品',
@@ -37,6 +38,7 @@ export default {
     view: '查看',
     manage: '管理',
     selected: '已选择',
+    goHome: '返回首页',
     description: '描述',
     application: '应用',
     theme: '主题',
@@ -120,6 +122,7 @@ export default {
     stock: '库存',
     category: '分类',
     image: '图片',
+    sku: 'SKU',
     description: '描述',
     confirmDelete: '确定要删除此产品吗？',
   },
@@ -144,6 +147,7 @@ export default {
     notes: '备注',
     product: '商品',
     qty: '数量',
+    payment: '支付',
   },
   categories: {
     title: '分类',
@@ -154,7 +158,7 @@ export default {
     slug: '别名',
     confirmDelete: '确定要删除此分类吗？',
   },
-  tags: { title: '标签', create: '创建标签', edit: '编辑标签', delete: '删除标签', name: '名称' },
+  tags: { title: '标签', create: '创建标签', edit: '编辑标签', delete: '删除标签', name: '名称', color: '颜色' },
   posts: {
     title: '文章',
     create: '创建文章',
@@ -204,6 +208,10 @@ export default {
     confirmNewPassword: '确认新密码',
     saveChanges: '保存更改',
     cancel: '取消',
+    emailVerified: '已验证',
+    emailNotVerified: '未验证',
+    resendVerification: '重新发送验证邮件',
+    verificationSent: '验证邮件已发送',
   },
   forgotPassword: {
     title: '忘记密码？',

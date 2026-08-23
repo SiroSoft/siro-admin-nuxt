@@ -1,5 +1,6 @@
 export default {
   common: {
+    id: 'ID',
     dashboard: 'Dashboard',
     users: 'Benutzer',
     products: 'Produkte',
@@ -37,6 +38,7 @@ export default {
     view: 'Ansehen',
     manage: 'Verwalten',
     selected: 'ausgewählt',
+    goHome: 'Zur Startseite',
     description: 'Beschreibung',
     application: 'Anwendung',
     theme: 'Design',
@@ -120,6 +122,7 @@ export default {
     stock: 'Lagerbestand',
     category: 'Kategorie',
     image: 'Bild',
+    sku: 'SKU',
     description: 'Beschreibung',
     confirmDelete: 'Sind Sie sicher, dass Sie dieses Produkt löschen möchten?',
   },
@@ -144,6 +147,7 @@ export default {
     notes: 'Notizen',
     product: 'Produkt',
     qty: 'Menge',
+    payment: 'Zahlung',
   },
   categories: {
     title: 'Kategorien',
@@ -154,7 +158,7 @@ export default {
     slug: 'Slug',
     confirmDelete: 'Sind Sie sicher, dass Sie diese Kategorie löschen möchten?',
   },
-  tags: { title: 'Tags', create: 'Tag erstellen', edit: 'Tag bearbeiten', delete: 'Tag löschen', name: 'Name' },
+  tags: { title: 'Tags', create: 'Tag erstellen', edit: 'Tag bearbeiten', delete: 'Tag löschen', name: 'Name', color: 'Farbe' },
   posts: {
     title: 'Beiträge',
     create: 'Beitrag erstellen',
@@ -204,6 +208,10 @@ export default {
     confirmNewPassword: 'Neues Passwort bestätigen',
     saveChanges: 'Änderungen speichern',
     cancel: 'Abbrechen',
+    emailVerified: 'Bestätigt',
+    emailNotVerified: 'Unbestätigt',
+    resendVerification: 'Bestätigungs-E-Mail erneut senden',
+    verificationSent: 'Bestätigungs-E-Mail gesendet',
   },
   forgotPassword: {
     title: 'Passwort vergessen?',

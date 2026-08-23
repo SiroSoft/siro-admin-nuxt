@@ -67,11 +67,11 @@ const stats = computed(() => [
 const chartData = computed(() => {
   if (!data.value?.monthly_revenue?.length) return null
   return {
-    labels: data.value.monthly_revenue.map((r: { month?: string; revenue?: number }) => r.month),
+    labels: data.value.monthly_revenue.map((r: { month?: string; revenue?: number }) => r.month ?? ""),
     datasets: [
       {
         label: t('dashboard.totalRevenue'),
-        data: data.value.monthly_revenue.map((r: { month?: string; revenue?: number }) => r.revenue),
+        data: data.value.monthly_revenue.map((r: { month?: string; revenue?: number }) => r.revenue ?? 0),
         backgroundColor: "hsl(var(--primary))",
         borderRadius: 4,
       },

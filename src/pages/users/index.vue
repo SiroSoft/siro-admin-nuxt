@@ -4,7 +4,7 @@ definePageMeta({
 })
 
 import { Plus, Download, Trash2 } from "lucide-vue-next"
-import type { User } from "~/types/user"
+import type { User, CreateUserRequest, UpdateUserRequest } from "~/types/user"
 import { useCreateUser, useUpdateUser, useDeleteUser } from "~/composables/useUsers"
 import { usersService } from "~/services/users.service"
 import Button from "~/components/ui/Button.vue"
@@ -30,6 +30,10 @@ const queryClient = useQueryClient()
 
 const createMutation = useCreateUser()
 const deleteMutation = useDeleteUser()
+
+function handleCreateUser(data: CreateUserRequest | UpdateUserRequest) {
+  createMutation.mutate(data as CreateUserRequest, { onSuccess: () => { showCreate.value = false } })
+}
 
 const params = computed(() => ({
   page: page.value,
@@ -84,10 +88,10 @@ function handleConfirmDeleteSelected() {
     .then(() => {
       selectedIds.value = new Set()
       queryClient.invalidateQueries({ queryKey: ["users"] })
-      useToast().success("Users deleted", `${ids.length} user(s) have been deleted.`)
+      useToast().success(t('toast.userDeleted'), `${ids.length} ${t('toast.userDeletedDesc')}`)
     })
     .catch(() => {
-      useToast().error("Error", "Failed to delete some users.")
+      useToast().error(t('toast.error'), t('toast.userDeleteError'))
     })
   confirmDeleteSelected.value = false
 }
@@ -95,7 +99,7 @@ function handleConfirmDeleteSelected() {
 
 <template>
   <div class="space-y-4">
-    <PageHeader :title="t('users.title')" description="Manage system users">
+    <PageHeader :title="t('users.title')" :description="t('users.title')">
       <Button @click="showCreate = true">
         <Plus class="mr-2 h-4 w-4" />
         {{ t('users.create') }}
@@ -131,7 +135,7 @@ function handleConfirmDeleteSelected() {
     <UserFormDialog
       :open="showCreate"
       @update:open="showCreate = $event"
-      @submit="createMutation.mutate($event, { onSuccess: () => showCreate = false })"
+      @submit="handleCreateUser($event)"
     />
 
     <DeleteDialog

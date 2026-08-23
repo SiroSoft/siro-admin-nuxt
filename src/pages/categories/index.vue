@@ -8,7 +8,7 @@ import PageHeader from "~/components/layout/PageHeader.vue"
 import SearchInput from "~/components/forms/SearchInput.vue"
 import CategoryTable from "~/modules/categories/components/CategoryTable.vue"
 import CategoryFormDialog from "~/modules/categories/components/CategoryFormDialog.vue"
-import type { Category } from "~/types/category"
+import type { Category, CreateCategoryRequest, UpdateCategoryRequest } from "~/types/category"
 
 const search = ref("")
 const page = ref(1)
@@ -21,6 +21,10 @@ const { t } = useI18n()
 const debouncedSearch = useDebounce(search)
 
 const createMutation = useCreateCategory()
+
+function handleCreateCategory(data: CreateCategoryRequest | UpdateCategoryRequest) {
+  createMutation.mutate(data as CreateCategoryRequest, { onSuccess: () => { showCreate.value = false } })
+}
 
 const params = computed(() => ({
   page: page.value,
@@ -46,7 +50,7 @@ function handlePageChange(newPage: number) {
 
 <template>
   <div class="space-y-4">
-    <PageHeader :title="t('categories.title')" description="Manage categories">
+    <PageHeader :title="t('categories.title')" :description="t('categories.title')">
       <Button @click="showCreate = true">
         <Plus class="mr-2 h-4 w-4" />
         {{ t('categories.create') }}
@@ -70,7 +74,7 @@ function handlePageChange(newPage: number) {
     <CategoryFormDialog
       :open="showCreate"
       @update:open="showCreate = $event"
-      @submit="createMutation.mutate($event, { onSuccess: () => showCreate = false })"
+      @submit="handleCreateCategory($event)"
     />
   </div>
 </template>

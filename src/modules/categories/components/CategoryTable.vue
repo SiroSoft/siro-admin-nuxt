@@ -27,17 +27,18 @@ const emit = defineEmits<{
   pageChange: [page: number]
 }>()
 
+const { t } = useI18n()
 const deleteId = ref<number | null>(null)
 const paramsRef = computed(() => props.params)
 const { categories, meta, isLoading, isError, refetch } = useCategories(paramsRef as Ref<Record<string, string | number | undefined>>)
 const deleteMutation = useDeleteCategory()
 
 const columns = [
-  { key: "id", label: "ID", sortable: true },
-  { key: "name", label: "Name", sortable: true },
-  { key: "slug", label: "Slug" },
-  { key: "is_active", label: "Status" },
-  { key: "created_at", label: "Created", sortable: true },
+  { key: "id", label: t('common.id'), sortable: true },
+  { key: "name", label: t('categories.name'), sortable: true },
+  { key: "slug", label: t('categories.slug') },
+  { key: "is_active", label: t('common.status') },
+  { key: "created_at", label: t('users.createdAt'), sortable: true },
   { key: "actions", label: "" },
 ]
 </script>
@@ -47,9 +48,9 @@ const columns = [
     <ErrorState @retry="refetch()" />
   </div>
   <div v-else-if="!isLoading && categories.length === 0">
-    <EmptyState title="No categories found" description="Get started by creating your first category.">
+    <EmptyState :title="t('common.noData')" :description="t('categories.title')">
       <template #action>
-        <Button @click="emit('create')">Create Category</Button>
+        <Button @click="emit('create')">{{ t('categories.create') }}</Button>
       </template>
     </EmptyState>
   </div>

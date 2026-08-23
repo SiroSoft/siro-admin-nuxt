@@ -63,11 +63,11 @@ const parentCategories = computed(() =>
 )
 
 const parentOptions = computed(() =>
-  parentCategories.value.map((cat: Category) => ({ label: cat.name, value: String(cat.id) }))
+  parentCategories.value.map((cat: Category) => ({ label: cat.name ?? "", value: String(cat.id) }))
 )
 
 const onSubmit = handleSubmit((values) => {
-  emit("submit", values)
+  emit("submit", values as CreateCategoryRequest | UpdateCategoryRequest)
 })
 </script>
 
@@ -106,7 +106,7 @@ const onSubmit = handleSubmit((values) => {
       </div>
       <div class="space-y-2">
         <Label for="sort_order">Sort Order</Label>
-        <Input id="sort_order" type="number" v-model="sort_order" :disabled="isSubmitting" />
+        <Input id="sort_order" type="number" :model-value="String(sort_order ?? 0)" @update:model-value="(v: string) => setFieldValue('sort_order', Number(v))" :disabled="isSubmitting" />
       </div>
     </div>
 

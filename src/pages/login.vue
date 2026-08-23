@@ -104,6 +104,10 @@ const serverError = computed(() => {
         <Loader2 v-if="isLoginPending" class="mr-2 h-4 w-4 animate-spin" />
         {{ t('common.login') }}
       </Button>
+      <p class="text-sm text-center text-muted-foreground mt-4">
+        {{ t('auth.noAccount') }}
+        <NuxtLink to="/register" class="text-primary hover:underline">        {{ t('auth.signUp') }}</NuxtLink>
+      </p>
     </form>
   </Card>
 </template>

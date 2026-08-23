@@ -91,7 +91,7 @@ const { t } = useI18n()
 const { push: addItem, remove: removeItem, fields: itemFields } = useFieldArray("items")
 
 const onSubmit = handleSubmit((values) => {
-  emit("submit", values)
+  emit("submit", values as CreateOrderRequest | UpdateOrderRequest)
 })
 </script>
 
@@ -137,7 +137,7 @@ const onSubmit = handleSubmit((values) => {
             <SearchableSelect
               :options="productOptions"
               :value="values.items?.[idx]?.product_id ? String(values.items[idx].product_id) : ''"
-              @change="(v: string) => setFieldValue(`items.${idx}.product_id`, Number(v))"
+              @change="(v: string) => setFieldValue(`items[${idx}].product_id` as any, Number(v))"
               :placeholder="t('common.search') + '...'"
               :disabled="isSubmitting"
             />
@@ -146,8 +146,8 @@ const onSubmit = handleSubmit((values) => {
             <Label class="text-xs">{{ t('orders.qty') }}</Label>
             <Input
               type="number"
-              :model-value="values.items?.[idx]?.quantity"
-              @update:model-value="(v: string) => setFieldValue(`items.${idx}.quantity`, Number(v))"
+              :model-value="values.items?.[idx]?.quantity != null ? String(values.items[idx].quantity) : '1'"
+              @update:model-value="(v: string) => setFieldValue(`items[${idx}].quantity` as any, Number(v))"
               placeholder="1"
               :disabled="isSubmitting"
             />

@@ -69,7 +69,7 @@ const statusOptions = [
 ]
 
 const onSubmit = handleSubmit((values) => {
-  emit("submit", values)
+  emit("submit", values as CreateUserRequest | UpdateUserRequest)
 })
 </script>
 

@@ -13,7 +13,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "generate:types": "openapi-typescript docs/openapi.json -o src/types/api.ts"
+    "generate:types": "openapi-typescript docs/openapi.json -o src/types/api.ts && node scripts/append-api-helpers.mjs"
   },
   "dependencies": {
     "@pinia/nuxt": "^0.10.1",

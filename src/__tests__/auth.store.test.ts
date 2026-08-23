@@ -8,7 +8,7 @@ const mockUser: User = {
   name: "Test User",
   email: "test@example.com",
   role: "admin",
-  status: "active",
+  status: 1,
 };
 
 describe("auth.store", () => {

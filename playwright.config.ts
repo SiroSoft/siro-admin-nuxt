@@ -12,9 +12,9 @@ export default defineConfig({
     headless: true,
   },
   webServer: {
-    command: "npx nuxt preview --port 3000",
+    command: "npm run dev -- --port 3000",
     url: "http://localhost:3000",
     reuseExistingServer: true,
-    timeout: 120000,
+    timeout: 180000,
   },
 });

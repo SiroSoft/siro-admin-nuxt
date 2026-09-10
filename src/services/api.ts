@@ -124,7 +124,14 @@ api.interceptors.response.use(
     }
 
     if (status === 422) {
-      console.error("[API] Validation error:", error.response.data)
+      const body = error.response.data as { errors?: Record<string, string[]>; meta?: { errors?: Record<string, string[]> }; message?: string }
+      const fieldErrors = body?.errors ?? body?.meta?.errors
+      if (fieldErrors) {
+        const first = Object.values(fieldErrors)[0]?.[0]
+        console.error("[API] Validation error:", first ?? body.message, fieldErrors)
+      } else {
+        console.error("[API] Validation error:", body)
+      }
     }
 
     if (status === 429) {

@@ -72,7 +72,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/health": {
+    "/health": {
         parameters: {
             query?: never;
             header?: never;
@@ -80,6 +80,38 @@ export interface paths {
             cookie?: never;
         };
         /** Check API health */
+        get: operations["healthCheck"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/health/live": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["healthCheck"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/health/ready": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         get: operations["healthCheck"];
         put?: never;
         post?: never;
@@ -477,6 +509,54 @@ export interface paths {
         put?: never;
         /** Verify email */
         post: operations["authVerifyEmail"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/auth/verify-email/resend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["authVerifyEmail"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/upload/avatar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["uploadFile"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/server/info": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["healthCheck"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -2412,6 +2492,11 @@ export interface PaginationParams {
   sort?: string
   order?: 'asc' | 'desc'
   status?: string
+  category_id?: number
+  min_price?: number
+  max_price?: number
+  // legacy alias — skeleton v0.x used is_active, v1.0 prefers status/category_id
+  is_active?: boolean | number | string
 }
 
 export interface PaginationMeta {
@@ -2422,8 +2507,16 @@ export interface PaginationMeta {
 }
 
 export interface ApiResponse<T = unknown> {
+  success?: boolean
   data: T
   message?: string
+  // skeleton error envelope: { success:false, message, meta:{ errors, timestamp } }
+  // keep legacy top-level errors for backward compat with older openapi
   errors?: Record<string, string[]>
+  meta?: {
+    errors?: Record<string, string[]>
+    timestamp?: string
+    [key: string]: unknown
+  }
 }
 // === END HAND TYPES ===

@@ -12,6 +12,7 @@ import { useAuth } from "~/composables/useAuth"
 
 definePageMeta({
   layout: "auth",
+  ssr: false,
 })
 
 const { t } = useI18n()

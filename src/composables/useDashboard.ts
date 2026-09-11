@@ -5,6 +5,7 @@ export function useDashboard() {
   const query = useQuery({
     queryKey: ["dashboard"],
     queryFn: () => dashboardService.getStats(),
+    enabled: import.meta.client,
   })
 
   return {

@@ -32,6 +32,10 @@ export const useAuthStore = defineStore("auth", () => {
   }
 
   function restoreSession(): User | null {
+    if (typeof window === "undefined" || typeof localStorage === "undefined") {
+      isLoading.value = false
+      return null
+    }
     try {
       const token = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN)
       const userStr = localStorage.getItem(STORAGE_KEYS.USER)
@@ -54,7 +58,9 @@ export const useAuthStore = defineStore("auth", () => {
         return parsed
       }
     } catch {
-      localStorage.removeItem(STORAGE_KEYS.USER)
+      if (typeof window !== "undefined") {
+        try { localStorage.removeItem(STORAGE_KEYS.USER) } catch {}
+      }
     }
     isLoading.value = false
     return null

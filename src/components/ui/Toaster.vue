@@ -38,7 +38,7 @@ const toastIcons: Record<string, any> = {
         <p class="text-sm font-semibold">{{ t.title }}</p>
         <p v-if="t.description" class="text-sm opacity-90">{{ t.description }}</p>
       </div>
-      <button @click="dismiss(t.id)" class="shrink-0 opacity-60 hover:opacity-100">
+      <button type="button" aria-label="Dismiss notification" @click="dismiss(t.id)" class="shrink-0 opacity-60 hover:opacity-100">
         <X class="h-4 w-4" />
       </button>
     </div>

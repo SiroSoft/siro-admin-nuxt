@@ -24,12 +24,11 @@ export const authService = {
     await api.post("/api/auth/logout")
   },
 
-  async forgotPassword(email: string) {
-    const res = await api.post("/api/auth/forgot-password", { email })
+  async forgotPassword(email: string, turnstileToken?: string) { const res = await api.post("/api/auth/forgot-password", { email, ...(turnstileToken ? { "cf-turnstile-response": turnstileToken } : {}) })
     return res.data
   },
 
-  async register(data: { name: string; email: string; password: string; password_confirmation: string }) {
+  async register(data: { name: string; email: string; password: string; password_confirmation: string; "cf-turnstile-response"?: string }) {
     const res = await api.post("/api/auth/register", data)
     return res.data
   },

@@ -9,6 +9,7 @@ import Label from "~/components/ui/Label.vue"
 import Card from "~/components/ui/Card.vue"
 import { useToast } from "~/composables/useToast"
 import { authService } from "~/services/auth.service"
+import VueTurnstile from "vue-turnstile"
 
 definePageMeta({ layout: "auth" })
 
@@ -35,11 +36,13 @@ const [password, passwordAttrs] = defineField("password")
 const [password_confirmation] = defineField("password_confirmation")
 
 const serverError = ref<string | null>(null)
+const turnstileToken = ref("")
+const turnstileSiteKey = (useRuntimeConfig().public.turnstileSiteKey as string) || ""
 
 const onSubmit = handleSubmit(async (values) => {
   serverError.value = null
   try {
-    await authService.register(values)
+    await authService.register({ ...values, ...(turnstileToken.value ? { "cf-turnstile-response": turnstileToken.value } : {}) })
     useToast().success(t('register.success'), '')
     router.push("/login")
   } catch (e: any) {
@@ -81,7 +84,7 @@ const onSubmit = handleSubmit(async (values) => {
         <Input id="password_confirmation" type="password" v-model="password_confirmation" autocomplete="new-password" />
         <p v-if="errors.password_confirmation" class="text-sm text-destructive">{{ errors.password_confirmation }}</p>
       </div>
-      <p v-if="serverError" class="text-sm text-destructive">{{ serverError }}</p>
+      <ClientOnly><VueTurnstile v-if="turnstileSiteKey" :site-key="turnstileSiteKey" v-model="turnstileToken" /></ClientOnly> <p v-if="serverError" class="text-sm text-destructive">{{ serverError }}</p>
       <Button type="submit" class="w-full" :disabled="isSubmitting">
         <Loader2 v-if="isSubmitting" class="mr-2 h-4 w-4 animate-spin" />
         {{ t('register.submit') }}

@@ -9,6 +9,7 @@ import Label from "~/components/ui/Label.vue"
 import Card from "~/components/ui/Card.vue"
 import { useToast } from "~/composables/useToast"
 import { authService } from "~/services/auth.service"
+import VueTurnstile from "vue-turnstile"
 
 definePageMeta({ layout: "auth" })
 
@@ -25,10 +26,12 @@ const { handleSubmit, errors, defineField, isSubmitting } = useForm({
 })
 
 const [email, emailAttrs] = defineField("email")
+const turnstileToken = ref("")
+const turnstileSiteKey = (useRuntimeConfig().public.turnstileSiteKey as string) || ""
 
 const onSubmit = handleSubmit(async (values) => {
   try {
-    await authService.forgotPassword(values.email)
+    await authService.forgotPassword(values.email, turnstileToken.value || undefined)
     submitted.value = true
     useToast().success(t('forgotPassword.emailSent'), t('forgotPassword.emailSentDesc'))
   } catch {
@@ -55,7 +58,7 @@ const onSubmit = handleSubmit(async (values) => {
         <p v-if="errors.email" class="text-sm text-destructive">{{ errors.email }}</p>
       </div>
 
-      <Button type="submit" class="w-full" :disabled="isSubmitting">
+      <ClientOnly><VueTurnstile v-if="turnstileSiteKey" :site-key="turnstileSiteKey" v-model="turnstileToken" /></ClientOnly> <Button type="submit" class="w-full" :disabled="isSubmitting">
         <Loader2 v-if="isSubmitting" class="mr-2 h-4 w-4 animate-spin" />
         <Mail v-else class="mr-2 h-4 w-4" />
         {{ t('forgotPassword.sendResetLink') }}

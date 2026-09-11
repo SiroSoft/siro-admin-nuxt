@@ -29,7 +29,7 @@ onMounted(() => {
       <Header />
       <main class="p-4 lg:p-6 animate-fade-in">
         <slot />
-      </main>
+      </main> <footer class="px-4 pb-6 lg:px-6"><OpenSourceLinks compact /></footer>
     </div>
   </div>
   <div v-else-if="!authStore.isLoading" class="min-h-screen">

@@ -35,6 +35,11 @@ onMounted(() => {
   }
 })
 
+const demoEmail = "demo@skeleton.sirophp.com"
+const demoPassword = "Demo123!"
+function onDemoLogin() {
+  login({ email: demoEmail, password: demoPassword })
+}
 const onSubmit = handleSubmit((values) => {
   if (rememberMe.value) {
     localStorage.setItem("siro_remember_email", values.email)
@@ -101,11 +106,11 @@ const serverError = computed(() => {
         <NuxtLink to="/forgot-password" class="text-sm text-primary hover:underline">{{ t('auth.forgotPassword') }}</NuxtLink>
       </div>
 
-      <Button type="submit" class="w-full" :disabled="isLoginPending">
+      <Button type="button" variant="outline" class="w-full" :disabled="isLoginPending" @click="onDemoLogin"> Try live demo - 1 click </Button> <Button type="submit" class="w-full" :disabled="isLoginPending">
         <Loader2 v-if="isLoginPending" class="mr-2 h-4 w-4 animate-spin" />
         {{ t('common.login') }}
       </Button>
-      <p class="text-sm text-center text-muted-foreground mt-4">
+      <OpenSourceLinks class="mt-4" /> <p class="text-sm text-center text-muted-foreground mt-4">
         {{ t('auth.noAccount') }}
         <NuxtLink to="/register" class="text-primary hover:underline">        {{ t('auth.signUp') }}</NuxtLink>
       </p>

@@ -9,6 +9,7 @@ import Label from "~/components/ui/Label.vue"
 import Card from "~/components/ui/Card.vue"
 import { loginSchema } from "~/modules/auth/schemas/login.schema"
 import { useAuth } from "~/composables/useAuth"
+import VueTurnstile from "vue-turnstile"
 
 definePageMeta({
   layout: "auth",
@@ -37,8 +38,10 @@ onMounted(() => {
 
 const demoEmail = "demo@skeleton.sirophp.com"
 const demoPassword = "Demo123!"
+const turnstileSiteKey = (useRuntimeConfig().public.turnstileSiteKey as string) || ""
+const turnstileToken = ref("")
 function onDemoLogin() {
-  login({ email: demoEmail, password: demoPassword })
+  login({ email: demoEmail, password: demoPassword, ...(turnstileToken.value ? { "cf-turnstile-response": turnstileToken.value } : {}) })
 }
 const onSubmit = handleSubmit((values) => {
   if (rememberMe.value) {
@@ -46,7 +49,7 @@ const onSubmit = handleSubmit((values) => {
   } else {
     localStorage.removeItem("siro_remember_email")
   }
-  login(values)
+  login({ ...values, ...(turnstileToken.value ? { "cf-turnstile-response": turnstileToken.value } : {}) })
 })
 
 const serverError = computed(() => {
@@ -106,6 +109,9 @@ const serverError = computed(() => {
         <NuxtLink to="/forgot-password" class="text-sm text-primary hover:underline">{{ t('auth.forgotPassword') }}</NuxtLink>
       </div>
 
+      <ClientOnly>
+        <VueTurnstile v-if="turnstileSiteKey" :site-key="turnstileSiteKey" v-model="turnstileToken" />
+      </ClientOnly>
       <Button type="button" variant="outline" class="w-full" :disabled="isLoginPending" @click="onDemoLogin"> Try live demo - 1 click </Button> <Button type="submit" class="w-full" :disabled="isLoginPending">
         <Loader2 v-if="isLoginPending" class="mr-2 h-4 w-4 animate-spin" />
         {{ t('common.login') }}

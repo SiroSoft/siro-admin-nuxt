@@ -2,10 +2,15 @@ import axios, { AxiosError, type InternalAxiosRequestConfig } from "axios"
 import { STORAGE_KEYS } from "~/constants"
 
 let BASE_URL = "http://localhost:8080"
+let FE_TOKEN = ""
 
 export function setApiBaseUrl(url: string) {
   BASE_URL = url
   api.defaults.baseURL = url
+}
+
+export function setFeToken(token: string) {
+  FE_TOKEN = token
 }
 
 function generateRequestId(): string {
@@ -50,6 +55,9 @@ api.interceptors.request.use(
     }
     if (config.headers) {
       config.headers["X-Request-Id"] = generateRequestId()
+      if (FE_TOKEN !== "") {
+        config.headers["X-Siro-FE"] = FE_TOKEN
+      }
     }
     return config
   },

@@ -26,6 +26,7 @@ export default defineNuxtConfig({
     public: {
       apiUrl: process.env.NUXT_PUBLIC_API_URL || "http://localhost:8080",
       appName: process.env.NUXT_PUBLIC_APP_NAME || "Siro Admin",
+      feToken: process.env.NUXT_PUBLIC_FE_TOKEN || "",
     },
   },
 

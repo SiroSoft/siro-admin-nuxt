@@ -31,6 +31,8 @@ const emit = defineEmits<{
   submit: [data: CreateUserRequest | UpdateUserRequest]
 }>()
 
+const { t } = useI18n()
+
 const isEdit = computed(() => !!props.user)
 const schema = computed(() => isEdit.value ? updateUserSchema : createUserSchema)
 
@@ -82,19 +84,19 @@ const onSubmit = handleSubmit((values) => {
 
     <div class="space-y-2">
       <Label for="name">Name <span class="text-destructive">*</span></Label>
-      <Input id="name" v-model="name" v-bind="nameAttrs" placeholder="John Doe" :disabled="isSubmitting" />
+      <Input id="name" v-model="name" v-bind="nameAttrs" :placeholder="t('placeholders.fullName')" :disabled="isSubmitting" />
       <p v-if="errors.name" class="text-sm text-destructive">{{ errors.name }}</p>
     </div>
 
     <div class="space-y-2">
       <Label for="email">Email <span class="text-destructive">*</span></Label>
-      <Input id="email" type="email" v-model="email" v-bind="emailAttrs" placeholder="john@example.com" :disabled="isSubmitting" />
+      <Input id="email" type="email" v-model="email" v-bind="emailAttrs" :placeholder="t('placeholders.userEmail')" :disabled="isSubmitting" />
       <p v-if="errors.email" class="text-sm text-destructive">{{ errors.email }}</p>
     </div>
 
     <div class="space-y-2">
       <Label for="phone">Phone</Label>
-      <Input id="phone" type="tel" v-model="phone" placeholder="+1 (555) 000-0000" :disabled="isSubmitting" />
+      <Input id="phone" type="tel" v-model="phone" :placeholder="t('placeholders.phone')" :disabled="isSubmitting" />
     </div>
 
     <template v-if="!isEdit">

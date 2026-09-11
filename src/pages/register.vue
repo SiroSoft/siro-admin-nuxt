@@ -36,7 +36,7 @@ const [password, passwordAttrs] = defineField("password")
 const [password_confirmation] = defineField("password_confirmation")
 
 const serverError = ref<string | null>(null)
-const turnstileToken = ref("")
+const turnstileToken = ref((useRoute().query.turnstile as string) || "")
 const turnstileSiteKey = (useRuntimeConfig().public.turnstileSiteKey as string) || ""
 
 const onSubmit = handleSubmit(async (values) => {
@@ -71,7 +71,7 @@ const onSubmit = handleSubmit(async (values) => {
       </div>
       <div class="space-y-2">
         <Label for="email">{{ t('auth.email') }} <span class="text-destructive">*</span></Label>
-        <Input id="email" type="email" v-model="email" v-bind="emailAttrs" placeholder="admin@example.com" autocomplete="email" />
+        <Input id="email" type="email" v-model="email" v-bind="emailAttrs" :placeholder="t('placeholders.email')" autocomplete="email" />
         <p v-if="errors.email" class="text-sm text-destructive">{{ errors.email }}</p>
       </div>
       <div class="space-y-2">

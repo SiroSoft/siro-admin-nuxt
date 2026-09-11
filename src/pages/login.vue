@@ -83,7 +83,7 @@ const serverError = computed(() => {
     <form v-else @submit="onSubmit" class="space-y-4">
       <div class="space-y-2">
         <Label for="email">{{ t('auth.email') }} <span class="text-destructive">*</span></Label>
-        <Input id="email" type="email" v-model="email" v-bind="emailAttrs" placeholder="admin@example.com" autocomplete="email" autofocus />
+        <Input id="email" type="email" v-model="email" v-bind="emailAttrs" :placeholder="t('placeholders.email')" autocomplete="email" autofocus />
         <p v-if="errors.email" class="text-sm text-destructive">{{ errors.email }}</p>
       </div>
 
@@ -112,7 +112,7 @@ const serverError = computed(() => {
       <ClientOnly>
         <VueTurnstile v-if="turnstileSiteKey" :site-key="turnstileSiteKey" v-model="turnstileToken" />
       </ClientOnly>
-      <Button type="button" variant="outline" class="w-full" :disabled="isLoginPending" @click="onDemoLogin"> Try live demo - 1 click </Button> <Button type="submit" class="w-full" :disabled="isLoginPending">
+      <Button type="button" variant="outline" class="w-full" :disabled="isLoginPending" @click="onDemoLogin">{{ t('auth.tryDemo') }}</Button> <Button type="submit" class="w-full" :disabled="isLoginPending">
         <Loader2 v-if="isLoginPending" class="mr-2 h-4 w-4 animate-spin" />
         {{ t('common.login') }}
       </Button>

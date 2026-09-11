@@ -10,6 +10,7 @@ import Switch from "~/components/ui/Switch.vue"
 import Select from "~/components/ui/Select.vue"
 import ImageUpload from "~/components/ui/ImageUpload.vue"
 import { createCategorySchema, updateCategorySchema } from "~/modules/categories/schemas/category.schema"
+import { useI18n } from "~/composables/useI18n"
 import { useCategories } from "~/composables/useCategories"
 import type { Category, CreateCategoryRequest, UpdateCategoryRequest } from "~/types/category"
 
@@ -33,6 +34,7 @@ const emit = defineEmits<{
   submit: [data: CreateCategoryRequest | UpdateCategoryRequest]
 }>()
 
+const { t } = useI18n()
 const isEdit = computed(() => !!props.category)
 const schema = computed(() => isEdit.value ? updateCategorySchema : createCategorySchema)
 const { categories } = useCategories(ref({ per_page: 100 }))
@@ -75,13 +77,13 @@ const onSubmit = handleSubmit((values) => {
   <form @submit="onSubmit" class="space-y-4">
     <div class="space-y-2">
       <Label for="name">Name *</Label>
-      <Input id="name" v-model="name" v-bind="nameAttrs" placeholder="Category name" :disabled="isSubmitting" />
+      <Input id="name" v-model="name" v-bind="nameAttrs" :placeholder="t('placeholders.categoryName')" :disabled="isSubmitting" />
       <p v-if="errors.name" class="text-sm text-destructive">{{ errors.name }}</p>
     </div>
 
     <div class="space-y-2">
       <Label for="description">Description</Label>
-      <Textarea id="description" v-model="description" placeholder="Category description" :disabled="isSubmitting" />
+      <Textarea id="description" v-model="description" :placeholder="t('placeholders.categoryDescription')" :disabled="isSubmitting" />
     </div>
 
     <div class="space-y-2">
@@ -116,7 +118,7 @@ const onSubmit = handleSubmit((values) => {
         :model-value="parent_id ? String(parent_id) : ''"
         @update:model-value="(v: string) => setFieldValue('parent_id', v ? Number(v) : undefined)"
         :options="parentOptions"
-        placeholder="None (top level)"
+        :placeholder="t('placeholders.noneTopLevel')"
         :disabled="isSubmitting"
       />
     </div>

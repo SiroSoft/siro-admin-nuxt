@@ -46,6 +46,8 @@ const emit = defineEmits<{
   submit: [data: CreateProductRequest | UpdateProductRequest]
 }>()
 
+const { t } = useI18n()
+
 const isEdit = computed(() => !!props.product)
 const schema = computed(() => isEdit.value ? updateProductSchema : createProductSchema)
 const { categories } = useCategories(ref({ per_page: 100 }))
@@ -107,12 +109,12 @@ const onSubmit = handleSubmit((values) => {
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <div class="space-y-2">
         <Label for="name">Name *</Label>
-        <Input id="name" v-model="name" v-bind="nameAttrs" placeholder="Product name" :disabled="isSubmitting" />
+        <Input id="name" v-model="name" v-bind="nameAttrs" :placeholder="t('placeholders.productName')" :disabled="isSubmitting" />
         <p v-if="errors.name" class="text-sm text-destructive">{{ errors.name }}</p>
       </div>
       <div class="space-y-2">
         <Label for="sku">SKU *</Label>
-        <Input id="sku" v-model="sku" placeholder="PROD-001" :disabled="isSubmitting" />
+        <Input id="sku" v-model="sku" :placeholder="t('placeholders.productSku')" :disabled="isSubmitting" />
         <p v-if="errors.sku" class="text-sm text-destructive">{{ errors.sku }}</p>
       </div>
     </div>
@@ -122,14 +124,14 @@ const onSubmit = handleSubmit((values) => {
       <RichTextEditor
         :model-value="description ?? ''"
         @update:model-value="(v: string) => setFieldValue('description', v)"
-        placeholder="Full product description"
+        :placeholder="t('placeholders.productDescription')"
         :disabled="isSubmitting"
       />
     </div>
 
     <div class="space-y-2">
       <Label for="short_description">Short Description</Label>
-      <Textarea id="short_description" v-model="short_description" placeholder="Brief product summary" :disabled="isSubmitting" />
+      <Textarea id="short_description" v-model="short_description" :placeholder="t('placeholders.productSummary')" :disabled="isSubmitting" />
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">

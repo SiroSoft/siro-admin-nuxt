@@ -26,7 +26,7 @@ const { handleSubmit, errors, defineField, isSubmitting } = useForm({
 })
 
 const [email, emailAttrs] = defineField("email")
-const turnstileToken = ref("")
+const turnstileToken = ref((useRoute().query.turnstile as string) || "")
 const turnstileSiteKey = (useRuntimeConfig().public.turnstileSiteKey as string) || ""
 
 const onSubmit = handleSubmit(async (values) => {
@@ -54,7 +54,7 @@ const onSubmit = handleSubmit(async (values) => {
     <form v-if="!submitted" @submit="onSubmit" class="space-y-4">
       <div class="space-y-2">
         <Label for="email">{{ t('auth.email') }}</Label>
-        <Input id="email" type="email" v-model="email" v-bind="emailAttrs" placeholder="name@example.com" autocomplete="email" />
+        <Input id="email" type="email" v-model="email" v-bind="emailAttrs" :placeholder="t('placeholders.emailExample')" autocomplete="email" />
         <p v-if="errors.email" class="text-sm text-destructive">{{ errors.email }}</p>
       </div>
 

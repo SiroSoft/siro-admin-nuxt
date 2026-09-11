@@ -1,5 +1,46 @@
 import axios, { AxiosError, type InternalAxiosRequestConfig } from "axios"
 import { STORAGE_KEYS } from "~/constants"
+import enMessages from "~/locales/en"
+import viMessages from "~/locales/vi"
+import deMessages from "~/locales/de"
+import zhMessages from "~/locales/zh"
+import jaMessages from "~/locales/ja"
+
+type ApiMessages = typeof enMessages
+
+const API_MESSAGES: Record<string, ApiMessages> = {
+  en: enMessages,
+  vi: viMessages,
+  de: deMessages,
+  zh: zhMessages,
+  ja: jaMessages,
+}
+
+function getApiLocale(): string {
+  if (typeof window !== "undefined") {
+    return localStorage.getItem("siro_locale") || "en"
+  }
+  return "en"
+}
+
+function resolvePath(obj: unknown, path: string): unknown {
+  return path.split(".").reduce((acc: unknown, part: string) => {
+    if (acc && typeof acc === "object" && part in acc) {
+      return (acc as Record<string, unknown>)[part]
+    }
+    return undefined
+  }, obj as unknown)
+}
+
+export function tApi(key: string, params?: Record<string, string | number>): string {
+  const loc = getApiLocale()
+  const dict = API_MESSAGES[loc] ?? API_MESSAGES.en
+  const msg = resolvePath(dict, key) ?? resolvePath(API_MESSAGES.en, key) ?? key
+  if (params && typeof msg === "string") {
+    return msg.replace(/\{\{(\w+)\}\}/g, (_, p) => String(params[p] ?? ""))
+  }
+  return String(msg ?? key)
+}
 
 let BASE_URL = "http://localhost:8080"
 let FE_TOKEN = ""
@@ -70,7 +111,7 @@ api.interceptors.response.use(
     const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean }
 
     if (!error.response) {
-      console.error("[API] Network Error:", error.message)
+      console.error(`[API] ${tApi("api.networkError")}`, error.message)
       return Promise.reject(error)
     }
 
@@ -125,11 +166,11 @@ api.interceptors.response.use(
     }
 
     if (status === 403) {
-      console.error("[API] Forbidden: You do not have permission to access this resource.")
+      console.error(`[API] ${tApi("api.forbidden")}`)
     }
 
     if (status === 404) {
-      console.error("[API] Resource not found.")
+      console.error(`[API] ${tApi("api.notFound")}`)
     }
 
     if (status === 422) {
@@ -137,18 +178,18 @@ api.interceptors.response.use(
       const fieldErrors = body?.errors ?? body?.meta?.errors
       if (fieldErrors) {
         const first = Object.values(fieldErrors)[0]?.[0]
-        console.error("[API] Validation error:", first ?? body.message, fieldErrors)
+        console.error(`[API] ${tApi("api.validationError")}`, first ?? body.message, fieldErrors)
       } else {
-        console.error("[API] Validation error:", body)
+        console.error(`[API] ${tApi("api.validationError")}`, body)
       }
     }
 
     if (status === 429) {
-      console.error("[API] Rate limit exceeded. Please try again later.")
+      console.error(`[API] ${tApi("api.rateLimit")}`)
     }
 
     if (status >= 500) {
-      console.error(`[API] Server error (${status}):`, error.response.data)
+      console.error(`[API] ${tApi("api.serverError", { status })}`, error.response.data)
     }
 
     return Promise.reject(error)

@@ -37,6 +37,7 @@ export default defineNuxtConfig({
       meta: [
         { name: "description", content: "Siro Admin Nuxt - Modern admin panel for SiroPHP APIs" },
       ],
+      link: [{ rel: "icon", type: "image/svg+xml", href: "/favicon.svg" }],
     },
   },
 

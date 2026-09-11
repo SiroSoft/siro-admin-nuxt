@@ -1,5 +1,6 @@
 export default {
   common: {
+    id: 'ID',
     dashboard: 'Dashboard',
     users: 'Users',
     products: 'Products',
@@ -37,6 +38,7 @@ export default {
     view: 'View',
     manage: 'Manage',
     selected: 'selected',
+    goHome: 'Go Home',
     description: 'Description',
     application: 'Application',
     theme: 'Theme',
@@ -120,6 +122,7 @@ export default {
     stock: 'Stock',
     category: 'Category',
     image: 'Image',
+    sku: 'SKU',
     description: 'Description',
     confirmDelete: 'Are you sure you want to delete this product?',
   },
@@ -144,6 +147,7 @@ export default {
     notes: 'Notes',
     product: 'Product',
     qty: 'Qty',
+    payment: 'Payment',
   },
   categories: {
     title: 'Categories',
@@ -154,7 +158,7 @@ export default {
     slug: 'Slug',
     confirmDelete: 'Are you sure you want to delete this category?',
   },
-  tags: { title: 'Tags', create: 'Create Tag', edit: 'Edit Tag', delete: 'Delete Tag', name: 'Name' },
+  tags: { title: 'Tags', create: 'Create Tag', edit: 'Edit Tag', delete: 'Delete Tag', name: 'Name', color: 'Color' },
   posts: {
     title: 'Posts',
     create: 'Create Post',
@@ -204,6 +208,10 @@ export default {
     confirmNewPassword: 'Confirm New Password',
     saveChanges: 'Save Changes',
     cancel: 'Cancel',
+    emailVerified: 'Verified',
+    emailNotVerified: 'Unverified',
+    resendVerification: 'Resend verification email',
+    verificationSent: 'Verification email sent',
   },
   forgotPassword: {
     title: 'Forgot password?',

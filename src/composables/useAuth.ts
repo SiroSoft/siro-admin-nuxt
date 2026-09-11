@@ -11,8 +11,8 @@ export function useAuth() {
     mutationFn: (data: LoginRequest) => authService.login(data),
     onSuccess: (res) => {
       const payload = res.data
-      if (payload && payload.user) {
-        authStore.login(payload.user, payload.token!, payload.refresh_token!)
+      if (payload?.user && payload?.token && payload?.refresh_token) {
+        authStore.login(payload.user, payload.token, payload.refresh_token)
         router.push("/")
       }
     },

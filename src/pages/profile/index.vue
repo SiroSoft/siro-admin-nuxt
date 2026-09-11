@@ -5,8 +5,9 @@ import { useMutation } from "@tanstack/vue-query"
 import { useForm } from "vee-validate"
 import { toTypedSchema } from "@vee-validate/zod"
 import { z } from "zod"
-import { Loader2, User, Lock } from "lucide-vue-next"
+import { Loader2, User, Lock, CheckCircle2, AlertTriangle, Mail } from "lucide-vue-next"
 import { profileService } from "~/services/profile.service"
+import { authService } from "~/services/auth.service"
 import { useAuthStore } from "~/stores/auth.store"
 import PageHeader from "~/components/layout/PageHeader.vue"
 import Card from "~/components/ui/Card.vue"
@@ -98,6 +99,20 @@ const initials = computed(() => {
     .toUpperCase()
     .slice(0, 2)
 })
+
+const isResending = ref(false)
+
+const handleResendVerification = async () => {
+  isResending.value = true
+  try {
+    await authService.resendVerificationEmail()
+    useToast().success(t('profile.verificationSent'), '')
+  } catch {
+    useToast().error(t('errors.networkError'), '')
+  } finally {
+    isResending.value = false
+  }
+}
 </script>
 
 <template>
@@ -114,6 +129,25 @@ const initials = computed(() => {
           <h3 class="text-lg font-semibold">{{ authStore.user?.name }}</h3>
           <p class="text-sm text-muted-foreground">{{ authStore.user?.email }}</p>
           <p class="text-xs text-muted-foreground mt-1 capitalize">{{ authStore.user?.role }}</p>
+          <div class="mt-3 flex items-center gap-2">
+            <template v-if="authStore.user?.email_verified_at">
+              <span class="inline-flex items-center gap-1 rounded-md border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/20 dark:text-emerald-400">
+                <CheckCircle2 class="h-3 w-3" />
+                {{ t('profile.emailVerified') }}
+              </span>
+            </template>
+            <template v-else>
+              <span class="inline-flex items-center gap-1 rounded-md border border-amber-200 bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-700 dark:border-amber-800 dark:bg-amber-950/20 dark:text-amber-400">
+                <AlertTriangle class="h-3 w-3" />
+                {{ t('profile.emailNotVerified') }}
+              </span>
+              <Button size="sm" variant="ghost" :disabled="isResending" @click="handleResendVerification" class="text-xs h-7 px-2">
+                <Loader2 v-if="isResending" class="h-3 w-3 animate-spin mr-1" />
+                <Mail v-else class="h-3 w-3 mr-1" />
+                {{ t('profile.resendVerification') }}
+              </Button>
+            </template>
+          </div>
           <p v-if="authStore.user?.created_at" class="text-xs text-muted-foreground mt-4">
             {{ t('profile.memberSince', { date: formatDate(authStore.user.created_at) }) }}
           </p>

@@ -9,7 +9,7 @@ import PageHeader from "~/components/layout/PageHeader.vue"
 import SearchInput from "~/components/forms/SearchInput.vue"
 import OrderTable from "~/modules/orders/components/OrderTable.vue"
 import OrderFormDialog from "~/modules/orders/components/OrderFormDialog.vue"
-import type { Order } from "~/types/order"
+import type { Order, CreateOrderRequest, UpdateOrderRequest } from "~/types/order"
 
 const search = ref("")
 const page = ref(1)
@@ -23,6 +23,10 @@ const { t } = useI18n()
 const debouncedSearch = useDebounce(search)
 
 const createMutation = useCreateOrder()
+
+function handleCreateOrder(data: CreateOrderRequest | UpdateOrderRequest) {
+  createMutation.mutate(data as CreateOrderRequest, { onSuccess: () => { showCreate.value = false } })
+}
 
 const params = computed(() => ({
   page: page.value,
@@ -49,7 +53,7 @@ function handlePageChange(newPage: number) {
 
 <template>
   <div class="space-y-4">
-    <PageHeader :title="t('orders.title')" description="Manage orders">
+    <PageHeader :title="t('orders.title')" :description="t('orders.title')">
       <Button @click="showCreate = true">
         <Plus class="mr-2 h-4 w-4" />
         {{ t('orders.create') }}
@@ -86,7 +90,7 @@ function handlePageChange(newPage: number) {
     <OrderFormDialog
       :open="showCreate"
       @update:open="showCreate = $event"
-      @submit="createMutation.mutate($event, { onSuccess: () => showCreate = false })"
+      @submit="handleCreateOrder($event)"
     />
   </div>
 </template>

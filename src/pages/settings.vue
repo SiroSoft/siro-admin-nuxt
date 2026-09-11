@@ -59,17 +59,17 @@ const { handleSubmit, errors, defineField, setFieldValue, isSubmitting, resetFor
 })
 
 watch(data, (val) => {
-  if (val?.data) {
+  if (val) {
     resetForm({
       values: {
-        app_name: val.data.app_name ?? "",
-        app_description: val.data.app_description ?? "",
-        language: val.data.language ?? "en",
-        timezone: val.data.timezone ?? "UTC",
-        currency: val.data.currency ?? "USD",
-        pagination_per_page: val.data.pagination_per_page ?? 15,
-        maintenance_mode: val.data.maintenance_mode ?? false,
-        email_notifications: val.data.email_notifications ?? true,
+        app_name: val.app_name ?? "",
+        app_description: val.app_description ?? "",
+        language: val.language ?? "en",
+        timezone: val.timezone ?? "UTC",
+        currency: val.currency ?? "USD",
+        pagination_per_page: val.pagination_per_page ?? 15,
+        maintenance_mode: val.maintenance_mode ?? false,
+        email_notifications: val.email_notifications ?? true,
       },
     })
   }
@@ -161,7 +161,7 @@ onMounted(async () => {
 
 function handleMaintenanceChange(v: boolean) {
   maintenanceTarget.value = v
-  previousMaintenance.value = maintenance_mode.value
+  previousMaintenance.value = maintenance_mode.value ?? false
   showMaintenanceAlert.value = true
 }
 
@@ -242,7 +242,7 @@ const themeOptions = [
               </div>
               <div class="space-y-2">
                 <Label for="pagination_per_page">{{ t('settings.itemsPerPage') }}</Label>
-                <Input id="pagination_per_page" type="number" v-model="pagination_per_page" :disabled="updateMutation.isPending.value" />
+                <Input id="pagination_per_page" type="number" :model-value="String(pagination_per_page ?? 15)" @update:model-value="(v: string) => setFieldValue('pagination_per_page', Number(v))" :disabled="updateMutation.isPending.value" />
                 <p v-if="errors.pagination_per_page" class="text-sm text-destructive">{{ errors.pagination_per_page }}</p>
               </div>
             </div>

@@ -1,9 +1,7 @@
 <script setup lang="ts">
-definePageMeta({ middleware: "auth" })
+definePageMeta({ middleware: "auth", ssr: false })
 
 import { Users, ShoppingCart, Package, DollarSign, Activity, RefreshCw, ArrowRight, Eye, Settings } from "lucide-vue-next"
-import { Bar } from "vue-chartjs"
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip as ChartTooltip, Legend } from "chart.js"
 import Card from "~/components/ui/Card.vue"
 import PageHeader from "~/components/layout/PageHeader.vue"
 import StatsSkeleton from "~/components/states/StatsSkeleton.vue"
@@ -24,8 +22,6 @@ const statColors = [
   { icon: "bg-gradient-to-br from-purple-500/10 to-purple-600/20 text-purple-600 dark:from-purple-500/20 dark:to-purple-600/30 dark:text-purple-400 ring-1 ring-purple-500/20", grad: "from-purple-600 to-purple-400" },
   { icon: "bg-gradient-to-br from-emerald-500/10 to-emerald-600/20 text-emerald-600 dark:from-emerald-500/20 dark:to-emerald-600/30 dark:text-emerald-400 ring-1 ring-emerald-500/20", grad: "from-emerald-600 to-emerald-400" },
 ]
-
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, ChartTooltip, Legend)
 
 const chartOptions = {
   responsive: true,
@@ -67,11 +63,11 @@ const stats = computed(() => [
 const chartData = computed(() => {
   if (!data.value?.monthly_revenue?.length) return null
   return {
-    labels: data.value.monthly_revenue.map((r: { month?: string; revenue?: number }) => r.month),
+    labels: data.value.monthly_revenue.map((r: { month?: string; revenue?: number }) => r.month ?? ""),
     datasets: [
       {
         label: t('dashboard.totalRevenue'),
-        data: data.value.monthly_revenue.map((r: { month?: string; revenue?: number }) => r.revenue),
+        data: data.value.monthly_revenue.map((r: { month?: string; revenue?: number }) => r.revenue ?? 0),
         backgroundColor: "hsl(var(--primary))",
         borderRadius: 4,
       },
@@ -236,13 +232,8 @@ const chartData = computed(() => {
         <template #header>
           <span class="text-sm font-medium">{{ t('dashboard.monthlyRevenue') }}</span>
         </template>
-        <div class="h-[300px]">
-          <Bar
-            v-if="chartData"
-            :data="chartData"
-            :options="chartOptions"
-          />
-          <p v-else class="text-muted-foreground text-center py-8">{{ t('dashboard.noRevenueData') }}</p>
+        <div class="h-[300px] flex items-center justify-center">
+          <p class="text-muted-foreground text-sm">Chart temporarily disabled for Pages deploy — data below</p>
         </div>
       </Card>
     </template>

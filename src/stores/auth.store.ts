@@ -32,17 +32,35 @@ export const useAuthStore = defineStore("auth", () => {
   }
 
   function restoreSession(): User | null {
+    if (typeof window === "undefined" || typeof localStorage === "undefined") {
+      isLoading.value = false
+      return null
+    }
     try {
       const token = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN)
       const userStr = localStorage.getItem(STORAGE_KEYS.USER)
       if (token && userStr) {
+        try {
+          const payload = JSON.parse(atob(token.split(".")[1]))
+          if (payload.exp && payload.exp * 1000 < Date.now()) {
+            localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN)
+            localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN)
+            localStorage.removeItem(STORAGE_KEYS.USER)
+            isLoading.value = false
+            return null
+          }
+        } catch {
+          // Invalid token format, proceed with restore
+        }
         const parsed = JSON.parse(userStr) as User
         user.value = parsed
         isLoading.value = false
         return parsed
       }
     } catch {
-      localStorage.removeItem(STORAGE_KEYS.USER)
+      if (typeof window !== "undefined") {
+        try { localStorage.removeItem(STORAGE_KEYS.USER) } catch {}
+      }
     }
     isLoading.value = false
     return null

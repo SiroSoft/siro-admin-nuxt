@@ -1,5 +1,6 @@
 export default {
   common: {
+    id: 'ID',
     dashboard: 'Bảng điều khiển',
     users: 'Người dùng',
     products: 'Sản phẩm',
@@ -37,6 +38,7 @@ export default {
     view: 'Xem',
     manage: 'Quản lý',
     selected: 'đã chọn',
+    goHome: 'Về trang chủ',
     description: 'Mô tả',
     application: 'Ứng dụng',
     theme: 'Giao diện',
@@ -120,6 +122,7 @@ export default {
     stock: 'Tồn kho',
     category: 'Danh mục',
     image: 'Hình ảnh',
+    sku: 'SKU',
     description: 'Mô tả',
     confirmDelete: 'Bạn có chắc chắn muốn xóa sản phẩm này?',
   },
@@ -144,6 +147,7 @@ export default {
     notes: 'Ghi chú',
     product: 'Sản phẩm',
     qty: 'SL',
+    payment: 'Thanh toán',
   },
   categories: {
     title: 'Danh mục',
@@ -154,7 +158,7 @@ export default {
     slug: 'Đường dẫn',
     confirmDelete: 'Bạn có chắc chắn muốn xóa danh mục này?',
   },
-  tags: { title: 'Thẻ', create: 'Tạo thẻ', edit: 'Sửa thẻ', delete: 'Xóa thẻ', name: 'Tên' },
+  tags: { title: 'Thẻ', create: 'Tạo thẻ', edit: 'Sửa thẻ', delete: 'Xóa thẻ', name: 'Tên', color: 'Màu sắc' },
   posts: {
     title: 'Bài viết',
     create: 'Tạo bài viết',
@@ -204,6 +208,10 @@ export default {
     confirmNewPassword: 'Xác nhận mật khẩu mới',
     saveChanges: 'Lưu thay đổi',
     cancel: 'Hủy',
+    emailVerified: 'Đã xác thực',
+    emailNotVerified: 'Chưa xác thực',
+    resendVerification: 'Gửi lại email xác thực',
+    verificationSent: 'Email xác thực đã được gửi',
   },
   forgotPassword: {
     title: 'Quên mật khẩu?',

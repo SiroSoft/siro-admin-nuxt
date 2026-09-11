@@ -8,7 +8,7 @@ import PageHeader from "~/components/layout/PageHeader.vue"
 import SearchInput from "~/components/forms/SearchInput.vue"
 import ProductTable from "~/modules/products/components/ProductTable.vue"
 import ProductFormDialog from "~/modules/products/components/ProductFormDialog.vue"
-import type { Product } from "~/types/product"
+import type { Product, CreateProductRequest, UpdateProductRequest } from "~/types/product"
 
 const search = ref("")
 const page = ref(1)
@@ -25,6 +25,10 @@ const { t } = useI18n()
 const debouncedSearch = useDebounce(search)
 
 const createMutation = useCreateProduct()
+
+function handleCreateProduct(data: CreateProductRequest | UpdateProductRequest) {
+  createMutation.mutate(data as CreateProductRequest, { onSuccess: () => { showCreate.value = false } })
+}
 
 const params = computed(() => ({
   page: page.value,
@@ -54,7 +58,7 @@ function handlePageChange(newPage: number) {
 
 <template>
   <div class="space-y-4">
-    <PageHeader :title="t('products.title')" description="Manage products">
+    <PageHeader :title="t('products.title')" :description="t('products.title')">
       <Button @click="showCreate = true">
         <Plus class="mr-2 h-4 w-4" />
         {{ t('products.create') }}
@@ -92,7 +96,7 @@ function handlePageChange(newPage: number) {
     <ProductFormDialog
       :open="showCreate"
       @update:open="showCreate = $event"
-      @submit="createMutation.mutate($event, { onSuccess: () => showCreate = false })"
+      @submit="handleCreateProduct($event)"
     />
   </div>
 </template>

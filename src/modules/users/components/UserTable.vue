@@ -77,7 +77,7 @@ const columns = computed(() => [
     <ErrorState @retry="refetch()" />
   </div>
   <div v-else-if="!isLoading && users.length === 0">
-    <EmptyState :title="`${t('common.noData')}`" description="Get started by creating your first user.">
+    <EmptyState :title="t('common.noData')" :description="t('users.title')">
       <template #action>
         <Button @click="emit('create')">
           <Plus class="mr-2 h-4 w-4" />

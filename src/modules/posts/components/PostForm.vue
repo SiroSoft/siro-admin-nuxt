@@ -53,7 +53,7 @@ const { handleSubmit, errors, defineField, setFieldValue, isSubmitting } = useFo
     status: props.post?.status ?? "draft",
     featured: props.post?.featured ?? false,
     category_id: props.post?.category_id ?? undefined,
-    tag_ids: props.post?.tags?.map((t: Tag) => t.id).filter(Boolean) ?? [],
+    tag_ids: props.post?.tags?.map((t: Tag) => t.id).filter((id): id is number => !!id) ?? [],
   },
 })
 
@@ -73,7 +73,7 @@ const statusOptions = [
 ]
 
 const categoryOptions = computed(() =>
-  categories.value.map((cat: Category) => ({ label: cat.name, value: String(cat.id) }))
+  categories.value.map((cat: Category) => ({ label: cat.name ?? "", value: String(cat.id) }))
 )
 
 const selectedTagIds = computed(() => (tag_ids as unknown as number[]) ?? [])
@@ -87,7 +87,7 @@ function toggleTag(tagId: number) {
 }
 
 const onSubmit = handleSubmit((values) => {
-  emit("submit", values)
+  emit("submit", values as CreatePostRequest | UpdatePostRequest)
 })
 </script>
 

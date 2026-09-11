@@ -33,13 +33,14 @@ const paramsRef = computed(() => props.params)
 const { orders, meta, isLoading, isError, refetch } = useOrders(paramsRef as Ref<Record<string, string | number | undefined>>)
 const deleteMutation = useDeleteOrder()
 
+const { t } = useI18n()
 const columns = [
-  { key: "id", label: "ID", sortable: true },
-  { key: "user_name", label: "Customer" },
-  { key: "total", label: "Total", sortable: true },
-  { key: "status", label: "Status" },
-  { key: "payment_status", label: "Payment" },
-  { key: "created_at", label: "Date", sortable: true },
+  { key: "id", label: t('common.id'), sortable: true },
+  { key: "user_name", label: t('orders.customer') },
+  { key: "total", label: t('orders.total'), sortable: true },
+  { key: "status", label: t('common.status') },
+  { key: "payment_status", label: t('orders.payment') },
+  { key: "created_at", label: t('orders.date'), sortable: true },
   { key: "actions", label: "" },
 ]
 </script>
@@ -49,9 +50,9 @@ const columns = [
     <ErrorState @retry="refetch()" />
   </div>
   <div v-else-if="!isLoading && orders.length === 0">
-    <EmptyState title="No orders found" description="Orders will appear here once customers place them.">
+    <EmptyState :title="t('common.noData')" :description="t('orders.title')">
       <template #action>
-        <Button @click="emit('create')">Create Order</Button>
+        <Button @click="emit('create')">{{ t('orders.create') }}</Button>
       </template>
     </EmptyState>
   </div>

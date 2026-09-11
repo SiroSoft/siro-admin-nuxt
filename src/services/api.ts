@@ -39,6 +39,7 @@ function processQueue(error: unknown) {
 
 api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
+    if (typeof window === "undefined") return config
     const locale = localStorage.getItem("siro_locale") || "en"
     if (config.headers) {
       config.headers["X-Locale"] = locale
@@ -68,6 +69,7 @@ api.interceptors.response.use(
     const { status } = error.response
 
     if (status === 401 && !originalRequest._retry) {
+      if (typeof window === "undefined") return Promise.reject(error)
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject })
@@ -84,7 +86,9 @@ api.interceptors.response.use(
         localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN)
         localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN)
         localStorage.removeItem(STORAGE_KEYS.USER)
-        window.location.href = "/login"
+        if (window.location.pathname !== "/login") {
+          window.location.href = "/login"
+        }
         return Promise.reject(error)
       }
 
@@ -103,7 +107,9 @@ api.interceptors.response.use(
         localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN)
         localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN)
         localStorage.removeItem(STORAGE_KEYS.USER)
-        window.location.href = "/login"
+        if (window.location.pathname !== "/login") {
+          window.location.href = "/login"
+        }
         return Promise.reject(refreshError)
       } finally {
         isRefreshing = false
@@ -119,7 +125,14 @@ api.interceptors.response.use(
     }
 
     if (status === 422) {
-      console.error("[API] Validation error:", error.response.data)
+      const body = error.response.data as { errors?: Record<string, string[]>; meta?: { errors?: Record<string, string[]> }; message?: string }
+      const fieldErrors = body?.errors ?? body?.meta?.errors
+      if (fieldErrors) {
+        const first = Object.values(fieldErrors)[0]?.[0]
+        console.error("[API] Validation error:", first ?? body.message, fieldErrors)
+      } else {
+        console.error("[API] Validation error:", body)
+      }
     }
 
     if (status === 429) {

@@ -94,11 +94,11 @@ const [cover_image] = defineField("cover_image")
 const [category_id] = defineField("category_id")
 
 const categoryOptions = computed(() =>
-  categories.value.map((cat: Category) => ({ label: cat.name, value: String(cat.id) }))
+  categories.value.map((cat: Category) => ({ label: cat.name ?? "", value: String(cat.id) }))
 )
 
 const onSubmit = handleSubmit((values) => {
-  emit("submit", values)
+  emit("submit", values as CreateProductRequest | UpdateProductRequest)
 })
 </script>
 
@@ -137,7 +137,7 @@ const onSubmit = handleSubmit((values) => {
         <Label for="price">Price *</Label>
         <div class="relative">
           <span class="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground z-10">$</span>
-          <Input id="price" type="number" step="0.01" v-model="price" class="pl-7" :disabled="isSubmitting" />
+          <Input id="price" type="number" step="0.01" :model-value="String(price ?? 0)" @update:model-value="(v: string) => setFieldValue('price', Number(v))" class="pl-7" :disabled="isSubmitting" />
         </div>
         <p v-if="errors.price" class="text-sm text-destructive">{{ errors.price }}</p>
       </div>
@@ -145,14 +145,14 @@ const onSubmit = handleSubmit((values) => {
         <Label for="compare_price">Compare Price</Label>
         <div class="relative">
           <span class="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground z-10">$</span>
-          <Input id="compare_price" type="number" step="0.01" v-model="compare_price" class="pl-7" :disabled="isSubmitting" />
+          <Input id="compare_price" type="number" step="0.01" :model-value="compare_price != null ? String(compare_price) : ''" @update:model-value="(v: string) => setFieldValue('compare_price', v ? Number(v) : undefined)" class="pl-7" :disabled="isSubmitting" />
         </div>
       </div>
       <div class="space-y-2">
         <Label for="cost_price">Cost Price</Label>
         <div class="relative">
           <span class="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground z-10">$</span>
-          <Input id="cost_price" type="number" step="0.01" v-model="cost_price" class="pl-7" :disabled="isSubmitting" />
+          <Input id="cost_price" type="number" step="0.01" :model-value="cost_price != null ? String(cost_price) : ''" @update:model-value="(v: string) => setFieldValue('cost_price', v ? Number(v) : undefined)" class="pl-7" :disabled="isSubmitting" />
         </div>
       </div>
     </div>
@@ -160,26 +160,26 @@ const onSubmit = handleSubmit((values) => {
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <div class="space-y-2">
         <Label for="stock">Stock</Label>
-        <Input id="stock" type="number" v-model="stock" :disabled="isSubmitting" />
+        <Input id="stock" type="number" :model-value="String(stock ?? 0)" @update:model-value="(v: string) => setFieldValue('stock', Number(v))" :disabled="isSubmitting" />
       </div>
       <div class="space-y-2">
         <Label for="stock_min">Min Stock</Label>
-        <Input id="stock_min" type="number" v-model="stock_min" :disabled="isSubmitting" />
+        <Input id="stock_min" type="number" :model-value="stock_min != null ? String(stock_min) : ''" @update:model-value="(v: string) => setFieldValue('stock_min', v ? Number(v) : undefined)" :disabled="isSubmitting" />
       </div>
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
       <div class="space-y-2">
         <Label for="weight">Weight</Label>
-        <Input id="weight" type="number" step="0.01" v-model="weight" :disabled="isSubmitting" />
+        <Input id="weight" type="number" step="0.01" :model-value="weight != null ? String(weight) : ''" @update:model-value="(v: string) => setFieldValue('weight', v ? Number(v) : undefined)" :disabled="isSubmitting" />
       </div>
       <div class="space-y-2">
         <Label for="width">Width</Label>
-        <Input id="width" type="number" step="0.01" v-model="width" :disabled="isSubmitting" />
+        <Input id="width" type="number" step="0.01" :model-value="width != null ? String(width) : ''" @update:model-value="(v: string) => setFieldValue('width', v ? Number(v) : undefined)" :disabled="isSubmitting" />
       </div>
       <div class="space-y-2">
         <Label for="height">Height</Label>
-        <Input id="height" type="number" step="0.01" v-model="height" :disabled="isSubmitting" />
+        <Input id="height" type="number" step="0.01" :model-value="height != null ? String(height) : ''" @update:model-value="(v: string) => setFieldValue('height', v ? Number(v) : undefined)" :disabled="isSubmitting" />
       </div>
     </div>
 

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useI18n } from "~/composables/useI18n"
 import Card from "~/components/ui/Card.vue"
 import Button from "~/components/ui/Button.vue"
 
@@ -9,6 +10,7 @@ interface Props {
 }
 
 const props = defineProps<Props>()
+const { t } = useI18n()
 </script>
 
 <template>
@@ -16,15 +18,15 @@ const props = defineProps<Props>()
     <Card class="max-w-md w-full">
       <template #header>
         <div class="text-center">
-          <h3 class="text-2xl font-bold">{{ props.error?.statusCode || 'Error' }}</h3>
+          <h3 class="text-2xl font-bold">{{ props.error?.statusCode || t('errors.unknown') }}</h3>
           <p class="text-sm text-muted-foreground mt-1">
-            {{ props.error?.message || 'An unexpected error occurred' }}
+            {{ props.error?.message || t('errors.unknown') }}
           </p>
         </div>
       </template>
       <div class="flex justify-center">
         <Button @click="clearError({ redirect: '/' })">
-          Go Home
+          {{ t('common.goHome') }}
         </Button>
       </div>
     </Card>

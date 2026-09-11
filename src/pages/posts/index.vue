@@ -8,7 +8,7 @@ import PageHeader from "~/components/layout/PageHeader.vue"
 import SearchInput from "~/components/forms/SearchInput.vue"
 import PostTable from "~/modules/posts/components/PostTable.vue"
 import PostFormDialog from "~/modules/posts/components/PostFormDialog.vue"
-import type { Post } from "~/types/post"
+import type { Post, CreatePostRequest, UpdatePostRequest } from "~/types/post"
 
 const search = ref("")
 const page = ref(1)
@@ -22,6 +22,10 @@ const { t } = useI18n()
 const debouncedSearch = useDebounce(search)
 
 const createMutation = useCreatePost()
+
+function handleCreatePost(data: CreatePostRequest | UpdatePostRequest) {
+  createMutation.mutate(data as CreatePostRequest, { onSuccess: () => { showCreate.value = false } })
+}
 
 const params = computed(() => ({
   page: page.value,
@@ -48,7 +52,7 @@ function handlePageChange(newPage: number) {
 
 <template>
   <div class="space-y-4">
-    <PageHeader :title="t('posts.title')" description="Manage posts">
+    <PageHeader :title="t('posts.title')" :description="t('posts.title')">
       <Button @click="showCreate = true">
         <Plus class="mr-2 h-4 w-4" />
         {{ t('posts.create') }}
@@ -81,7 +85,7 @@ function handlePageChange(newPage: number) {
     <PostFormDialog
       :open="showCreate"
       @update:open="showCreate = $event"
-      @submit="createMutation.mutate($event, { onSuccess: () => showCreate = false })"
+      @submit="handleCreatePost($event)"
     />
   </div>
 </template>

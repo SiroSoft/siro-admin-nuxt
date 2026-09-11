@@ -32,14 +32,15 @@ const paramsRef = computed(() => props.params)
 const { products, meta, isLoading, isError, refetch } = useProducts(paramsRef as Ref<Record<string, string | number | undefined>>)
 const deleteMutation = useDeleteProduct()
 
+const { t } = useI18n()
 const columns = [
-  { key: "id", label: "ID", sortable: true },
-  { key: "name", label: "Name", sortable: true },
-  { key: "price", label: "Price", sortable: true },
-  { key: "stock", label: "Stock", sortable: true },
-  { key: "sku", label: "SKU" },
-  { key: "is_active", label: "Status" },
-  { key: "created_at", label: "Created", sortable: true },
+  { key: "id", label: t('common.id'), sortable: true },
+  { key: "name", label: t('products.name'), sortable: true },
+  { key: "price", label: t('products.price'), sortable: true },
+  { key: "stock", label: t('products.stock'), sortable: true },
+  { key: "sku", label: t('products.sku') },
+  { key: "is_active", label: t('common.status') },
+  { key: "created_at", label: t('users.createdAt'), sortable: true },
   { key: "actions", label: "" },
 ]
 </script>
@@ -49,9 +50,9 @@ const columns = [
     <ErrorState @retry="refetch()" />
   </div>
   <div v-else-if="!isLoading && products.length === 0">
-    <EmptyState title="No products found" description="Get started by creating your first product.">
+    <EmptyState :title="t('common.noData')" :description="t('products.title')">
       <template #action>
-        <Button @click="emit('create')">Create Product</Button>
+        <Button @click="emit('create')">{{ t('products.create') }}</Button>
       </template>
     </EmptyState>
   </div>

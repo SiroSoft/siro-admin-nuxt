@@ -19,10 +19,10 @@ const route = useRoute()
 const token = (route.query.token as string) || ""
 
 const schema = z.object({
-  password: z.string().min(8, "Password must be at least 8 characters"),
+  password: z.string().min(8, t("validation.passwordMin", { min: 8 })),
   password_confirmation: z.string(),
 }).refine((d) => d.password === d.password_confirmation, {
-  message: "Passwords do not match",
+  message: t("validation.passwordMismatch"),
   path: ["password_confirmation"],
 })
 

@@ -1,4 +1,5 @@
 import { z } from "zod"
+import { tSchema } from "~/utils/schema-i18n"
 
 export const createOrderSchema = z.object({
   status: z.string().default("pending"),
@@ -9,14 +10,14 @@ export const createOrderSchema = z.object({
   payment_method: z.string().optional(),
   items: z.array(
     z.object({
-      product_id: z.number({ required_error: "Product is required" }),
-      quantity: z.number().min(1, "Quantity must be at least 1"),
+      product_id: z.number({ required_error: tSchema("validation.productRequired") }),
+      quantity: z.number().min(1, tSchema("validation.quantityMin", { min: 1 })),
     }),
-  ).min(1, "At least one item is required"),
+  ).min(1, tSchema("validation.itemsMin")),
 })
 
 export const updateOrderSchema = z.object({
-  status: z.string().min(1, "Status is required"),
+  status: z.string().min(1, tSchema("validation.statusRequired")),
   shipping_address: z.string().optional(),
   billing_address: z.string().optional(),
   notes: z.string().optional(),

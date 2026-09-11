@@ -20,7 +20,7 @@ const authStore = useAuthStore()
 const queryToken = (route.query.token as string) || ""
 
 const schema = z.object({
-  token: z.string().min(1, "Token is required"),
+  token: z.string().min(1, t("validation.tokenRequired")),
 })
 
 const { handleSubmit, errors, defineField, isSubmitting } = useForm({
@@ -87,8 +87,8 @@ const handleResend = async () => {
 
       <form @submit="onSubmit" class="space-y-4">
         <div class="space-y-2">
-          <Label for="token">Token</Label>
-          <Input id="token" v-model="token" placeholder="Enter verification token" />
+          <Label for="token">{{ t('verifyEmail.token') }}</Label>
+          <Input id="token" v-model="token" :placeholder="t('placeholders.verificationToken')" />
           <p v-if="errors.token" class="text-sm text-destructive">{{ errors.token }}</p>
         </div>
         <Button type="submit" class="w-full" :disabled="isSubmitting || isAlreadyVerified">

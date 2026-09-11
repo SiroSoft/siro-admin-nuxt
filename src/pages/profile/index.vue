@@ -25,17 +25,17 @@ const { t } = useI18n()
 const authStore = useAuthStore()
 
 const profileSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Invalid email"),
+  name: z.string().min(2, t("validation.nameMin", { min: 2 })),
+  email: z.string().email(t("validation.invalidEmail")),
   avatar: z.string().optional(),
 })
 
 const passwordSchema = z.object({
-  current_password: z.string().min(1, "Current password is required"),
-  new_password: z.string().min(8, "New password must be at least 8 characters"),
+  current_password: z.string().min(1, t("validation.currentPasswordRequired")),
+  new_password: z.string().min(8, t("validation.newPasswordMin", { min: 8 })),
   new_password_confirmation: z.string(),
 }).refine((data) => data.new_password === data.new_password_confirmation, {
-  message: "Passwords do not match",
+  message: t("validation.passwordMismatch"),
   path: ["new_password_confirmation"],
 })
 
@@ -173,12 +173,12 @@ const handleResendVerification = async () => {
             </div>
             <div class="space-y-2">
               <Label for="pName">{{ t('common.name') }}</Label>
-              <Input id="pName" v-model="pName" v-bind="pNameAttrs" placeholder="Your name" :disabled="profileMutation.isPending.value" />
+              <Input id="pName" v-model="pName" v-bind="pNameAttrs" :placeholder="t('placeholders.profileName')" :disabled="profileMutation.isPending.value" />
               <p v-if="profileErrors.name" class="text-sm text-destructive">{{ profileErrors.name }}</p>
             </div>
             <div class="space-y-2">
               <Label for="pEmail">{{ t('common.email') }}</Label>
-              <Input id="pEmail" type="email" v-model="pEmail" v-bind="pEmailAttrs" placeholder="email@example.com" :disabled="profileMutation.isPending.value" />
+              <Input id="pEmail" type="email" v-model="pEmail" v-bind="pEmailAttrs" :placeholder="t('placeholders.profileEmail')" :disabled="profileMutation.isPending.value" />
               <p v-if="profileErrors.email" class="text-sm text-destructive">{{ profileErrors.email }}</p>
             </div>
             <div class="flex gap-2">

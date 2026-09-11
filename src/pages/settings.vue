@@ -34,7 +34,7 @@ const { data, isLoading, isError, refetch } = useQuery({
 })
 
 const settingsSchema = z.object({
-  app_name: z.string().min(1, "App name is required"),
+  app_name: z.string().min(1, t("validation.appNameRequired")),
   app_description: z.string().optional(),
   language: z.string().min(1),
   timezone: z.string().min(1),
@@ -203,12 +203,12 @@ const themeOptions = [
           <form @submit="onSubmit" class="space-y-4">
             <div class="space-y-2">
               <Label for="app_name">{{ t('settings.appName') }}</Label>
-              <Input id="app_name" v-model="app_name" v-bind="appNameAttrs" placeholder="My App" :disabled="updateMutation.isPending.value" />
+              <Input id="app_name" v-model="app_name" v-bind="appNameAttrs" :placeholder="t('placeholders.appName')" :disabled="updateMutation.isPending.value" />
               <p v-if="errors.app_name" class="text-sm text-destructive">{{ errors.app_name }}</p>
             </div>
             <div class="space-y-2">
               <Label for="app_description">{{ t('common.description') }}</Label>
-              <Input id="app_description" v-model="app_description" placeholder="Brief description" :disabled="updateMutation.isPending.value" />
+              <Input id="app_description" v-model="app_description" :placeholder="t('placeholders.briefDescription')" :disabled="updateMutation.isPending.value" />
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div class="space-y-2">

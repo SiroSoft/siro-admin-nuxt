@@ -50,7 +50,7 @@ async function copyCmd() {
     <a :href="SITE_URL" target="_blank" rel="noopener noreferrer" class="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium hover:bg-accent">
       🌐 {{ t('opensource.visitSite') }}
     </a>
-    <button type="button" class="mt-2 flex w-full items-center justify-between gap-2 rounded-lg bg-muted px-3 py-2 font-mono text-xs text-muted-foreground hover:text-foreground" aria-label="Copy composer command" @click="copyCmd">
+    <button type="button" class="mt-2 flex w-full items-center justify-between gap-2 rounded-lg bg-muted px-3 py-2 font-mono text-xs text-muted-foreground hover:text-foreground" :aria-label="t('a11y.copyComposer')" @click="copyCmd">
       <span class="truncate">{{ COMPOSER_CMD }}</span>
       <span v-if="copied">✓</span>
       <span v-else>⧉</span>

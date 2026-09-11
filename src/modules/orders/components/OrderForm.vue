@@ -160,7 +160,7 @@ const onSubmit = handleSubmit((values) => {
           <Plus class="mr-2 h-4 w-4" />
           {{ t('orders.addItem') }}
         </Button>
-        <p v-if="errors.items" class="text-sm text-destructive">{{ errors.items || "Items validation error" }}</p>
+        <p v-if="errors.items" class="text-sm text-destructive">{{ errors.items || t('orders.itemsError') }}</p>
       </div>
 
       <div class="space-y-2">

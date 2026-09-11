@@ -25,6 +25,8 @@ const emit = defineEmits<{
   "update:modelValue": [value: string]
 }>()
 
+const { t } = useI18n()
+
 const editor = useEditor({
   content: props.modelValue || "",
   editable: !props.disabled,
@@ -58,13 +60,13 @@ watch(() => props.disabled, (newVal) => {
     <div
       class="flex flex-wrap items-center gap-0.5 border-b bg-muted/30 px-2 py-1.5"
       role="toolbar"
-      aria-label="Text formatting"
+      :aria-label="t('a11y.textFormatting')"
     >
       <button
         type="button"
         @click="editor?.chain().focus().toggleBold().run()"
         :disabled="props.disabled"
-        aria-label="Bold"
+        :aria-label="t('a11y.bold')"
         :class="cn(
           'rounded p-1.5 transition-colors',
           editor?.isActive('bold') ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-muted',
@@ -77,7 +79,7 @@ watch(() => props.disabled, (newVal) => {
         type="button"
         @click="editor?.chain().focus().toggleItalic().run()"
         :disabled="props.disabled"
-        aria-label="Italic"
+        :aria-label="t('a11y.italic')"
         :class="cn(
           'rounded p-1.5 transition-colors',
           editor?.isActive('italic') ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-muted',
@@ -91,7 +93,7 @@ watch(() => props.disabled, (newVal) => {
         type="button"
         @click="editor?.chain().focus().toggleHeading({ level: 1 }).run()"
         :disabled="props.disabled"
-        aria-label="Heading 1"
+        :aria-label="t('a11y.heading1')"
         :class="cn(
           'rounded p-1.5 transition-colors',
           editor?.isActive('heading', { level: 1 }) ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-muted',
@@ -104,7 +106,7 @@ watch(() => props.disabled, (newVal) => {
         type="button"
         @click="editor?.chain().focus().toggleHeading({ level: 2 }).run()"
         :disabled="props.disabled"
-        aria-label="Heading 2"
+        :aria-label="t('a11y.heading2')"
         :class="cn(
           'rounded p-1.5 transition-colors',
           editor?.isActive('heading', { level: 2 }) ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-muted',
@@ -118,7 +120,7 @@ watch(() => props.disabled, (newVal) => {
         type="button"
         @click="editor?.chain().focus().toggleBulletList().run()"
         :disabled="props.disabled"
-        aria-label="Bullet list"
+        :aria-label="t('a11y.bulletList')"
         :class="cn(
           'rounded p-1.5 transition-colors',
           editor?.isActive('bulletList') ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-muted',
@@ -131,7 +133,7 @@ watch(() => props.disabled, (newVal) => {
         type="button"
         @click="editor?.chain().focus().toggleOrderedList().run()"
         :disabled="props.disabled"
-        aria-label="Ordered list"
+        :aria-label="t('a11y.orderedList')"
         :class="cn(
           'rounded p-1.5 transition-colors',
           editor?.isActive('orderedList') ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-muted',
@@ -144,7 +146,7 @@ watch(() => props.disabled, (newVal) => {
         type="button"
         @click="editor?.chain().focus().toggleBlockquote().run()"
         :disabled="props.disabled"
-        aria-label="Quote"
+        :aria-label="t('a11y.quote')"
         :class="cn(
           'rounded p-1.5 transition-colors',
           editor?.isActive('blockquote') ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-muted',
@@ -158,7 +160,7 @@ watch(() => props.disabled, (newVal) => {
         type="button"
         @click="editor?.chain().focus().undo().run()"
         :disabled="props.disabled"
-        aria-label="Undo"
+        :aria-label="t('a11y.undo')"
         :class="cn(
           'rounded p-1.5 transition-colors',
           'text-muted-foreground hover:bg-muted',
@@ -171,7 +173,7 @@ watch(() => props.disabled, (newVal) => {
         type="button"
         @click="editor?.chain().focus().redo().run()"
         :disabled="props.disabled"
-        aria-label="Redo"
+        :aria-label="t('a11y.redo')"
         :class="cn(
           'rounded p-1.5 transition-colors',
           'text-muted-foreground hover:bg-muted',

@@ -6,6 +6,8 @@ import Button from "~/components/ui/Button.vue"
 import Input from "~/components/ui/Input.vue"
 import { cn } from "~/utils"
 
+const { t } = useI18n()
+
 interface Option {
   label: string
   value: string
@@ -59,7 +61,7 @@ function selectOption(value: string) {
     </PopoverTrigger>
     <PopoverContent class="w-[var(--radix-popover-trigger-width)] p-0 z-50 rounded-md border bg-popover text-popover-foreground shadow-md">
       <div class="p-2">
-        <Input v-model="search" placeholder="Search..." class="h-8" />
+        <Input v-model="search" :placeholder="t('common.search') + '...'" class="h-8" />
       </div>
       <div class="max-h-60 overflow-y-auto p-1">
         <p v-if="filtered.length === 0" class="p-2 text-sm text-muted-foreground">{{ props.emptyText }}</p>

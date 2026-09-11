@@ -71,10 +71,10 @@ const columns = [
       </template>
       <template #cell-actions="{ item }: { item: Category }">
         <div class="flex justify-end gap-1">
-          <Button variant="ghost" size="icon" @click="emit('edit', item)" :aria-label="`Edit ${item.name ?? 'category'}`">
+          <Button variant="ghost" size="icon" @click="emit('edit', item)" :aria-label="t('a11y.edit', { name: item.name ?? t('a11y.item') })">
             <Edit class="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="icon" @click="deleteId = item.id ?? null" :aria-label="`Delete ${item.name ?? 'category'}`">
+          <Button variant="ghost" size="icon" @click="deleteId = item.id ?? null" :aria-label="t('a11y.delete', { name: item.name ?? t('a11y.item') })">
             <Trash2 class="h-4 w-4 text-destructive" />
           </Button>
         </div>

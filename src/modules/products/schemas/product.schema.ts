@@ -1,13 +1,14 @@
 import { z } from "zod"
+import { tSchema } from "~/utils/schema-i18n"
 
 export const createProductSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
+  name: z.string().min(2, tSchema("validation.nameMin", { min: 2 })),
   description: z.string().optional(),
   short_description: z.string().optional(),
-  price: z.number({ required_error: "Price is required" }).min(0, "Price must be positive"),
+  price: z.number({ required_error: tSchema("validation.priceRequired") }).min(0, tSchema("validation.pricePositive")),
   compare_price: z.number().optional(),
   cost_price: z.number().optional(),
-  sku: z.string().min(1, "SKU is required"),
+  sku: z.string().min(1, tSchema("validation.skuRequired")),
   barcode: z.string().optional(),
   stock: z.number().int().default(0),
   stock_min: z.number().int().optional(),
@@ -22,10 +23,10 @@ export const createProductSchema = z.object({
 })
 
 export const updateProductSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters").optional(),
+  name: z.string().min(2, tSchema("validation.nameMin", { min: 2 })).optional(),
   description: z.string().optional(),
   short_description: z.string().optional(),
-  price: z.number().min(0, "Price must be positive").optional(),
+  price: z.number().min(0, tSchema("validation.pricePositive")).optional(),
   compare_price: z.number().optional(),
   cost_price: z.number().optional(),
   sku: z.string().optional(),

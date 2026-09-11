@@ -49,7 +49,7 @@ function handleLogout() {
       <button
         @click="uiStore.toggleSidebar()"
         :class="cn('ml-auto text-sidebar-foreground hover:bg-sidebar-accent rounded-lg p-2', uiStore.sidebarCollapsed && 'ml-0')"
-        :aria-label="uiStore.sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'"
+        :aria-label="uiStore.sidebarCollapsed ? t('a11y.expandSidebar') : t('a11y.collapseSidebar')"
       >
         <ChevronLeft :class="cn('h-4 w-4 transition-transform', uiStore.sidebarCollapsed && 'rotate-180')" />
       </button>

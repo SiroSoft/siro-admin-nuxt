@@ -17,12 +17,12 @@ const { t } = useI18n()
 const router = useRouter()
 
 const schema = z.object({
-  name: z.string().min(3, "Name must be at least 3 characters"),
-  email: z.string().email("Please enter a valid email"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
+  name: z.string().min(3, t("validation.nameMin", { min: 3 })),
+  email: z.string().email(t("validation.invalidEmail")),
+  password: z.string().min(8, t("validation.passwordMin", { min: 8 })),
   password_confirmation: z.string(),
 }).refine((d) => d.password === d.password_confirmation, {
-  message: "Passwords do not match",
+  message: t("validation.passwordMismatch"),
   path: ["password_confirmation"],
 })
 

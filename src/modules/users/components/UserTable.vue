@@ -96,10 +96,10 @@ const columns = computed(() => [
       @sort="emit('sort', $event)"
     >
       <template #header-select>
-        <input type="checkbox" :checked="allSelected" @change="toggleSelectAll" class="h-4 w-4 rounded border-primary text-primary focus:ring-ring" aria-label="Select all users" />
+        <input type="checkbox" :checked="allSelected" @change="toggleSelectAll" class="h-4 w-4 rounded border-primary text-primary focus:ring-ring" :aria-label="t('a11y.selectAllUsers')" />
       </template>
       <template #cell-select="{ item }: { item: User }">
-        <input type="checkbox" :checked="props.selectedIds.has(item.id!)" @change="toggleSelect(item.id!)" class="h-4 w-4 rounded border-primary text-primary focus:ring-ring" :aria-label="`Select ${item.name ?? 'user'}`" />
+        <input type="checkbox" :checked="props.selectedIds.has(item.id!)" @change="toggleSelect(item.id!)" class="h-4 w-4 rounded border-primary text-primary focus:ring-ring" :aria-label="t('a11y.select', { name: item.name ?? t('a11y.item') })" />
       </template>
       <template #cell-role="{ item }: { item: User }">
         <StatusBadge :status="item.role" />
@@ -112,10 +112,10 @@ const columns = computed(() => [
       </template>
       <template #cell-actions="{ item }: { item: User }">
         <div class="flex justify-end gap-1">
-          <Button variant="ghost" size="icon" @click="emit('edit', item)" :aria-label="`Edit ${item.name ?? 'user'}`">
+          <Button variant="ghost" size="icon" @click="emit('edit', item)" :aria-label="t('a11y.edit', { name: item.name ?? t('a11y.item') })">
             <Edit class="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="icon" @click="deleteId = item.id ?? null" :aria-label="`Delete ${item.name ?? 'user'}`">
+          <Button variant="ghost" size="icon" @click="deleteId = item.id ?? null" :aria-label="t('a11y.delete', { name: item.name ?? t('a11y.item') })">
             <Trash2 class="h-4 w-4 text-destructive" />
           </Button>
         </div>

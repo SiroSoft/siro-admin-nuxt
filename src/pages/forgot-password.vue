@@ -18,7 +18,7 @@ const router = useRouter()
 const submitted = ref(false)
 
 const schema = z.object({
-  email: z.string().email("Please enter a valid email address"),
+  email: z.string().email(t("validation.invalidEmail")),
 })
 
 const { handleSubmit, errors, defineField, isSubmitting } = useForm({
@@ -75,7 +75,7 @@ const onSubmit = handleSubmit(async (values) => {
     </div>
 
     <div class="mt-4 text-center">
-      <button type="button" @click="router.push('/login')" class="text-sm text-muted-foreground hover:text-foreground inline-flex items-center gap-1" aria-label="Back to login">
+      <button type="button" @click="router.push('/login')" class="text-sm text-muted-foreground hover:text-foreground inline-flex items-center gap-1" :aria-label="t('a11y.backToLogin')">
         <ArrowLeft class="h-3 w-3" />
         {{ t('forgotPassword.backToLogin') }}
       </button>

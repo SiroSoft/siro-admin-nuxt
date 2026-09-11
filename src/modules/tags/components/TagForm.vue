@@ -23,6 +23,8 @@ const emit = defineEmits<{
 const isEdit = computed(() => !!props.tag)
 const schema = computed(() => isEdit.value ? updateTagSchema : createTagSchema)
 
+const { t } = useI18n()
+
 const { handleSubmit, errors, defineField, setFieldValue, isSubmitting } = useForm({
   validationSchema: toTypedSchema(schema.value),
   initialValues: {
@@ -47,7 +49,7 @@ const onSubmit = handleSubmit((values) => {
   <form @submit="onSubmit" class="space-y-4">
     <div class="space-y-2">
       <Label for="name">Name *</Label>
-      <Input id="name" v-model="name" v-bind="nameAttrs" placeholder="Tag name" :disabled="isSubmitting" />
+      <Input id="name" v-model="name" v-bind="nameAttrs" :placeholder="t('placeholders.tagName')" :disabled="isSubmitting" />
       <p v-if="errors.name" class="text-sm text-destructive">{{ errors.name }}</p>
     </div>
 
@@ -68,7 +70,7 @@ const onSubmit = handleSubmit((values) => {
 
     <div class="space-y-2">
       <Label for="description">Description</Label>
-      <Textarea id="description" v-model="description" placeholder="Tag description" :disabled="isSubmitting" />
+      <Textarea id="description" v-model="description" :placeholder="t('placeholders.tagDescription')" :disabled="isSubmitting" />
     </div>
 
     <div class="flex items-center gap-2">

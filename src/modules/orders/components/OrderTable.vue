@@ -79,13 +79,13 @@ const columns = [
       </template>
       <template #cell-actions="{ item }: { item: Order }">
         <div class="flex justify-end gap-1">
-          <Button variant="ghost" size="icon" @click="emit('view', item)" :aria-label="`View order #${item.id}`">
+          <Button variant="ghost" size="icon" @click="emit('view', item)" :aria-label="t('a11y.view', { name: `#${item.id}` })">
             <Eye class="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="icon" @click="emit('edit', item)" :aria-label="`Edit order #${item.id}`">
+          <Button variant="ghost" size="icon" @click="emit('edit', item)" :aria-label="t('a11y.edit', { name: `#${item.id}` })">
             <Edit class="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="icon" @click="deleteId = item.id ?? null" :aria-label="`Delete order #${item.id}`">
+          <Button variant="ghost" size="icon" @click="deleteId = item.id ?? null" :aria-label="t('a11y.delete', { name: `#${item.id}` })">
             <Trash2 class="h-4 w-4 text-destructive" />
           </Button>
         </div>

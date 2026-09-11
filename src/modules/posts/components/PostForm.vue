@@ -40,6 +40,7 @@ const emit = defineEmits<{
 
 const isEdit = computed(() => !!props.post)
 const schema = computed(() => isEdit.value ? updatePostSchema : createPostSchema)
+const { t } = useI18n()
 const { categories } = useCategories(ref({ per_page: 100 }))
 const { tags } = useTags(ref({ per_page: 200 }))
 
@@ -95,13 +96,13 @@ const onSubmit = handleSubmit((values) => {
   <form @submit="onSubmit" class="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
     <div class="space-y-2">
       <Label for="title">Title *</Label>
-      <Input id="title" v-model="title" v-bind="titleAttrs" placeholder="Post title" :disabled="isSubmitting" />
+      <Input id="title" v-model="title" v-bind="titleAttrs" :placeholder="t('placeholders.postTitle')" :disabled="isSubmitting" />
       <p v-if="errors.title" class="text-sm text-destructive">{{ errors.title }}</p>
     </div>
 
     <div class="space-y-2">
       <Label for="excerpt">Excerpt</Label>
-      <Textarea id="excerpt" v-model="excerpt" placeholder="Brief description" :disabled="isSubmitting" />
+      <Textarea id="excerpt" v-model="excerpt" :placeholder="t('placeholders.briefDescription')" :disabled="isSubmitting" />
     </div>
 
     <div class="space-y-2">
@@ -109,7 +110,7 @@ const onSubmit = handleSubmit((values) => {
       <RichTextEditor
         :model-value="content ?? ''"
         @update:model-value="(v: string) => setFieldValue('content', v)"
-        placeholder="Post content..."
+        :placeholder="t('placeholders.postContent')"
         :disabled="isSubmitting"
         :error="errors.content"
       />
@@ -136,7 +137,7 @@ const onSubmit = handleSubmit((values) => {
           :model-value="category_id ? String(category_id) : ''"
           @update:model-value="(v: string) => setFieldValue('category_id', v ? Number(v) : undefined)"
           :options="categoryOptions"
-          placeholder="Select category"
+          :placeholder="t('placeholders.selectCategory')"
           :disabled="isSubmitting"
         />
       </div>

@@ -36,6 +36,12 @@ export default defineNuxtConfig({
       title: "Siro Admin",
       meta: [
         { name: "description", content: "Siro Admin Nuxt - Modern admin panel for SiroPHP APIs" },
+        { property: "og:title", content: "Siro Admin - SiroPHP Demo" },
+        { property: "og:description", content: "Try the live demo, then grab the open-source admin template and SiroPHP skeleton." },
+        { property: "og:url", content: "https://admin-nuxt.sirophp.com" },
+        { property: "og:site_name", content: "Siro Admin" },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary" },
       ],
       link: [{ rel: "icon", type: "image/svg+xml", href: "/favicon.svg" }],
     },

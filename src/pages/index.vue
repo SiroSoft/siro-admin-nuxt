@@ -1,7 +1,7 @@
 <script setup lang="ts">
 definePageMeta({ middleware: "auth", ssr: false })
 
-import { Users, ShoppingCart, Package, DollarSign, Activity, RefreshCw, ArrowRight, Eye, Settings } from "lucide-vue-next"
+import { Users, ShoppingCart, Package, DollarSign, Activity, RefreshCw, ArrowRight, Eye, Settings, Database } from "lucide-vue-next"
 import Card from "~/components/ui/Card.vue"
 import PageHeader from "~/components/layout/PageHeader.vue"
 import StatsSkeleton from "~/components/states/StatsSkeleton.vue"
@@ -114,6 +114,15 @@ const chartData = computed(() => {
     </div>
 
     <template v-else>
+      <div v-if="(data?.total_users ?? 0) + (data?.total_products ?? 0) + (data?.total_orders ?? 0) === 0" class="rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 flex items-start gap-3 mb-4">
+        <Database class="h-5 w-5 mt-0.5 text-amber-500 shrink-0" />
+        <div>
+          <p class="font-medium">{{ t('dashboard.emptyDbTitle') }}</p>
+          <p class="text-sm text-muted-foreground mt-1">
+            {{ t('dashboard.emptyDbDesc') }} <code class="px-1 rounded bg-muted">php siro db:seed</code>
+          </p>
+        </div>
+      </div>
       <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-5">
         <NuxtLink
           v-for="(stat, idx) in stats"

@@ -17,6 +17,8 @@ const emit = defineEmits<{
   "update:modelValue": [value: string]
 }>()
 
+const { t } = useI18n()
+
 const localValue = ref(props.modelValue ?? "")
 
 const debounced = useDebounce(localValue)
@@ -45,7 +47,7 @@ watch(
     <button
       v-if="localValue"
       type="button"
-      aria-label="Clear search"
+      :aria-label="t('a11y.clearSearch')"
       @click="localValue = ''"
       class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
     >

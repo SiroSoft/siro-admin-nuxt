@@ -5,6 +5,7 @@ import { cn } from "~/utils"
 import type { ToastItem } from "~/composables/useToast"
 
 const { toasts, dismiss } = useToast()
+const { t } = useI18n()
 
 const toastVariants: Record<string, string> = {
   default: "border bg-background text-foreground",
@@ -26,19 +27,19 @@ const toastIcons: Record<string, any> = {
 <template>
   <div class="fixed bottom-4 right-4 z-[100] flex flex-col gap-2 max-w-md">
     <div
-      v-for="t in toasts"
-      :key="t.id"
+      v-for="toast in toasts"
+      :key="toast.id"
       :class="cn(
         'flex items-start gap-3 rounded-lg border p-4 shadow-md animate-in slide-in-from-right-full fade-in-0 zoom-in-95',
-        toastVariants[t.variant] ?? toastVariants.default,
+        toastVariants[toast.variant] ?? toastVariants.default,
       )"
     >
-      <component :is="toastIcons[t.variant] ?? Info" class="h-5 w-5 shrink-0 mt-0.5" />
+      <component :is="toastIcons[toast.variant] ?? Info" class="h-5 w-5 shrink-0 mt-0.5" />
       <div class="flex-1">
-        <p class="text-sm font-semibold">{{ t.title }}</p>
-        <p v-if="t.description" class="text-sm opacity-90">{{ t.description }}</p>
+        <p class="text-sm font-semibold">{{ toast.title }}</p>
+        <p v-if="toast.description" class="text-sm opacity-90">{{ toast.description }}</p>
       </div>
-      <button type="button" aria-label="Dismiss notification" @click="dismiss(t.id)" class="shrink-0 opacity-60 hover:opacity-100">
+      <button type="button" :aria-label="t('a11y.dismiss')" @click="dismiss(toast.id)" class="shrink-0 opacity-60 hover:opacity-100">
         <X class="h-4 w-4" />
       </button>
     </div>

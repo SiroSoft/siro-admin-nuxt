@@ -72,7 +72,7 @@ function handleRemove() {
       ]"
     >
       <div v-if="props.value" class="relative w-full">
-        <img :src="props.value" alt="Preview" class="mx-auto max-h-48 rounded-md object-contain" />
+        <img :src="props.value" :alt="t('a11y.preview')" class="mx-auto max-h-48 rounded-md object-contain" />
         <Button
           v-if="!props.disabled"
           type="button"

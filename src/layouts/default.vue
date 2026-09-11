@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useI18n } from "~/composables/useI18n"
 import { useAuthStore } from "~/stores/auth.store"
 import { useUiStore } from "~/stores/ui.store"
 import Sidebar from "~/components/layout/Sidebar.vue"
@@ -9,6 +10,32 @@ import { cn } from "~/utils"
 
 const authStore = useAuthStore()
 const uiStore = useUiStore()
+const { t } = useI18n()
+const route = useRoute()
+
+const TITLE_KEYS: Record<string, string> = {
+  "/": "common.dashboard",
+  "/users": "common.users",
+  "/orders": "common.orders",
+  "/products": "common.products",
+  "/categories": "common.categories",
+  "/tags": "common.tags",
+  "/posts": "common.posts",
+  "/profile": "common.profile",
+  "/settings": "common.settings",
+  "/login": "auth.signIn",
+  "/register": "auth.signUp",
+  "/forgot-password": "auth.forgotPassword",
+  "/reset-password": "auth.resetTitle",
+  "/verify-email": "auth.verifyTitle",
+}
+
+const pageTitle = computed(() => {
+  const seg = "/" + (route.path.split("/")[1] ?? "");
+  return t(TITLE_KEYS[seg] ?? TITLE_KEYS[route.path] ?? "common.dashboard");
+});
+
+useHead({ title: pageTitle })
 
 onMounted(() => {
   authStore.restoreSession()

@@ -1,10 +1,10 @@
-import type en from "~/locales/en"
+import enMessages from "~/locales/en"
 
 type NestedKeyOf<T> = T extends Record<string, unknown>
   ? { [K in keyof T]: K extends string ? `${K}.${NestedKeyOf<T[K]>}` : never }[keyof T]
   : ""
 
-type Messages = typeof en
+type Messages = typeof enMessages
 type TranslationKey = NestedKeyOf<Messages> | (string & {})
 
 export function useI18n() {
@@ -15,7 +15,14 @@ export function useI18n() {
     return "en"
   })
 
-  const messages = useState<Record<string, Messages>>("messages", () => ({}))
+  // Seed English synchronously so t() never renders raw keys on first
+  // paint (dynamic locale chunks load async below). Other locales are
+  // fetched on demand and reactively replace the strings once loaded.
+  const messages = useState<Record<string, Messages>>("messages", () => ({ en: enMessages }))
+
+  if (import.meta.client && !messages.value[locale.value]) {
+    void loadLocale(locale.value)
+  }
 
   async function loadLocale(loc: "en" | "vi" | "de" | "zh" | "ja") {
     if (messages.value[loc]) return

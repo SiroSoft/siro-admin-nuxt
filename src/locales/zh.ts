@@ -15,6 +15,7 @@ export default {
     register: '注册',
     save: '保存',
     cancel: '取消',
+    unsavedChanges: 'You have unsaved changes. Discard them?',
     delete: '删除',
     edit: '编辑',
     create: '创建',
@@ -316,6 +317,10 @@ export default {
     view: 'View {{name}}',
     selectAllUsers: 'Select all users',
     item: 'item',
+    prevPage: 'Previous page',
+    nextPage: 'Next page',
+    pageNumber: 'Page {{page}}',
+    sortBy: 'Sort by {{column}}',
   },
   imageUpload: {
     dragDrop: '拖拽或点击上传',

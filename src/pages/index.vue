@@ -12,7 +12,7 @@ import StatusBadge from "~/components/layout/StatusBadge.vue"
 import Button from "~/components/ui/Button.vue"
 import { useDashboard } from "~/composables/useDashboard"
 import { useAuth } from "~/composables/useAuth"
-import { formatDate, formatNumber, formatRelativeTime, cn } from "~/utils"
+import { formatCurrency, formatDate, formatNumber, formatRelativeTime, cn } from "~/utils"
 import Avatar from "~/components/ui/Avatar.vue"
 
 const statColors = [
@@ -57,7 +57,7 @@ const stats = computed(() => [
   { key: 'activeUsers', title: t('dashboard.activeUsers'), value: formatNumber(data.value?.active_users ?? 0), icon: Activity, href: "/users" },
   { key: 'totalOrders', title: t('dashboard.totalOrders'), value: formatNumber(data.value?.total_orders ?? 0), icon: ShoppingCart, href: "/orders" },
   { key: 'totalProducts', title: t('dashboard.totalProducts'), value: formatNumber(data.value?.total_products ?? 0), icon: Package, href: "/products" },
-  { key: 'revenue', title: t('dashboard.totalRevenue'), value: `$${formatNumber(data.value?.total_revenue ?? 0)}`, icon: DollarSign, href: "/orders" },
+  { key: 'revenue', title: t('dashboard.totalRevenue'), value: formatCurrency(data.value?.total_revenue ?? 0), icon: DollarSign, href: "/orders" },
 ])
 
 const chartData = computed(() => {
@@ -256,8 +256,15 @@ const chartData = computed(() => {
         <template #header>
           <span class="text-sm font-medium">{{ t('dashboard.monthlyRevenue') }}</span>
         </template>
-        <div class="h-[300px] flex items-center justify-center">
-          <p class="text-muted-foreground text-sm">Chart temporarily disabled for Pages deploy — data below</p>
+        <div class="h-[300px]">
+          <ClientOnly>
+            <RevenueChart :chart-data="chartData" :chart-options="chartOptions" />
+            <template #fallback>
+              <div class="h-full flex items-center justify-center">
+                <LoadingSkeleton :rows="5" />
+              </div>
+            </template>
+          </ClientOnly>
         </div>
       </Card>
     </template>

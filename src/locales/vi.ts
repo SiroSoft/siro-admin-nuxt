@@ -15,6 +15,7 @@ export default {
     register: 'Đăng ký',
     save: 'Lưu',
     cancel: 'Hủy',
+    unsavedChanges: 'Bạn có thay đổi chưa lưu. Bỏ qua?',
     delete: 'Xóa',
     edit: 'Sửa',
     create: 'Tạo',
@@ -327,6 +328,10 @@ export default {
     view: 'Xem {{name}}',
     selectAllUsers: 'Chọn tất cả người dùng',
     item: 'mục',
+    prevPage: 'Trang trước',
+    nextPage: 'Trang sau',
+    pageNumber: 'Trang {{page}}',
+    sortBy: 'Sắp xếp theo {{column}}',
   },
   imageUpload: {
     dragDrop: 'Kéo thả hoặc nhấp để tải lên',

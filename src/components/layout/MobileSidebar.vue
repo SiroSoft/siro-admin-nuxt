@@ -3,23 +3,16 @@ import { useUiStore } from "~/stores/ui.store"
 import { useAuthStore } from "~/stores/auth.store"
 import { cn } from "~/utils"
 import { useRuntimeConfig } from "nuxt/app"
-import { X, LayoutDashboard, Users, ShoppingCart, Package, FileText, Settings, LogOut } from "lucide-vue-next"
+import { X, LogOut } from "lucide-vue-next"
 import Button from "~/components/ui/Button.vue"
+import { useNavItems } from "~/composables/useNavItems"
 
 const uiStore = useUiStore()
 const authStore = useAuthStore()
 const config = useRuntimeConfig()
 const router = useRouter()
 const { t } = useI18n()
-
-const navItems = [
-  { href: "/", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/users", label: "Users", icon: Users },
-  { href: "/orders", label: "Orders", icon: ShoppingCart },
-  { href: "/products", label: "Products", icon: Package },
-  { href: "/posts", label: "Posts", icon: FileText },
-  { href: "/settings", label: "Settings", icon: Settings },
-]
+const { navItems } = useNavItems()
 
 function handleLogout() {
   uiStore.setMobileSidebar(false)

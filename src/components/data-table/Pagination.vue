@@ -38,6 +38,7 @@ const pages = computed(() => {
         class="h-8 w-8"
         :disabled="props.currentPage <= 1"
         @click="emit('pageChange', props.currentPage - 1)"
+        :aria-label="t('a11y.prevPage')"
       >
         <ChevronLeft class="h-4 w-4" />
       </Button>
@@ -48,6 +49,8 @@ const pages = computed(() => {
         size="icon"
         class="h-8 w-8"
         @click="emit('pageChange', page)"
+        :aria-label="t('a11y.pageNumber', { page })"
+        :aria-current="page === props.currentPage ? 'page' : undefined"
       >
         {{ page }}
       </Button>
@@ -57,6 +60,7 @@ const pages = computed(() => {
         class="h-8 w-8"
         :disabled="props.currentPage >= props.lastPage"
         @click="emit('pageChange', props.currentPage + 1)"
+        :aria-label="t('a11y.nextPage')"
       >
         <ChevronRight class="h-4 w-4" />
       </Button>

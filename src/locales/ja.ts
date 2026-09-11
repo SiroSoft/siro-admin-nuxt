@@ -15,6 +15,7 @@ export default {
     register: '登録',
     save: '保存',
     cancel: 'キャンセル',
+    unsavedChanges: 'You have unsaved changes. Discard them?',
     delete: '削除',
     edit: '編集',
     create: '作成',
@@ -316,6 +317,10 @@ export default {
     view: 'View {{name}}',
     selectAllUsers: 'Select all users',
     item: 'item',
+    prevPage: 'Previous page',
+    nextPage: 'Next page',
+    pageNumber: 'Page {{page}}',
+    sortBy: 'Sort by {{column}}',
   },
   imageUpload: {
     dragDrop: 'ドラッグ＆ドロップ、またはクリックしてアップロード',

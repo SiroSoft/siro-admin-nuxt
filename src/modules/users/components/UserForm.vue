@@ -29,6 +29,8 @@ const props = defineProps<Props>()
 
 const emit = defineEmits<{
   submit: [data: CreateUserRequest | UpdateUserRequest]
+  cancel: []
+  "dirty-change": [dirty: boolean]
 }>()
 
 const { t } = useI18n()
@@ -36,7 +38,7 @@ const { t } = useI18n()
 const isEdit = computed(() => !!props.user)
 const schema = computed(() => isEdit.value ? updateUserSchema : createUserSchema)
 
-const { handleSubmit, errors, defineField, setFieldValue, isSubmitting } = useForm<UserFormType>({
+const { handleSubmit, errors, defineField, setFieldValue, isSubmitting, meta } = useForm<UserFormType>({
   validationSchema: toTypedSchema(schema.value),
   initialValues: {
     name: props.user?.name ?? "",
@@ -48,6 +50,11 @@ const { handleSubmit, errors, defineField, setFieldValue, isSubmitting } = useFo
     phone: props.user?.phone ?? "",
   },
 })
+
+watch(
+  () => meta.value.dirty,
+  (dirty) => emit("dirty-change", dirty),
+)
 
 const [name, nameAttrs] = defineField("name")
 const [email, emailAttrs] = defineField("email")
@@ -137,6 +144,9 @@ const onSubmit = handleSubmit((values) => {
     </div>
 
     <div class="flex justify-end gap-2 pt-2">
+      <Button type="button" variant="outline" :disabled="isSubmitting" @click="emit('cancel')">
+        {{ t('common.cancel') }}
+      </Button>
       <Button type="submit" :disabled="isSubmitting">
         <Loader2 v-if="isSubmitting" class="mr-2 h-4 w-4 animate-spin" />
         {{ isEdit ? "Update" : "Create" }} User

@@ -15,6 +15,7 @@ export default {
     register: 'Register',
     save: 'Save',
     cancel: 'Cancel',
+    unsavedChanges: 'You have unsaved changes. Discard them?',
     delete: 'Delete',
     edit: 'Edit',
     create: 'Create',
@@ -316,6 +317,10 @@ export default {
     view: 'View {{name}}',
     selectAllUsers: 'Select all users',
     item: 'item',
+    prevPage: 'Previous page',
+    nextPage: 'Next page',
+    pageNumber: 'Page {{page}}',
+    sortBy: 'Sort by {{column}}',
   },
   imageUpload: {
     dragDrop: 'Drag & drop or click to upload',

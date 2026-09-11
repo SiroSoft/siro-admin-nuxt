@@ -42,11 +42,16 @@ function getSortIcon(key: string) {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead v-for="col in columns" :key="col.key">
+          <TableHead
+            v-for="col in columns"
+            :key="col.key"
+            :aria-sort="col.sortable ? (props.sortBy === col.key ? (props.sortOrder === 'asc' ? 'ascending' : 'descending') : 'none') : undefined"
+          >
             <button
               v-if="col.sortable"
               @click="emit('sort', col.key)"
               class="inline-flex items-center gap-1 hover:text-foreground"
+              :aria-label="t('a11y.sortBy', { column: col.label })"
             >
               {{ col.label }}
               <svg

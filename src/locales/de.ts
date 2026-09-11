@@ -96,6 +96,7 @@ export default {
     viewOrders: 'Bestellungen anzeigen',
     manageProducts: 'Produkte verwalten',
     monthlyRevenue: 'Monatlicher Umsatz',
+    ordersByStatus: 'Orders by Status',
     noRevenueData: 'Keine Umsatzdaten verfügbar',
   },
   users: {

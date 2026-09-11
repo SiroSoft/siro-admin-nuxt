@@ -96,6 +96,7 @@ export default {
     viewOrders: '查看订单',
     manageProducts: '管理产品',
     monthlyRevenue: '月收入',
+    ordersByStatus: 'Orders by Status',
     noRevenueData: '暂无收入数据',
   },
   users: {

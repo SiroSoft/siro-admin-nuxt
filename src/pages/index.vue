@@ -196,6 +196,21 @@ const chartData = computed(() => {
 
           <Card>
             <template #header>
+              <span class="text-sm font-medium">{{ t('dashboard.ordersByStatus') }}</span>
+            </template>
+            <div v-if="data?.orders_by_status && Object.keys(data.orders_by_status).length" class="space-y-3">
+              <div v-for="(count, status) in data.orders_by_status" :key="status" class="flex items-center justify-between">
+                <span class="text-sm text-muted-foreground capitalize">{{ status }}</span>
+                <span class="text-sm font-medium">{{ formatNumber(count ?? 0) }}</span>
+              </div>
+            </div>
+            <div v-else>
+              <p class="text-sm text-muted-foreground py-4 text-center">{{ t('common.noData') }}</p>
+            </div>
+          </Card>
+
+          <Card>
+            <template #header>
               <span class="text-sm font-medium">{{ t('dashboard.quickActions') }}</span>
             </template>
             <div class="grid gap-2">

@@ -96,6 +96,7 @@ export default {
     viewOrders: 'Xem đơn hàng',
     manageProducts: 'Quản lý sản phẩm',
     monthlyRevenue: 'Doanh thu hàng tháng',
+    ordersByStatus: 'Orders by Status',
     noRevenueData: 'Không có dữ liệu doanh thu',
   },
   users: {

@@ -39,7 +39,7 @@ const params = computed(() => ({
   ...(categoryFilter.value ? { category_id: categoryFilter.value } : {}),
   ...(minPrice.value ? { min_price: minPrice.value } : {}),
   ...(maxPrice.value ? { max_price: maxPrice.value } : {}),
-  ...(statusFilter.value !== undefined ? { is_active: statusFilter.value } : {}),
+  ...(statusFilter.value !== undefined ? { status: statusFilter.value ? "active" : "inactive" } : {}),
 }))
 
 function handleSort(key: string) {

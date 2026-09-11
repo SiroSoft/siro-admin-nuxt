@@ -96,6 +96,7 @@ export default {
     viewOrders: '注文を表示',
     manageProducts: '商品を管理',
     monthlyRevenue: '月次収益',
+    ordersByStatus: 'Orders by Status',
     noRevenueData: '収益データがありません',
   },
   users: {

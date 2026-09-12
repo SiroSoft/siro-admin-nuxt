@@ -7,7 +7,7 @@ import Button from "~/components/ui/Button.vue"
 import Input from "~/components/ui/Input.vue"
 import Label from "~/components/ui/Label.vue"
 import Card from "~/components/ui/Card.vue"
-import { loginSchema } from "~/modules/auth/schemas/login.schema"
+import { z } from "zod"
 import { useAuth } from "~/composables/useAuth"
 import VueTurnstile from "vue-turnstile"
 
@@ -21,8 +21,17 @@ const { login, isLoginPending, loginError, isLoading } = useAuth()
 const showPassword = ref(false)
 const rememberMe = ref(false)
 
+// Built in setup (not imported static) so validation messages follow
+// the active locale without a page reload.
+const loginSchema = computed(() =>
+  z.object({
+    email: z.string().email(t("validation.invalidEmail")),
+    password: z.string().min(8, t("validation.passwordMin", { min: 8 })),
+  }),
+)
+
 const { handleSubmit, errors, defineField, setFieldValue } = useForm({
-  validationSchema: toTypedSchema(loginSchema),
+  validationSchema: toTypedSchema(loginSchema.value),
 })
 
 const [email, emailAttrs] = defineField("email")

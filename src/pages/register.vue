@@ -16,18 +16,26 @@ definePageMeta({ layout: "auth" })
 const { t } = useI18n()
 const router = useRouter()
 
-const schema = z.object({
-  name: z.string().min(3, t("validation.nameMin", { min: 3 })),
-  email: z.string().email(t("validation.invalidEmail")),
-  password: z.string().min(8, t("validation.passwordMin", { min: 8 })),
-  password_confirmation: z.string(),
-}).refine((d) => d.password === d.password_confirmation, {
-  message: t("validation.passwordMismatch"),
-  path: ["password_confirmation"],
-})
+// Reactive schema: messages follow locale switches with no reload,
+// and typed input is preserved (no form remount needed).
+const schema = computed(() =>
+  toTypedSchema(
+    z
+      .object({
+        name: z.string().min(3, t("validation.nameMin", { min: 3 })),
+        email: z.string().email(t("validation.invalidEmail")),
+        password: z.string().min(8, t("validation.passwordMin", { min: 8 })),
+        password_confirmation: z.string(),
+      })
+      .refine((d) => d.password === d.password_confirmation, {
+        message: t("validation.passwordMismatch"),
+        path: ["password_confirmation"],
+      }),
+  ),
+)
 
 const { handleSubmit, errors, defineField, isSubmitting } = useForm({
-  validationSchema: toTypedSchema(schema),
+  validationSchema: schema,
 })
 
 const [name, nameAttrs] = defineField("name")

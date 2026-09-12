@@ -17,12 +17,16 @@ const { t } = useI18n()
 const router = useRouter()
 const submitted = ref(false)
 
-const schema = z.object({
-  email: z.string().email(t("validation.invalidEmail")),
-})
+const schema = computed(() =>
+  toTypedSchema(
+    z.object({
+      email: z.string().email(t("validation.invalidEmail")),
+    }),
+  ),
+)
 
 const { handleSubmit, errors, defineField, isSubmitting } = useForm({
-  validationSchema: toTypedSchema(schema),
+  validationSchema: schema,
 })
 
 const [email, emailAttrs] = defineField("email")

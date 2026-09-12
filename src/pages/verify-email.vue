@@ -19,12 +19,16 @@ const router = useRouter()
 const authStore = useAuthStore()
 const queryToken = (route.query.token as string) || ""
 
-const schema = z.object({
-  token: z.string().min(1, t("validation.tokenRequired")),
-})
+const schema = computed(() =>
+  toTypedSchema(
+    z.object({
+      token: z.string().min(1, t("validation.tokenRequired")),
+    }),
+  ),
+)
 
 const { handleSubmit, errors, defineField, isSubmitting } = useForm({
-  validationSchema: toTypedSchema(schema),
+  validationSchema: schema,
   initialValues: { token: queryToken },
 })
 

@@ -18,16 +18,22 @@ const route = useRoute()
 
 const token = (route.query.token as string) || ""
 
-const schema = z.object({
-  password: z.string().min(8, t("validation.passwordMin", { min: 8 })),
-  password_confirmation: z.string(),
-}).refine((d) => d.password === d.password_confirmation, {
-  message: t("validation.passwordMismatch"),
-  path: ["password_confirmation"],
-})
+const schema = computed(() =>
+  toTypedSchema(
+    z
+      .object({
+        password: z.string().min(8, t("validation.passwordMin", { min: 8 })),
+        password_confirmation: z.string(),
+      })
+      .refine((d) => d.password === d.password_confirmation, {
+        message: t("validation.passwordMismatch"),
+        path: ["password_confirmation"],
+      }),
+  ),
+)
 
 const { handleSubmit, errors, defineField, isSubmitting } = useForm({
-  validationSchema: toTypedSchema(schema),
+  validationSchema: schema,
 })
 
 const [password, passwordAttrs] = defineField("password")

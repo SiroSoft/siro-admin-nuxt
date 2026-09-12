@@ -1,5 +1,6 @@
 export default {
   common: {
+    demoReadOnly: 'Demo chỉ đọc — tự deploy skeleton để upload.',
     id: 'ID',
     dashboard: 'Bảng điều khiển',
     users: 'Người dùng',
@@ -362,6 +363,7 @@ export default {
     invalidToken: 'Token xác thực không hợp lệ hoặc hết hạn',
   },
   errors: {
+    uploadFailed: 'Tải lên thất bại',
     notFound: 'Không tìm thấy',
     serverError: 'Lỗi máy chủ nội bộ',
     unauthorized: 'Không được phép',

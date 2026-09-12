@@ -1,5 +1,6 @@
 export default {
   common: {
+    demoReadOnly: 'Demo is read-only — deploy your own skeleton to upload.',
     id: 'ID',
     dashboard: 'ダッシュボード',
     users: 'ユーザー',
@@ -350,6 +351,7 @@ export default {
     invalidToken: '無効または期限切れの確認トークン',
   },
   errors: {
+    uploadFailed: 'Upload failed',
     notFound: '見つかりません',
     serverError: '内部サーバーエラー',
     unauthorized: '認証されていません',

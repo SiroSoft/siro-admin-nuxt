@@ -1,5 +1,6 @@
 export default {
   common: {
+    demoReadOnly: 'Demo is read-only — deploy your own skeleton to upload.',
     id: 'ID',
     dashboard: 'Dashboard',
     users: 'Users',
@@ -350,6 +351,7 @@ export default {
     invalidToken: 'Invalid or expired verification token',
   },
   errors: {
+    uploadFailed: 'Upload failed',
     notFound: 'Not Found',
     serverError: 'Internal Server Error',
     unauthorized: 'Unauthorized',

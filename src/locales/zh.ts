@@ -1,5 +1,6 @@
 export default {
   common: {
+    demoReadOnly: 'Demo is read-only — deploy your own skeleton to upload.',
     id: 'ID',
     dashboard: '仪表盘',
     users: '用户',
@@ -350,6 +351,7 @@ export default {
     invalidToken: '无效或过期的验证令牌',
   },
   errors: {
+    uploadFailed: 'Upload failed',
     notFound: '未找到',
     serverError: '服务器内部错误',
     unauthorized: '未授权',

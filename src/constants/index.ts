@@ -10,6 +10,8 @@ export const ROLES = {
   VIEWER: "viewer",
 } as const
 
+export const DEMO_EMAIL = "demo@skeleton.sirophp.com"
+
 export const STATUS = {
   ACTIVE: "active",
   INACTIVE: "inactive",

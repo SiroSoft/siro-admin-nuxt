@@ -1,5 +1,13 @@
 # Changelog — siro-admin-nuxt
 
+## [1.0.1] - 2026-09-13
+
+### Fixed (via backend)
+- File uploads (`upload.service.ts`, multipart/form-data) were rejected
+  with 415 by backends on sirosoft/core ≤1.0.6. Requires backend
+  `sirosoft/core ^1.0.7` — no template code change needed (verified:
+  vitest 39 green).
+
 ## [1.0.0] - 2026-06-15
 
 ### Added
